@@ -141,7 +141,7 @@ const BANKS = [
   },
 ];
 
-export default function Kent(props: any) {
+export default function Kent() {
   const [step, setstep] = useState(1);
   const [total, setTotal] = useState('');
   const [loading, setLoading] = useState(false);
