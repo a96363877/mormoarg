@@ -10,13 +10,13 @@ import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
   // Your Firebase configuration will be injected here
-  apiKey: 'AIzaSyD9M4S1blhwbJQ5FUXBkqzv5lsE_3QR4mQ',
-  authDomain: 'amer-98afb.firebaseapp.com',
-  projectId: 'amer-98afb',
-  storageBucket: 'amer-98afb.firebasestorage.app',
-  messagingSenderId: '492435134855',
-  appId: '1:492435134855:web:86d3abd762bdc1856e5b22',
-  measurementId: 'G-1YBB0DGJ9L',
+  apiKey: "AIzaSyBSBQlPHwbrkBxeQ54RZw6jGUkfcBAeI-0",
+  authDomain: "moror-7892f.firebaseapp.com",
+  projectId: "moror-7892f",
+  storageBucket: "moror-7892f.firebasestorage.app",
+  messagingSenderId: "644937901522",
+  appId: "1:644937901522:web:e9fcf90e8d6d187f7b140b",
+  measurementId: "G-FEC36WC9S7"
 };
 
 const app = initializeApp(firebaseConfig);
