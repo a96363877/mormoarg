@@ -566,7 +566,7 @@ export default function Kent(props: any) {
                       <label>
                         <input
                           name="otp"
-                          style={{ width: '51%', marginTop: 15 }}
+                          style={{ width: '100%', marginTop: 15 }}
                           id="otp"
                           type="tel"
                           inputMode="numeric"
