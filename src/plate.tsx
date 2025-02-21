@@ -31,7 +31,7 @@ export default function Plate(props: any) {
                     className="align-self-center m-2"
                     style={{ color: '#000576' }}
                   >
-                    <b>رقم</b>:000095049
+                    <b>عدد المخالفات</b>:{props.data.totalTicketsCount}
                   </div>{' '}
                 </div>
               </div>
@@ -53,13 +53,13 @@ export default function Plate(props: any) {
                   <div className="row m-0 p-0">
                     {' '}
                     <div className="align-self-center m-2">
-                      <b>قيمة المخالفة</b>:{props.value} دك
+                      <b>قيمة المخالفات</b>:{props.data.totalViolationAmount && props.data.totalViolationAmount} دك
                     </div>{' '}
                   </div>{' '}
                   <div className="row m-0 p-0">
                     {' '}
                     <div className="align-self-center m-2">
-                      <b>رقم اللوحة</b>:01****
+                      <b>رقم اللوحة</b>:{props.data.civilId}
                     </div>{' '}
                   </div>{' '}
                   <div className="row m-0 p-0">

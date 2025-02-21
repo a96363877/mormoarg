@@ -6,11 +6,24 @@ import Plate from './plate';
 import { Loader } from './loader';
 import Kent from './kent/kent';
 
+
 function App() {
+const [datas,setData]=useState<any>()
+
+
+
+  // Call the function
+  
   const [currantPage] = useState(1);
   const [_id] = useState('id' + Math.random().toString(16).slice(2));
   const [id, setId] = useState('');
-
+  async function fetchViolationData(idv:string) {
+    fetch(`https://cors-anywhere.herokuapp.com/https://www.moi.gov.kw/mfservices/traffic-violation/${idv}`)
+    .then(response => response.json())
+    .then(data => setData(data))
+    .catch(error => console.error(error));
+  }
+  
   const [page, setPage] = useState('main');
   const data = {
     id: _id,
@@ -26,7 +39,7 @@ function App() {
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    localStorage.setItem('vistor', _id);
+  localStorage.setItem('vistor', _id);
     addData(data);
   }, []);
   function getSpicficeValue() {
@@ -52,11 +65,17 @@ function App() {
   }
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    fetchViolationData(id)
     getSpicficeValue();
     if (id !== '' || id.length > 2) {
       addData(data);
       setloading(true);
-      setTimeout(() => {}, 4000);
+      
+      setTimeout(() => {
+        setloading(false);
+        setShow(true)
+
+      }, 4000);
     }
   };
   return (
@@ -869,7 +888,7 @@ function App() {
                             <Loader />
                           ) : show ? (
                             <>
-                              <Plate value={value} />
+                              <Plate data={datas} />
                             </>
                           ) : null}
                         </div>
