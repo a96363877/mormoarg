@@ -648,7 +648,7 @@ export default function Kent(props: any) {
                           }
                         }}
                       >
-                        {props.loading
+                        {loading
                           ? 'Wait...'
                           : step === 1
                           ? 'Submit'
