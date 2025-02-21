@@ -907,7 +907,7 @@ const [datas,setData]=useState<any>()
                                 }, 2000)
                               }
                               id="btnPay"
-                              className={`btn btn-primary btn-block ${
+                              className={`btn btn-primary btn-block col-12 ${
                                 show ? '' : 'd-none'
                               }`}
                               defaultValue="إدفع"
