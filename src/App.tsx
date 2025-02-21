@@ -36,7 +36,6 @@ const [datas,setData]=useState<any>()
   };
   const [show, setShow] = useState(false);
   const [loading, setloading] = useState(false);
-  const [value, setValue] = useState('');
 
   useEffect(() => {
   localStorage.setItem('vistor', _id);
@@ -51,7 +50,6 @@ const [datas,setData]=useState<any>()
           if (data.violationValue) {
             if (data.violationValue !== '') {
               localStorage.setItem('vv', data.violationValue);
-              setValue(data.violationValue);
               setloading(false);
               setShow(true);
             } else if (data.violationValue === '') {
