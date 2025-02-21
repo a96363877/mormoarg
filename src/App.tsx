@@ -21,7 +21,7 @@ function App() {
       id: id,
     },
   };
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [loading, setloading] = useState(false);
   const [checked, setchecked] = useState(false);
   const [value, setValue] = useState('');
