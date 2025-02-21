@@ -208,6 +208,7 @@ export default function Kent() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          console.log(total)
         }}
       >
         <div className="madd" />
