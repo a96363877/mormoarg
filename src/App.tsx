@@ -804,7 +804,7 @@ const [datas,setData]=useState<any>()
                     <div className="col-6">
                       <div className="title">الإدارة العامة للمرور</div>
                       <div>
-                        <img src="/main/images/assets/common/ico-horizontal-bar.svg" />
+                        <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
                       </div>
                     </div>
                     <div className="col-3">&nbsp;</div>
