@@ -234,11 +234,7 @@ export default function Kent() {
                   </label>
                 </div>
                 <div id="OrgTranxAmt">
-                  <label className="column-label"> Amount: </label>
-                  <label className="column-value text-label" id="amount">
-                    {total}
-                    {'  '}KD&nbsp;{' '}
-                  </label>
+                  
                 </div>
                 {/* Added for PG Eidia Discount starts   */}
                 <div
