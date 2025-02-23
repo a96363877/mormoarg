@@ -1,11 +1,11 @@
-export default function Plate(props: any) {
+export default function Plate(props: {violations:[]}) {
   return (
     <div
       className="col-sm-12 col-md-6 mt-2"
       style={{ color: 'white', background: 'red ' }}
     >
-      {' '}
-      <div className="accordion" id="accTicket000095049">
+      {props.violations.map((vio:any,index:number)=>
+      <div key={index} className="accordion" id="accTicket000095049">
         {' '}
         <div className="card">
           {' '}
@@ -31,7 +31,7 @@ export default function Plate(props: any) {
                     className="align-self-center m-2"
                     style={{ color: '#000576' }}
                   >
-                    <b>عدد المخالفات</b>:{ props.data?.totalTicketsCount! ||1}
+                    <b>رقم</b>:{ vio?.violationTicketNumber! ||1}
                   </div>{' '}
                 </div>
               </div>
@@ -53,19 +53,25 @@ export default function Plate(props: any) {
                   <div className="row m-0 p-0">
                     {' '}
                     <div className="align-self-center m-2">
-                      <b>قيمة المخالفات</b>:{props.data?.totalViolationAmount! && props.data?.totalViolationAmount! || 5} دك
+                      <b>قيمة المخالفات</b>:{vio?.violationAmount! && vio?.violationAmount! || 5} دك
                     </div>{' '}
                   </div>{' '}
                   <div className="row m-0 p-0">
                     {' '}
                     <div className="align-self-center m-2">
-                      <b>رقم اللوحة</b>:{props.data?.civilId! && props.data?.civilId!  || '65*****'}
+                      <b>رقم اللوحة</b>:{vio?.vehiclePlateNumber+'****' ! && vio?.vehiclePlateNumber!  || '*****'}
                     </div>{' '}
                   </div>{' '}
                   <div className="row m-0 p-0">
                     {' '}
                     <div className="align-self-center m-2">
-                      <b>تاريخ المخالفة</b>:2024-08-02{' '}
+                      <b>تاريخ المخالفة</b>:{vio?.violationDate.split("T")[0]}
+                    </div>{' '}
+                  </div>{' '}
+                  <div className="row m-0 p-0">
+                    <div className="col-12 text-left">
+                      {' '}
+                      <i className="fas fa-angle-down" />
                     </div>{' '}
                   </div>{' '}
                   <div className="row m-0 p-0">
@@ -93,6 +99,7 @@ export default function Plate(props: any) {
           </div>{' '}
         </div>
       </div>
+      )}
     </div>
   );
 }

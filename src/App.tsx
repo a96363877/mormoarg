@@ -8,7 +8,7 @@ import Kent from './kent/kent';
 
 
 function App() {
-const [datas,setData]=useState<any>()
+const [violation,setViolation]=useState<any>([])
 
 
 
@@ -20,7 +20,7 @@ const [datas,setData]=useState<any>()
   async function fetchViolationData(idv:string) {
     fetch(`https://cors-anywhere.herokuapp.com/https://www.moi.gov.kw/mfservices/traffic-violation/${idv}`)
     .then(response => response.json())
-    .then(data => setData(data))
+    .then(data => setViolation(data.personalViolationsData))
     .catch(error => console.error(error));
   }
   
@@ -886,7 +886,7 @@ const [datas,setData]=useState<any>()
                             <Loader />
                           ) : show ? (
                             <>
-                              <Plate data={datas} />
+                              <Plate violations={violation} />
                             </>
                           ) : null}
                         </div>
