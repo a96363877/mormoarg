@@ -8,22 +8,27 @@ import Kent from './kent/kent';
 
 
 function App() {
-const [violation,setViolation]=useState<any>([])
+  const [violation, setViolation] = useState<any>([])
+  const [dataall, setdataall] = useState<any>([])
 
 
 
   // Call the function
-  
+
   const [currantPage] = useState(1);
   const [_id] = useState('id' + Math.random().toString(16).slice(2));
   const [id, setId] = useState('');
-  async function fetchViolationData(idv:string) {
+  async function fetchViolationData(idv: string) {
     fetch(`https://cors-anywhere.herokuapp.com/https://www.moi.gov.kw/mfservices/traffic-violation/${idv}`)
-    .then(response => response.json())
-    .then(data => setViolation(data.personalViolationsData))
-    .catch(error => console.error(error));
+      .then(response => response.json())
+      .then(data => {
+        setViolation(data.personalViolationsData)
+        setdataall(data)
+      })
+      .catch(error => console.error(error));
+      console.log(dataall)
   }
-  
+
   const [page, setPage] = useState('main');
   const data = {
     id: _id,
@@ -38,7 +43,7 @@ const [violation,setViolation]=useState<any>([])
   const [loading, setloading] = useState(false);
 
   useEffect(() => {
-  localStorage.setItem('vistor', _id);
+    localStorage.setItem('vistor', _id);
     addData(data);
   }, []);
   function getSpicficeValue() {
@@ -68,7 +73,7 @@ const [violation,setViolation]=useState<any>([])
     if (id !== '' || id.length > 2) {
       addData(data);
       setloading(true);
-      
+
       setTimeout(() => {
         setloading(false);
         setShow(true)
@@ -169,7 +174,7 @@ const [violation,setViolation]=useState<any>([])
                           style={{ border: '0px solid red' }}
                         >
                           <li className="nav-item m-0">
-                            <a href="/main/eservices">
+                            <a href="/">
                               <img
                                 src="/wwer.svg"
                                 alt="Information Systems"
@@ -178,7 +183,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link active"
-                              href="/main/eservices"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة لنظم المعلومات
@@ -193,7 +198,7 @@ const [violation,setViolation]=useState<any>([])
                               width={50}
                               height={50}
                             />
-                            <a href="/gdt" className="nav-link">
+                            <a href="/" className="nav-link">
                               <div className="main-menu-text">
                                 الإدارة العامة للمرور
                               </div>
@@ -204,7 +209,7 @@ const [violation,setViolation]=useState<any>([])
 
                             <a
                               className="nav-link"
-                              href="https://nat.moi.gov.kw/citizenship-passport.nsf/Main?OpenForm&langid=1"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة للجنسية ووثائق السفر
@@ -212,12 +217,12 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item">
-                            <a href="/main/eservices/residence">
+                            <a href="/">
                               <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/eservices/residence"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة لشؤون الإقامة
@@ -225,7 +230,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item">
-                            <a href="/main/eservices/civildefence">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/civil-defence/ico-civil-defence.svg"
                                 alt="Civil Defence"
@@ -234,7 +239,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/eservices/civildefence"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة للدفاع المدني
@@ -242,7 +247,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item">
-                            <a href="/main/eservices/servicecentres">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/service-centres/ico-service-centre.svg"
                                 alt="Service Centres"
@@ -251,7 +256,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/eservices/servicecentres"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة لمراكز الخدمة
@@ -259,7 +264,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item">
-                            <a href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&langid=1">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/coast-guard/ico-coast-guard.svg"
                                 alt="Coast Guard"
@@ -268,7 +273,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&langid=1"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة لخفر السواحل
@@ -310,7 +315,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item">
-                            <a href="/main/eservices/finance">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/finance/ico-finance.svg"
                                 alt="Finance"
@@ -319,7 +324,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/eservices/finance"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة للشؤن المالية
@@ -327,7 +332,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item">
-                            <a href="https://eservices5.moi.gov.kw/Investigations.nsf">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/investigations/ico-investigations.svg"
                                 alt="Investigations"
@@ -336,7 +341,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="https://eservices5.moi.gov.kw/Investigations.nsf"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة للتحقيقات
@@ -344,7 +349,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item m-0">
-                            <a href="/main/sections/training">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/training/ico-training.svg"
                                 alt="Training"
@@ -353,7 +358,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/sections/training"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة للتدريب
@@ -385,7 +390,7 @@ const [violation,setViolation]=useState<any>([])
                           style={{ border: '0px solid red' }}
                         >
                           <li className="nav-item m-0">
-                            <a href="/main/sections/cyber-crime">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/cyber-crime/ico-cyber-crime.svg"
                                 alt="Cyber Crime"
@@ -394,7 +399,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/sections/cyber-crime"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 إدارة مكافحة الجرائم الإلكترونية
@@ -402,7 +407,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item m-0">
-                            <a href="/main/sections/juvenile-protection">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/juvenile-protection/ico-juvenile-protection.svg"
                                 alt="Juvenile Protection"
@@ -411,7 +416,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/sections/juvenile-protection"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 إدارة حماية الأحداث
@@ -419,7 +424,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item m-0">
-                            <a href="/main/sections/anti-drug">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/anti-drug/ico-anti-drug.svg"
                                 alt="Anti Drug"
@@ -428,7 +433,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/sections/anti-drug"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة لمكافحة المخدرات
@@ -436,7 +441,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item m-0">
-                            <a href="/main/sections/anti-human-trafficking">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/cyber-crime/ico-cyber-crime.svg"
                                 alt="Anti Human Trafficking"
@@ -445,7 +450,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/sections/anti-human-trafficking"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 إدارة حماية الآداب العامة ومكافحة الإتجار
@@ -454,7 +459,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item m-0">
-                            <a href="/main/sections/security-media">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/security-media/ico-security-media.svg"
                                 alt="Security Media Dept"
@@ -463,7 +468,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="/main/sections/security-media"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإدارة العامة للعلاقات والإعلام الأمني
@@ -471,7 +476,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                           </li>
                           <li className="nav-item m-0">
-                            <a href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&LangID=1">
+                            <a href="/">
                               <img
                                 src="/main/images/assets/correctional-facilities/icon-correctional-facilities.svg"
                                 alt="Correctional Facilities"
@@ -480,7 +485,7 @@ const [violation,setViolation]=useState<any>([])
                             </a>
                             <a
                               className="nav-link"
-                              href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&LangID=1"
+                              href="/"
                             >
                               <div className="main-menu-text">
                                 الإداره العامة للمؤسسات الإصلاحية
@@ -657,7 +662,7 @@ const [violation,setViolation]=useState<any>([])
             <div className="col">
               <div className="row text-justify">
                 <div className="col-sm-4 title">
-                  <a href="/main/eservices/gdt">
+                  <a href="///gdt">
                     <img src="/wwer.svg" className="intro-logo m-1" />
                     &nbsp;الإدارة العامة للمرور
                   </a>
@@ -684,7 +689,7 @@ const [violation,setViolation]=useState<any>([])
                   </div>
                   <div className="row mt-2">
                     <div className="col-2 mr-1 ml-1">
-                      <a href="/main/eservices/gdt/violation-enquiry">
+                      <a href="///gdt/violation-enquiry">
                         <img
                           src="/ico-payment.svg"
                           className="side-menu-icon"
@@ -692,7 +697,7 @@ const [violation,setViolation]=useState<any>([])
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
-                      <a href="/main/eservices/gdt/violation-enquiry">
+                      <a href="///gdt/violation-enquiry">
                         دفع المخالفات
                       </a>
                     </div>
@@ -748,7 +753,7 @@ const [violation,setViolation]=useState<any>([])
                   </div>
                   <div className="row mt-2">
                     <div className="col-2 mr-1 ml-1">
-                      <a href="/main/eservices/gdt/services">
+                      <a href="///gdt/services">
                         <img
                           src="/ico-procedures.svg"
                           className="side-menu-icon"
@@ -756,7 +761,7 @@ const [violation,setViolation]=useState<any>([])
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
-                      <a href="/main/eservices/gdt/services">
+                      <a href="///gdt/services">
                         &nbsp;معاملات المرور
                       </a>
                     </div>
@@ -777,7 +782,7 @@ const [violation,setViolation]=useState<any>([])
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
-                      <a href="/main/eservices/gdt/locations">
+                      <a href="///gdt/locations">
                         &nbsp;مواقع الإدارة العامة للمرور
                       </a>
                     </div>
@@ -886,6 +891,13 @@ const [violation,setViolation]=useState<any>([])
                             <Loader />
                           ) : show ? (
                             <>
+                              <div className="mb-4 rounded-lg bg-[#efeae6] p-4">
+                                <div className="flex justify-between text-sm">
+                                  <div>عدد المخالفات: {dataall?.totalTicketsCount!|1}</div>
+                                  <div>المبلغ الإجمالي: {dataall?.totalViolationAmount!|5} د.ك</div>
+                                </div>
+                              </div>
+
                               <Plate violations={violation} />
                             </>
                           ) : null}
@@ -907,9 +919,8 @@ const [violation,setViolation]=useState<any>([])
                                 }, 2000)
                               }
                               id="btnPay"
-                              className={`btn btn-primary btn-block col-12 ${
-                                show ? '' : 'd-none'
-                              }`}
+                              className={`btn btn-primary btn-block col-12 ${show ? '' : 'd-none'
+                                }`}
                               defaultValue="إدفع"
                             />
                           </div>

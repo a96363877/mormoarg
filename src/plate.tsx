@@ -4,7 +4,7 @@ export default function Plate(props: {violations:[]}) {
       className="col-sm-12 col-md-6 mt-2"
       style={{ color: 'white', background: 'red ' }}
     >
-      {props.violations.map((vio:any,index:number)=>
+      {props.violations! && props.violations?.map((vio:any,index:number)=>
       <div key={index} className="accordion" id="accTicket000095049">
         {' '}
         <div className="card">
