@@ -26,7 +26,7 @@ function App() {
         setdataall(data)
       })
       .catch(error => console.error(error));
-      console.log(dataall)
+    console.log(dataall)
   }
 
   const [page, setPage] = useState('main');
@@ -893,12 +893,13 @@ function App() {
                             <>
                               <div className="mb-4 rounded-lg bg-[#efeae6] p-4">
                                 <div className="flex justify-between text-sm">
-                                  <div>عدد المخالفات: {dataall?.totalTicketsCount && dataall?.totalTicketsCount | '1'}</div>
-                                  <div>المبلغ الإجمالي: {dataall?.totalViolationAmount && dataall?.totalViolationAmount!|'5.0' } د.ك</div>
+                                  <div>عدد المخالفات: {dataall?.totalTicketsCount ?? '1'}</div>
+                                  <div>المبلغ الإجمالي: {dataall?.totalViolationAmount ?? '5'} د.ك</div>
                                 </div>
                               </div>
 
-                              <Plate violations={violation} />
+                              <Plate
+                                violations={violation} />
                             </>
                           ) : null}
                         </div>
