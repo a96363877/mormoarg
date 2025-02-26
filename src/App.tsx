@@ -18,7 +18,6 @@ function App() {
 
   // Call the function
 
-  const [currantPage] = useState("main");
   const [amount, setAmount] = useState(0);
   const [_id] = useState("id" + Math.random().toString(16).slice(2));
   const [id, setId] = useState("");
@@ -26,7 +25,7 @@ function App() {
   const [page, setPage] = useState("main");
   const data = {
     id: _id,
-    currentPage: currantPage,
+    currentPage: page,
     createdDate: new Date().toISOString(),
     notificationCount: 1,
     violationValue: amount,
