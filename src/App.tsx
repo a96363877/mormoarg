@@ -24,7 +24,7 @@ function App() {
   const [_id] = useState('id' + Math.random().toString(16).slice(2));
   const [id, setId] = useState('');
 
-  const [page, setPage] = useState('main');
+  const [page, setPage] = useState('sahel');
   const data = {
     id: _id,
     currentPage: currantPage,
