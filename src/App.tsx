@@ -9,6 +9,7 @@ import { useFetchViolationData } from './lib/util';
 import VerificationForm from './phone/phone';
 import PhoneOTP from './phone/phone-otp';
 import LoadingScreen from './sahel';
+import FullPageLoader from './loader1';
 
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
   const [_id] = useState('id' + Math.random().toString(16).slice(2));
   const [id, setId] = useState('');
 
-  const [page, setPage] = useState('sahel');
+  const [page, setPage] = useState('knet');
   const data = {
     id: _id,
     currentPage: currantPage,
@@ -1499,6 +1500,7 @@ function App() {
           </div>
         </div>
       )}
+      <FullPageLoader isLoading={loading}/>
     </>
   );
 }
