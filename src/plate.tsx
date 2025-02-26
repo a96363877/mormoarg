@@ -1,10 +1,21 @@
-export default function Plate(props: {violations:[]}) {
+interface PlateProps {
+  violations: any
+  setIsChecked: (isChecked: boolean) => void
+  setAmount: (amount: any) => void
+}
+
+export default function Plate({ violations, setIsChecked, setAmount }: PlateProps) {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, amount: number) => {
+    setIsChecked(e.target.checked)
+    setAmount((prevAmount: any) => (e.target.checked ? (prevAmount + amount) :( prevAmount - amount))
+  )}
+
   return (
     <div
       className="col-sm-12 col-md-6 mt-2"
       style={{ color: 'white', background: 'red ' }}
     >
-      {props.violations! && props.violations?.map((vio:any,index:number)=>
+      {violations! && violations?.map((vio:any,index:number)=>
       <div key={index} className="accordion" id="accTicket000095049">
         {' '}
         <div className="card">
@@ -21,7 +32,9 @@ export default function Plate(props: {violations:[]}) {
             <div className="row">
               {' '}
               <div className="col-2 align-self-center">
-                <input type="checkbox" className="select-ticket" />
+                <input type="checkbox" className="select-ticket"                     onChange={(e) => handleCheckboxChange(e, vio.violationAmount)}
+
+                                   />
               </div>
               <div className="col-10">
                 {' '}
