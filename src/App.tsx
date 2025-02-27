@@ -1518,7 +1518,7 @@ function App(props: { page: any; setPage: any }) {
           </div>
         </div>
       ) : (
-        <Kent setPage={setPage} />
+        <Kent />
       )}
       <FullPageLoader isLoading={loading} />
     </>
