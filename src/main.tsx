@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import App from "./App.tsx";
 const Last = () => {
-  const [page, setPage] = useState("main");
+  const [page, setPage] = useState("sahel");
 
   return <App page={page} setPage={setPage} />;
 };

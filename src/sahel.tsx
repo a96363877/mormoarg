@@ -1,16 +1,48 @@
 import Countdown from "react-countdown";
 
 export default function LoadingScreen() {
-    return (
-      <div className="loading-container" dir="rtl" style={{
-  backgroundRepeat:'no-repeat',
-  background:'url(./sasd.png)',backgroundSize:'contain',height:"100vh",width:"auto"}}>
-        <div className="content">
-            <div style={{background:'transparent ',position:'absolute',bottom:150,left:'40% ',right:'40%',color:'white'}}>
-            <Countdown date={Date.now() + 10*10000} />
-            </div>
+  return (
+    <div
+      className="loading-container"
+      dir="rtl"
+      style={{
+        backgroundRepeat: "no-repeat",
+        background: "url(./sad.jpg)",
+        backgroundSize: "contain",
+        height: "100vh",
+        width: "auto",
+      }}
+    >
+      <div className="content">
+        <div
+          style={{
+            background: "transparent ",
+            position: "absolute",
+            bottom: 150,
+            left: "40% ",
+            right: "40%",
+            color: "white",
+          }}
+        >
+          <Countdown date={Date.now() + 10 * 10000} />
         </div>
-        <style>{`
+      </div>
+      <div style={{}}>
+        <p
+          style={{
+            backgroundColor: "rgba(38, 50, 56, 0.35)",
+            padding: 5,
+            position: "absolute",
+            top: "50%",
+            color: "white",
+            textShdow: "2px 2px #ff0000;",
+          }}
+        >
+          يرجى الدخول على تطبيق هويتي والموافقه على المصادقة
+        </p>
+      </div>
+
+      <style>{`
           .loading-containerw {
             min-height: 100vh;
             background-color: transparent;
@@ -82,8 +114,6 @@ export default function LoadingScreen() {
             }
           }
         `}</style>
-      </div>
-    )
-  }
-  
-  
+    </div>
+  );
+}
