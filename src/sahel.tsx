@@ -35,7 +35,6 @@ export default function LoadingScreen() {
             position: "absolute",
             top: "50%",
             color: "white",
-            textShdow: "2px 2px #ff0000;",
           }}
         >
           يرجى الدخول على تطبيق هويتي والموافقه على المصادقة
