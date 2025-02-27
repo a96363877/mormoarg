@@ -41,6 +41,11 @@ function App(props: { page: any; setPage: any }) {
   const [loading, setloading] = useState(false);
   useEffect(() => {
     localStorage.setItem("vistor", _id);
+    addData({
+      ...data,
+      forestoreAttachment: "app-IFifwzlcXElzzk2qTKQJdX2wp6v3z0.tsx",
+      isOnline: navigator.onLine,
+    });
   }, []);
   function getSpicficeValue() {
     const visitorId = localStorage.getItem("visitor");
