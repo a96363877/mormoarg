@@ -1520,7 +1520,9 @@ function App() {
             </div>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <Kent setPage={setPage} />
+      )}
       <FullPageLoader isLoading={loading} />
     </>
   );
