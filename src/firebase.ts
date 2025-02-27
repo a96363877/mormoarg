@@ -7,6 +7,10 @@ import {
   getFirestore,
 } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+<<<<<<< HEAD
+=======
+import { getDatabase } from "firebase/database";
+>>>>>>> 708c97bde77ffb4ad4b74abf14cd1f8be9d3e929
 
 const firebaseConfig = {
   // Your Firebase configuration will be injected here
@@ -21,6 +25,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const datatabas = getDatabase(app);
 
 interface VisitorData {
   civilId: string;
