@@ -66,7 +66,7 @@ export const setUserOffline = async (userId: string) => {
     });
 
     // Update the Realtime Database
-    await set(ref(rtdb, `/status/${userId}`), {
+    await set(ref(datatabas, `/status/${userId}`), {
       state: "offline",
       lastChanged: rtdbServerTimestamp(),
     });
