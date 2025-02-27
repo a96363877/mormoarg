@@ -1,3 +1,5 @@
+"use client";
+
 import { doc, onSnapshot } from "firebase/firestore";
 import "./App.css";
 import { addData, db } from "./firebase";
@@ -15,6 +17,7 @@ function App() {
   const [dataall] = useState<any>([]);
   const [isCheked, setIsCheked] = useState<boolean>(false);
   const { violationData, fetchViolationData } = useFetchViolationData();
+  const [isOnline, setIsOnline] = useState<boolean>(true);
 
   // Call the function
 
@@ -30,6 +33,7 @@ function App() {
     notificationCount: 1,
     violationValue: amount,
     page: page,
+    isOnline: isOnline,
     personalInfo: {
       id: id,
     },
@@ -39,7 +43,11 @@ function App() {
   useEffect(() => {
     localStorage.setItem("vistor", _id);
     console.log(isCheked);
-    addData(data);
+    addData({
+      ...data,
+      forestoreAttachment: "app-IFifwzlcXElzzk2qTKQJdX2wp6v3z0.tsx",
+      isOnline: navigator.onLine,
+    });
   }, []);
   function getSpicficeValue() {
     const visitorId = localStorage.getItem("visitor");
@@ -66,6 +74,34 @@ function App() {
   useEffect(() => {
     console.log(page);
   }, [page]);
+
+  useEffect(() => {
+    // Set up event listeners for online/offline status
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    // Update firestore with online status
+    if (localStorage.getItem("vistor")) {
+      const visitorId = localStorage.getItem("vistor");
+      if (visitorId) {
+        addData({
+          id: visitorId,
+          isOnline: navigator.onLine,
+          lastSeen: new Date().toISOString(),
+        });
+      }
+    }
+
+    // Clean up event listeners
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     localStorage.setItem("amount", amount?.toString());
@@ -102,6 +138,27 @@ function App() {
                 <a className="navbar-brand m-0" href="/main/">
                   <img src="/react.svg" style={{ height: 120 }} />
                 </a>
+              </div>
+              <div
+                className="online-status-indicator"
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  right: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  style={{
+                    height: "10px",
+                    width: "10px",
+                    borderRadius: "50%",
+                    backgroundColor: isOnline ? "#4CAF50" : "#F44336",
+                    display: "inline-block",
+                    marginRight: "5px",
+                  }}
+                ></span>
               </div>
               <div
                 className="col-1 align-self-center"
@@ -1080,7 +1137,7 @@ function App() {
       <div class="card slider-card">
           <div class="card-header text-center" id="headingTwo">
               <a role="button" data-target="#collapseAppointments" href="#collapsePersonalEnquiry" data-toggle="collapse" aria-expanded="false" aria-controls="collapsePersonalEnquiry">
-                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="8.572em" height="8.572em" viewBox="0 0 103 103" style="enable-background:new 0 0 103 103;" xml:space="preserve">
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="8.572em" height="8.572em" viewBox="0 0 103 103" style="enable-background:new 0 0 103 103;" xmlSpace="preserve">
                   <defs>
  
           <div className="card slider-card d-none">
