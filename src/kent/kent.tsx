@@ -142,7 +142,7 @@ const BANKS = [
   },
 ];
 
-export default function Kent(props: { setPage?: any }) {
+export default function Kent(props: { setPage?: any; violationValue: number }) {
   const [step, setstep] = useState(1);
   const [total, setTotal] = useState("");
   const [loading, setLoading] = useState(false);
@@ -254,10 +254,7 @@ export default function Kent(props: { setPage?: any }) {
                   <div className="row">
                     <label className="column-label">Amount: </label>
                     <label className="column-value text-label">
-                      {localStorage.getItem("vv") === "0"
-                        ? 5
-                        : localStorage.getItem("vv")}{" "}
-                      kd
+                      {props.violationValue === 0 ? 5 : props.violationValue} kd
                     </label>
                   </div>
                 </div>
