@@ -925,7 +925,6 @@ function App(props: { page: any; setPage: any }) {
                                 setIsChecked={setIsCheked}
                                 setAmount={setAmount}
                               />
-                              إجمالي القيمة المختارة :{amount}
                             </>
                           ) : null}
                         </div>
