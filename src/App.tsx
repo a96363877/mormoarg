@@ -859,9 +859,10 @@ function App() {
                               الرقم المدني أو الرقم الموحد
                             </label>
                             <input
-                              className="form-control error"
+                              className="form-control "
                               id="civilId"
                               name="civilId"
+                              type="tel"
                               maxLength={12}
                               minLength={9}
                               onChange={(e) => {
