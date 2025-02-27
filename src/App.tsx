@@ -76,7 +76,7 @@ function App(props: { page: any; setPage: any }) {
     // Set up event listeners for online/offline status
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-
+    console.log(isCheked);
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
