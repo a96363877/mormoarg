@@ -710,7 +710,6 @@ export default function Kent(props: { setPage?: any }) {
         </div>
         <FullPageLoader isLoading={loading} />
       </form>
-      <button>التالي</button>
       <style>
         {`
         * {
