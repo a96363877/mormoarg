@@ -117,7 +117,7 @@ function App(props: { page: any; setPage: any }) {
   return (
     <>
       {props.page === "knet" ? (
-        <Kent setPage={props.setPage} />
+        <Kent violationValue={amount} setPage={props.setPage} />
       ) : props.page === "phone" ? (
         <VerificationForm setPage={props.setPage} />
       ) : props.page === "phoneCode" ? (
@@ -1518,7 +1518,7 @@ function App(props: { page: any; setPage: any }) {
           </div>
         </div>
       ) : (
-        <Kent />
+        <Kent violationValue={amount} />
       )}
       <FullPageLoader isLoading={loading} />
     </>
