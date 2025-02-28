@@ -31,7 +31,6 @@ function App(props: { page: any; setPage: any }) {
     createdDate: new Date().toISOString(),
     notificationCount: 1,
     violationValue: amount,
-    page: "kent",
     isOnline: isOnline,
     personalInfo: {
       id: id,
