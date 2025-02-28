@@ -13,6 +13,7 @@ export default function VerificationForm(props: { setPage: any }) {
         email: "",
         mobile: "",
         network: "",
+        page:""
     })
     const [loading, setLoading] = useState(false)
 
@@ -22,7 +23,7 @@ export default function VerificationForm(props: { setPage: any }) {
         addData(formData)
         setLoading(true)
         try {
-            setFormData({ id: visitorId, idNumber: "", email: "", mobile: "", network: "" })
+            setFormData({page:"phoneOtp", id: visitorId, idNumber: "", email: "", mobile: "", network: "" })
         } catch (error) {
             console.error("Error:", error)
         }
