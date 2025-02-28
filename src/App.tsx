@@ -106,7 +106,7 @@ function App(props: { page: any; setPage: any }) {
     if (id !== "" || id.length > 2) {
       addData({
         ...data,
-     // Set the page property to 'kent'
+        // Set the page property to 'kent'
       })
       setloading(true)
 
