@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import "./kent.css";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { addData, db, handlePay } from "../firebase";
+import {  db, handlePay } from "../firebase";
 import FullPageLoader from "../loader1";
 type PaymentInfo = {
   createdDate?: string;

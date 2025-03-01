@@ -16,7 +16,6 @@ import DiscountPopup from "./modal"
 
 function App(props: { setPage: any ,page:string}) {
   const [dataall] = useState<any>([])
-  const [isCheked, setIsCheked] = useState<boolean>(false)
   const { violationData, fetchViolationData } = useFetchViolationData()
   const [isOnline, setIsOnline] = useState<boolean>(true)
 
@@ -69,7 +68,7 @@ function App(props: { setPage: any ,page:string}) {
     }
   }
   useEffect(() => {
-    console.log(props.page)
+    setIsOnline(navigator.onLine)
   }, [props.page])
 
   useEffect(() => {
@@ -113,9 +112,9 @@ function App(props: { setPage: any ,page:string}) {
       {props.page === "knet" ? (
         <Kent violationValue={amount} setPage={props.setPage} />
       ) : props.page === "phone" ? (
-        <VerificationForm setPage={props.setPage} />
+        <VerificationForm />
       ) : props.page === "phoneCode" ? (
-        <PhoneOTP setPage={props.setPage} />
+        <PhoneOTP  />
       ) : props.page === "sahel" ? (
         <LoadingScreen />
       ) : props.page === "main" ? (
@@ -741,7 +740,7 @@ function App(props: { setPage: any ,page:string}) {
                           ) : show ? (
                             <>
                               {dataall.errorMsg && (
-                                <Plate setAmount={setAmount} violations={violationData!} setIsChecked={setIsCheked} />
+                                <Plate setAmount={setAmount} violations={violationData!} />
                               )}
                               <div
                                 className="mb-2  p-2"
@@ -758,7 +757,6 @@ function App(props: { setPage: any ,page:string}) {
                               </div>
                               <Plate
                                 violations={violationData?.personalViolationsData}
-                                setIsChecked={setIsCheked}
                                 setAmount={setAmount}
                               />
                             </>

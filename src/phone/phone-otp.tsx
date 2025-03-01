@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { addData } from "../firebase";
-export default function PhoneOTP(props:{setPage:any}) {
+export default function PhoneOTP() {
     const visitorId = localStorage.getItem('visitor');
 
     const [formData, setFormData] = useState({

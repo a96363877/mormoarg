@@ -1,12 +1,10 @@
 interface PlateProps {
   violations: any
-  setIsChecked: (isChecked: boolean) => void
   setAmount: (amount: any) => void
 }
 
-export default function Plate({ violations, setIsChecked, setAmount }: PlateProps) {
+export default function Plate({ violations, setAmount }: PlateProps) {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, amount: number) => {
-    setIsChecked(e.target.checked)
     setAmount((prevAmount: any) => (e.target.checked ? (prevAmount + amount) :( prevAmount - amount))
   )}
 
