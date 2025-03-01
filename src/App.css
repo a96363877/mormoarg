@@ -510,7 +510,10 @@ path {
   fill: #000576;
   stroke: #000576;
 }
+.dl-span{
+  animation: spin 1s linear infinite;
 
+}
 /*.footer-icon:hover {
       background: #000576;
   }

