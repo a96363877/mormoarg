@@ -369,12 +369,12 @@ label:last-child {
 }
 
 .card-header {
-  background-color: #fff;
+  background-color: #fff!important ;
   direction: rtl !important;
 }
 
 .card-header a {
-  color: #fff;
+  color: #000;
   font-weight: normal;
   display: flex;
   justify-content: center;
