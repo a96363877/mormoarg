@@ -227,7 +227,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
           console.log(total);
         }}
       >
-        <div className="w-full" />
+        <div className="madd" />
         <div id="PayPageEntry">
           <div className="container">
             <div className="content-block">
@@ -740,7 +740,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
           box-sizing: border-box;
         }
         .content-block {
-          width: 100vw;
+          width: 395px;
           margin: 0 auto;
         }
         .row {
@@ -806,26 +806,24 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
           font-size: 11px;
           height: 20px;
         }
-       
+        form .text-label,
+        input,
         select {
           color: #444444;
           font-weight: normal;
-          border: 1px solid #454545;
-      
         }
         form input[type='tel'],
         input[type='password'] {
-          border: 1px solid #5f5f5f;
+          border: 2px solid #0070cd;
           box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
           padding: 0 3px;
-          outline: 1px;
-          border-radius: 2px;
+          outline: 0;
           font-size: 11px;
           height: 20px;
         }
         form input[type='text'],
         input[type='password'] {
-          border: 1px solid #777777;
+          border: 2px solid #0070cd;
           box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
           padding: 0 3px;
           outline: 0;
