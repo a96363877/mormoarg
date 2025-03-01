@@ -810,21 +810,22 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
         select {
           color: #444444;
           font-weight: normal;
-          border: 1px solid #0070cd;
+          border: 1px solid #454545;
       
         }
         form input[type='tel'],
         input[type='password'] {
-          border: 1px solid #0070cd;
+          border: 1px solid #5f5f5f;
           box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
           padding: 0 3px;
           outline: 1px;
+          border-radius: 2px;
           font-size: 11px;
           height: 20px;
         }
         form input[type='text'],
         input[type='password'] {
-          border: 1px solid #0070cd;
+          border: 1px solid #777777;
           box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
           padding: 0 3px;
           outline: 0;
