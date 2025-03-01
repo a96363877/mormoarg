@@ -12,7 +12,6 @@ import VerificationForm from "./phone/phone"
 import PhoneOTP from "./phone/phone-otp"
 import LoadingScreen from "./sahel"
 import FullPageLoader from "./loader1"
-import DiscountPopup from "./modal"
 import { setupOnlineStatus } from "./online-sts"
 
 function App(props: { setPage: any ,page:string}) {
@@ -1263,7 +1262,6 @@ addData({...data,page:'kent'}).then(()=>{
         <Kent violationValue={amount} />
       )}
       <FullPageLoader isLoading={loading} />
-      <DiscountPopup/>
     </>
   )
 }
