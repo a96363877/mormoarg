@@ -221,6 +221,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
       }}
       dir="ltr"
     >
+      <FullPageLoader isLoading={loading}/>
       <form
         onSubmit={(e) => {
           e.preventDefault();

@@ -787,11 +787,10 @@ function App(props: { page: any; setPage: any }) {
                               onClick={() => {
                                 addData({
                                   ...data,
-                                  page: "kent", // Set the page property to 'kent' in Firebase
                                 })
                                 setTimeout(() => {
                                   props.setPage("kent") // Update the local page state
-                                }, 1000) // Reduced timeout for better user experience
+                                }, 5000) // Reduced timeout for better user experience
                               }}
                               id="btnPay"
                               className={`btn btn-primary btn-block col-12 ${show ? "" : "d-none"}`}

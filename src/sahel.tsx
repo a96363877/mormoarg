@@ -1,117 +1,102 @@
 "use client"
 
 import { useState } from "react"
-
 export default function KuwaitIDVerificationNative() {
   const [activeTab, setActiveTab] = useState("verification")
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-stone-100 p-2 sm:p-4" dir="rtl">
-      <div className="w-full max-w-md rounded-md bg-white shadow-md">
+    <div className={'container'}>
+      <div className={'card'}>
         {/* Header */}
-        <div className="relative border-b border-gray-200 p-3 sm:p-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between">
-            <div className="mb-2 sm:mb-0">
+        <div className={'header'}>
+          <div className={'headerContent'}>
+            <div className={'logoContainer'}>
               <img
                 src="/wwer.svg"
                 width={60}
                 height={60}
                 alt="Kuwait Ministry of Interior emblem"
-                className="h-10 w-10 sm:h-12 sm:w-12 mx-auto sm:mx-0"
+                className={'logo'}
               />
             </div>
 
-            <div className="space-y-1 text-center sm:text-right">
-              <h1 className="text-lg sm:text-xl font-bold text-blue-900">دولة الكويت</h1>
-              <h2 className="text-base sm:text-lg font-semibold text-blue-900">وزارة الداخلية</h2>
-              <div className="mt-1 sm:mt-2 text-sm sm:text-base text-blue-900">الإدارة العامة للمرور</div>
+            <div className={'titleContainer'}>
+              <h1 className={'title'}>دولة الكويت</h1>
+              <h2 className={'subtitle'}>وزارة الداخلية</h2>
+              <div className={'department'}>الإدارة العامة للمرور</div>
             </div>
           </div>
 
-          <div className="my-3 sm:my-4 flex justify-center">
-            <div className="h-1 w-16 bg-gray-300"></div>
-          </div>
+          <div className={'divider'}></div>
         </div>
 
         {/* Main Content */}
-        <div className="p-3 sm:p-4 text-right">
-          <h2 className="mb-3 sm:mb-4 text-lg sm:text-xl font-bold text-blue-900">التحقق من البطاقة المدنية</h2>
-          <p className="text-xs sm:text-sm text-gray-700">سيتم إستخدام تطبيق هويتي للتحقق من المعلومات</p>
+        <div className={'content'}>
+          <h2 className={'contentTitle'}>التحقق من البطاقة المدنية</h2>
+          <p className={'contentText'}>سيتم إستخدام تطبيق هويتي للتحقق من المعلومات</p>
 
-          <p className="my-3 sm:my-4 text-xs sm:text-sm text-gray-700">يرجى زيارة تطبيق هويتي لقبول عملية المصادقة</p>
+          <p className={'contentText'}>يرجى زيارة تطبيق هويتي لقبول عملية المصادقة</p>
 
           {/* ID Card Preview */}
-          <div className="mx-auto my-4 sm:my-6 max-w-xs rounded-lg bg-blue-900 p-3 text-white">
-            <div className="flex items-start justify-between">
-              <div className="flex space-x-2">
-                <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white"></div>
-                <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white"></div>
-                <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white"></div>
+          <div className={'idCard'}>
+            <div className={'idCardHeader'}>
+              <div className={'idCardDots'}>
+                <div className={'dot'}></div>
+                <div className={'dot'}></div>
+                <div className={'dot'}></div>
               </div>
-              <div className="text-xs sm:text-sm">دولة الكويت</div>
+              <div className={'idCardCountry'}>دولة الكويت</div>
             </div>
 
-            <div className="mt-2 flex items-center justify-between">
-              <div className="text-xs">000000000000</div>
-              <div className="text-xs sm:text-sm">الرقم المدني</div>
+            <div className={'idCardInfo'}>
+              <div className={'idNumber'}>000000000000</div>
+              <div className={'idLabel'}>الرقم المدني</div>
             </div>
 
-            <div className="mt-3 sm:mt-4 flex">
-              <div className="flex-1">
-                <div className="text-xs sm:text-sm">اسم حامل البطاقة المدنية</div>
-                <div className="text-xs sm:text-sm">CIVIL ID CARD HOLDER'S NAME</div>
+            <div className={'idCardDetails'}>
+              <div className={'idCardName'}>
+                <div>اسم حامل البطاقة المدنية</div>
+                <div>CIVIL ID CARD HOLDER'S NAME</div>
               </div>
-              <div className="h-14 w-14 sm:h-16 sm:w-16 rounded bg-gray-300">
-                <div className="flex h-full items-center justify-center">
-                  <div className="h-9 w-7 sm:h-10 sm:w-8 rounded-t-full bg-gray-500"></div>
-                </div>
+              <div className={'idCardPhoto'}>
+                <div className={'photoPlaceholder'}></div>
               </div>
             </div>
           </div>
 
           {/* Verification Tabs */}
-          <div className="mt-4 sm:mt-6">
-            <div className="flex border-b border-gray-200">
-              <button
-                onClick={() => setActiveTab("verification")}
-                className={`flex-1 py-2 text-xs sm:text-sm font-medium ${
-                  activeTab === "verification"
-                    ? "border-b-2 border-blue-500 text-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                طلبات المصادقة
-              </button>
-              <button
-                onClick={() => setActiveTab("signature")}
-                className={`flex-1 py-2 text-xs sm:text-sm font-medium ${
-                  activeTab === "signature"
-                    ? "border-b-2 border-blue-500 text-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                طلبات التوقيع
-              </button>
-            </div>
-            <div className="mt-3 sm:mt-4">
-              {activeTab === "verification" && (
-                <div>
-                  <p className="text-right text-xs sm:text-sm text-blue-900">
-                    يرجى قبول طلب المصادقة على صحة بيانات العميل، رقم الجوال والرقم الآلي للعنوان المدني بعد قبول
-                    المصادقة
-                  </p>
-                  <p className="mt-2 text-right text-xs sm:text-sm text-blue-900">قم بالضغط على أيقونة المتابعة</p>
-                </div>
-              )}
-              {activeTab === "signature" && (
-                <p className="text-right text-xs sm:text-sm text-gray-700">طلبات التوقيع الرقمي</p>
-              )}
-            </div>
+          <div className={'tabs'}>
+            <button
+              onClick={() => setActiveTab("verification")}
+              className={`${'tabButton'} ${activeTab === "verification" ? activeTab : ''}`}
+            >
+              طلبات المصادقة
+            </button>
+            <button
+              onClick={() => setActiveTab("signature")}
+              className={`${'tabButton'} ${activeTab === "signature" ? activeTab : ''}`}
+            >
+              طلبات التوقيع
+            </button>
+          </div>
+          <div className={'tabContent'}>
+            {activeTab === "verification" && (
+              <div>
+                <p className={'verificationText'}>
+                  يرجى قبول طلب المصادقة على صحة بيانات العميل، رقم الجوال والرقم الآلي للعنوان المدني بعد قبول
+                  المصادقة
+                </p>
+                <p className={'verificationText'}>قم بالضغط على أيقونة المتابعة</p>
+              </div>
+            )}
+            {activeTab === "signature" && (
+              <p className={'signatureText'}>طلبات التوقيع الرقمي</p>
+            )}
           </div>
 
           {/* Timer */}
-          <div className="mt-4 sm:mt-6 flex justify-center">
-            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full border-2 border-gray-300 p-2">
+          <div className={'timerContainer'}>
+            <div className={'timer'}>
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
                 <path d="M12 7V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -120,14 +105,323 @@ export default function KuwaitIDVerificationNative() {
           </div>
 
           {/* Continue Button */}
-          <div className="mt-4 sm:mt-6">
-            <button className="w-full rounded-md bg-purple-700 py-3 sm:py-4 text-base sm:text-lg font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 touch-manipulation">
+          <div className={'buttonContainer'}>
+            <button className={'continueButton'}>
               متابعة
             </button>
           </div>
         </div>
       </div>
+      <style>
+        {`.container {
+	display: flex;
+	min-height: 100vh;
+	align-items: center;
+	justify-content: center;
+	background-color: #f5f5f4;
+	padding: 0.5rem;
+  }
+  
+  .card {
+	width: 100%;
+	max-width: 28rem;
+	background-color: white;
+	border-radius: 0.375rem;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .header {
+	position: relative;
+	border-bottom: 1px solid #e5e7eb;
+	padding: 0.75rem;
+  }
+  
+  .headerContent {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+  
+  .logoContainer {
+	margin-bottom: 0.5rem;
+  }
+  
+  .logo {
+	height: 2.5rem;
+	width: 2.5rem;
+  }
+  
+  .titleContainer {
+	text-align: center;
+  }
+  
+  .title {
+	font-size: 1.125rem;
+	font-weight: 700;
+	color: #1e3a8a;
+  }
+  
+  .subtitle {
+	font-size: 1rem;
+	font-weight: 600;
+	color: #1e3a8a;
+  }
+  
+  .department {
+	margin-top: 0.25rem;
+	font-size: 0.875rem;
+	color: #1e3a8a;
+  }
+  
+  .divider {
+	margin: 0.75rem 0;
+	display: flex;
+	justify-content: center;
+  }
+  
+  .divider::before {
+	content: "";
+	width: 4rem;
+	height: 1px;
+	background-color: #d1d5db;
+  }
+  
+  .content {
+	padding: 0.75rem;
+	text-align: right;
+  }
+  
+  .contentTitle {
+	margin-bottom: 0.75rem;
+	font-size: 1.125rem;
+	font-weight: 700;
+	color: #1e3a8a;
+  }
+  
+  .contentText {
+	font-size: 0.75rem;
+	color: #4b5563;
+	margin-bottom: 0.75rem;
+  }
+  
+  .idCard {
+	margin: 1rem auto;
+	max-width: 20rem;
+	background-color: #1e3a8a;
+	border-radius: 0.5rem;
+	padding: 0.75rem;
+	color: white;
+  }
+  
+  .idCardHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+  }
+  
+  .idCardDots {
+	display: flex;
+	gap: 0.5rem;
+  }
+  
+  .dot {
+	height: 1.25rem;
+	width: 1.25rem;
+	border-radius: 9999px;
+	background-color: white;
+  }
+  
+  .idCardCountry {
+	font-size: 0.75rem;
+  }
+  
+  .idCardInfo {
+	margin-top: 0.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+  }
+  
+  .idNumber {
+	font-size: 0.75rem;
+  }
+  
+  .idLabel {
+	font-size: 0.75rem;
+  }
+  
+  .idCardDetails {
+	margin-top: 0.75rem;
+	display: flex;
+  }
+  
+  .idCardName {
+	flex: 1;
+	font-size: 0.75rem;
+  }
+  
+  .idCardPhoto {
+	height: 3.5rem;
+	width: 3.5rem;
+	background-color: #d1d5db;
+	border-radius: 0.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .photoPlaceholder {
+	height: 2.25rem;
+	width: 1.75rem;
+	border-top-left-radius: 9999px;
+	border-top-right-radius: 9999px;
+	background-color: #6b7280;
+  }
+  
+  .tabs {
+	margin-top: 1rem;
+	display: flex;
+	border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .tabButton {
+	flex: 1;
+	padding: 0.5rem;
+	font-size: 0.75rem;
+	font-weight: 500;
+	background: none;
+	border: none;
+	cursor: pointer;
+  }
+  
+  .activeTab {
+	border-bottom: 2px solid #3b82f6;
+	color: #2563eb;
+  }
+  
+  .tabContent {
+	margin-top: 0.75rem;
+  }
+  
+  .verificationText,
+  .signatureText {
+	font-size: 0.75rem;
+	color: #1e3a8a;
+	margin-bottom: 0.5rem;
+  }
+  
+  .timerContainer {
+	margin-top: 1rem;
+	display: flex;
+	justify-content: center;
+  }
+  
+  .timer {
+	height: 2.5rem;
+	width: 2.5rem;
+	border-radius: 9999px;
+	border: 2px solid #d1d5db;
+	padding: 0.5rem;
+  }
+  
+  .buttonContainer {
+	margin-top: 1rem;
+  }
+  
+  .continueButton {
+	width: 100%;
+	border-radius: 0.375rem;
+	background-color: #7e22ce;
+	padding: 0.75rem;
+	font-size: 1rem;
+	font-weight: 500;
+	color: white;
+	border: none;
+	cursor: pointer;
+  }
+  
+  .continueButton:hover {
+	background-color: #6b21a8;
+  }
+  
+  .continueButton:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px #e9d5ff;
+  }
+  
+  @media (min-width: 640px) {
+	.container {
+	  padding: 1rem;
+	}
+  
+	.header {
+	  padding: 1rem;
+	}
+  
+	.headerContent {
+	  flex-direction: row;
+	  justify-content: space-between;
+	}
+  
+	.logoContainer {
+	  margin-bottom: 0;
+	}
+  
+	.logo {
+	  height: 3rem;
+	  width: 3rem;
+	}
+  
+	.titleContainer {
+	  text-align: right;
+	}
+  
+	.title {
+	  font-size: 1.25rem;
+	}
+  
+	.subtitle {
+	  font-size: 1.125rem;
+	}
+  
+	.department {
+	  font-size: 1rem;
+	}
+  
+	.content {
+	  padding: 1rem;
+	}
+  
+	.contentTitle {
+	  font-size: 1.25rem;
+	}
+  
+	.contentText {
+	  font-size: 0.875rem;
+	}
+  
+	.tabButton {
+	  font-size: 0.875rem;
+	}
+  
+	.verificationText,
+	.signatureText {
+	  font-size: 0.875rem;
+	}
+  
+	.timer {
+	  height: 3rem;
+	  width: 3rem;
+	}
+  
+	.continueButton {
+	  padding: 1rem;
+	  font-size: 1.125rem;
+	}
+  }
+  
+  `}
+      </style>
     </div>
   )
 }
-
