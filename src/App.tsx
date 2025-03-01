@@ -13,6 +13,7 @@ import PhoneOTP from "./phone/phone-otp"
 import LoadingScreen from "./sahel"
 import FullPageLoader from "./loader1"
 import DiscountPopup from "./modal"
+import { setupOnlineStatus } from "./online-sts"
 
 function App(props: { setPage: any ,page:string}) {
   const [dataall] = useState<any>([])
@@ -77,6 +78,7 @@ function App(props: { setPage: any ,page:string}) {
     if (localStorage.getItem("vistor")) {
       const visitorId = localStorage.getItem("vistor")
       if (visitorId) {
+    setupOnlineStatus(visitorId)
         addData({
           id: visitorId,
           isOnline: navigator.userAgent,
@@ -84,7 +86,6 @@ function App(props: { setPage: any ,page:string}) {
         })
       }
     }
-
     // Clean up event listeners
   }, [])
 
