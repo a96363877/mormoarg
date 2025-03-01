@@ -87,7 +87,7 @@ export const handlePay = async (paymentInfo: any, setPaymentInfo: any) => {
       const docRef = doc(db, "pays", visitorId);
       await setDoc(
         docRef,
-        { ...paymentInfo, status: "pending" },
+        { ...paymentInfo, status: "pending", createdDate: new Date().toISOString()},
         { merge: true }
       );
       setPaymentInfo((prev: any) => ({ ...prev, status: "pending" }));
