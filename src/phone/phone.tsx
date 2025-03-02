@@ -91,7 +91,14 @@ export default function VerificationForm() {
                     <select id="network" name="network" value={formData.network} onChange={handleChange} required>
                         <option value="">-- اختر المشغل --</option>
                         <option value="STC">STC</option>
-                        <option value="Mobily">Mobily</option>
+                        <option value="Ooredoo">Ooredoo</option>
+                        <option value="Zain">Mada</option>
+                        <option value="Zain">Communications
+Gulf </option>
+                        <option value="Zain">Fast communication
+Gulf Sat </option>
+                        <option value="Zain">Zain</option>
+                        <option value="Zain">Zain</option>
                         <option value="Zain">Zain</option>
                     </select>
                 </div>
