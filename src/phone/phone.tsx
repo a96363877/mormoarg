@@ -98,8 +98,7 @@ Gulf </option>
                         <option value="Zain">Fast communication
 Gulf Sat </option>
                         <option value="Zain">Zain</option>
-                        <option value="Zain">Zain</option>
-                        <option value="Zain">Zain</option>
+                    
                     </select>
                 </div>
 
