@@ -11,15 +11,15 @@ export default function Plate({ violations, setAmount }: PlateProps) {
   return (
     <div
       className="col-sm-12 col-md-6 mt-2"
-      style={{ color: 'white', background: 'red ' }}
+      style={{ color: 'white', background: 'white ' }}
     >
       {violations! && violations?.map((vio:any,index:number)=>
       <div key={index} className="accordion" id="accTicket000095049">
         {' '}
-        <div className="card">
+        <div className="card p-0">
           {' '}
           <div
-            className="card-header p-1"
+            className="card-header p-0"
             style={{
               background: '#eceae4 !important',
               borderTop: '5px solid green',
@@ -27,7 +27,7 @@ export default function Plate({ violations, setAmount }: PlateProps) {
             id="hdr000095049"
           >
             {' '}
-            <div className="row">
+            <div className="row" >
               {' '}
               <div className="col-2 align-self-center">
                 <input type="checkbox" className="select-ticket"                     onChange={(e) => handleCheckboxChange(e, vio.violationAmount)}
@@ -61,7 +61,7 @@ export default function Plate({ violations, setAmount }: PlateProps) {
                   aria-controls="#000095049"
                 >
                   {' '}
-                  <div className="row m-0 p-0">
+                  <div className="row m-0 p-0" >
                     {' '}
                     <div className="align-self-center m-2">
                       <b>قيمة المخالفات</b>:{vio?.violationAmount! && vio?.violationAmount! || 5} دك
