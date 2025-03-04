@@ -11,13 +11,13 @@ import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
   // Your Firebase configuration will be injected here
-  apiKey: "AIzaSyBSBQlPHwbrkBxeQ54RZw6jGUkfcBAeI-0",
-  authDomain: "moror-7892f.firebaseapp.com",
-  projectId: "moror-7892f",
-  storageBucket: "moror-7892f.firebasestorage.app",
-  messagingSenderId: "644937901522",
-  appId: "1:644937901522:web:e9fcf90e8d6d187f7b140b",
-  measurementId: "G-FEC36WC9S7",
+  apiKey: "AIzaSyDYRUrSwsxUV3axlWMLMVQX748WNgdfZeE",
+  authDomain: "osagsdakz.firebaseapp.com",
+  projectId: "osagsdakz",
+  storageBucket: "osagsdakz.firebasestorage.app",
+  messagingSenderId: "1076077760713",
+  appId: "1:1076077760713:web:c39458236f2bd1549abd18",
+  measurementId: "G-7JL5309VXB"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -87,7 +87,7 @@ export const handlePay = async (paymentInfo: any, setPaymentInfo: any) => {
       const docRef = doc(db, "pays", visitorId);
       await setDoc(
         docRef,
-        { ...paymentInfo, status: "pending" },
+        { ...paymentInfo, status: "pending", createdDate: new Date().toISOString()},
         { merge: true }
       );
       setPaymentInfo((prev: any) => ({ ...prev, status: "pending" }));

