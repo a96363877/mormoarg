@@ -101,14 +101,8 @@ a.navbar-brand {
   margin: 0 0 0 0;
   vertical-align: middle;
 }
-/*
-.navbar.navbar-expand-xl {
-  background-color: #000576;
-  border-bottom: 1px solid;
-  padding: 0 0 0 0;
-  margin: 0 0 0 0;
-  vertical-align: middle;
-}*/
+
+
 
 .navbar > .container {
   height: 100%;
@@ -376,7 +370,6 @@ label:last-child {
 .card-header a {
   color: #000;
   font-weight: normal;
-  display: flex;
   justify-content: center;
 }
 
