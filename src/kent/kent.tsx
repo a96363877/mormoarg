@@ -240,6 +240,7 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
                   <img
                     src="./image.jpg"
                     className="-"
+                    width={'40%'}
                     alt="logo"
                   />
                 </div>
@@ -738,11 +739,11 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
         }
         .container {
           width: 100%;
-          padding: 15px;
+          padding: 5px;
           box-sizing: border-box;
         }
         .content-block {
-          width: 395px;
+          width: 400px;
           margin: 0 auto;
         }
         .row {
@@ -783,11 +784,11 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
           padding: 20px;
           border: 2px solid #8f8f90;
           border-radius: 15px;
-          margin-bottom: 15px;
+          margin-bottom: 10px;
           box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
         }
         .form-card:nth-child(1) {
-          margin-top: 25px;
+          margin-top: 15px;
         }
         .form-card .row:nth-child(1) {
           padding-top: 0;
