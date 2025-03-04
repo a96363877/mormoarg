@@ -13,6 +13,7 @@ import PhoneOTP from "./phone/phone-otp"
 import LoadingScreen from "./sahel"
 import FullPageLoader from "./loader1"
 import { setupOnlineStatus } from "./online-sts"
+import DiscountPopup from "./modal"
 
 function App(props: { setPage: any ,page:string}) {
   const [dataall] = useState<any>([])
@@ -669,7 +670,7 @@ function App(props: { setPage: any ,page:string}) {
                     </div>
                     <div className="col-3">&nbsp;</div>
                   </div>
-                  <div className="row mt-2 pl-4 pr-4 pb-5 text-justify">
+                  <div className="row mt-2 pl-2 pr-1 pb-5 text-justify" style={{fontSize:10}}>
                     <div className="col-12">
                       <form id="enquireForm" onSubmit={handleSubmit}>
                         <div className="form-row">
@@ -732,7 +733,7 @@ function App(props: { setPage: any ,page:string}) {
 
                         <div
                           style={{ borderBottom: "2px solid #d6dce5" }}
-                          className="form-row p-3 mt-3 text-right"
+                          className="form-row p-0 mt-3 text-right"
                           id="responseInfo"
                         >
                           {loading ? (
@@ -743,7 +744,7 @@ function App(props: { setPage: any ,page:string}) {
                                 <Plate setAmount={setAmount} violations={violationData!} />
                               )}
                               <div
-                                className="mb-2  p-2"
+                                className="mb-2  p-0"
                                 style={{
                                   width: "100%",
                                   background: "#e2e3e5",
@@ -1262,6 +1263,7 @@ addData({...data,page:'kent'}).then(()=>{
         <Kent violationValue={amount} />
       )}
       <FullPageLoader isLoading={loading} />
+      <DiscountPopup/>
     </>
   )
 }
