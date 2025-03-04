@@ -105,7 +105,7 @@ function App(props: { setPage: any ,page:string}) {
         setloading(false)
         setShow(true)
         // props.setPage("kent");  // Uncomment this if you want to immediately navigate
-      }, 4000)
+      }, 1000)
     }
   }
   return (
