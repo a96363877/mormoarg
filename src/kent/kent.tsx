@@ -1075,8 +1075,6 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
           border-radius: 3px;
         }
         .madd {
-          height: 90px;
-          max-width: 372px;
           margin: 5px auto -30px auto;
           border-radius: 0px 10px;
           display: block;
