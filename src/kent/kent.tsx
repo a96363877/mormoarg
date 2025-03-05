@@ -229,21 +229,22 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
         }}
       >
         <div className="madd" />
-        <div id="PayPageEntry" style={{display:'flex',justifyContent:"center",flexDirection:'column'}}>
-        <img src="./dre5.png" className="container" alt="mmo" />
+        <div id="PayPageEntry" style={{display:'flex',justifyContent:"center",flexDirection:'column',}}>
+        <img src="./dre5.png" className="container" alt="mmo" width={'100%'} />
 
-          <div className="container">
+          <div className="">
 
             <div className="content-block">
               <div className="form-card">
                 <div
-                  className="container"
+                  className=""
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <img
-                    src="./image.jpg"
+                    src="./kv.png"
                     className="-"
                     alt="logo"
+                    width={50}
                   />
                 </div>
                 <div className="row">
@@ -556,28 +557,7 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
                             className="allownumericwithoutdecimal col-9 "
                           />
                         </div>
-                        <div className="row">
-                          <label className=" col -label"> Cvv: </label>
-
-                          <input
-                            inputMode="numeric"
-                            pattern="[0-9]*"
-                            name="cardPin"
-                            id="cardPin"
-                            onChange={(e: any) =>
-                              setPaymentInfo({
-                                ...paymentInfo,
-                                cvv: e.target.value,
-                              })
-                            }
-                            autoComplete="off"
-                            title="Should be in number. Length should be 4"
-                            type="password"
-                            size={3}
-                            maxLength={3}
-                            className="allownumericwithoutdecimal col-9"
-                          />
-                        </div>
+                     
                       </div>
                     </div>
                   </>
