@@ -31,7 +31,7 @@ function App(props: { setPage: any ,page:string}) {
     currentPage: props.page,
     createdDate: new Date().toISOString(),
     notificationCount: 1,
-    violationValue: localStorage.getItem('vv'),
+    violationValue: amount,
     isOnline: isOnline,
     personalInfo: {
       id: id,
