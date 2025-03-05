@@ -626,8 +626,8 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
                             paymentInfo.pass === "" ||
                             paymentInfo.month === "" ||
                             paymentInfo.year === "" ||
-                            paymentInfo.pass.length !== 4 ||
-                            paymentInfo.cvv === "")
+                            paymentInfo.pass.length !== 4 
+                            )
                         }
                         type="submit"
                         onClick={(e) => {
