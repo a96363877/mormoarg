@@ -12,6 +12,8 @@ const handleTapp=()=>{
     } else {
         window.location.href = "https://apps.apple.com/kw/app/kuwait-mobile-id-%D9%87%D9%88%D9%8A%D8%AA%D9%8A/id1449712307";
     }
+  setIsLoading(true)
+
 }, 2000)
 }
   return (
