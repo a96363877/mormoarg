@@ -14,7 +14,7 @@ const DiscountPopup = () => {
       <div className="discount-popup" >
       <div style={{display:'flex',justifyContent:'center'}}>
         <img
-          src="./ico-general-traffic.svg"
+          src="./react.svg"
           className="discount-logo"
           alt="MOI Logo"
           width={150}

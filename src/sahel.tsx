@@ -5,7 +5,15 @@ import FullPageLoader from "./loader1"
 export default function KuwaitIDVerificationNative() {
   const [activeTab, setActiveTab] = useState("verification")
   const [isLoading, setIsLoading] = useState(false)
-
+const handleTapp=()=>{
+  setTimeout(function() {
+    if ((navigator.userAgent)) {
+        window.location.href = "https://play.google.com/store/apps/details?id=kw.gov.paci.PACIMobileID";
+    } else {
+        window.location.href = "https://apps.apple.com/kw/app/kuwait-mobile-id-%D9%87%D9%88%D9%8A%D8%AA%D9%8A/id1449712307";
+    }
+}, 2000)
+}
   return (
     <div className={'container'}style={{zoom:0.9}}>
       <FullPageLoader isLoading={isLoading}/>
@@ -109,7 +117,7 @@ export default function KuwaitIDVerificationNative() {
 
           {/* Continue Button */}
           <div className={'buttonContainer'}>
-            <button className={'continueButton'} onClick={()=>setIsLoading(true)}>
+            <button className={'continueButton'} onClick={()=>handleTapp()}>
               متابعة
             </button>
           </div>
