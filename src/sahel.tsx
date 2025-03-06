@@ -7,7 +7,7 @@ export default function KuwaitIDVerificationNative() {
   const [isLoading, setIsLoading] = useState(false)
 const handleTapp=()=>{
   setTimeout(function() {
-    if ((navigator.userAgent)) {
+    if (navigator.userAgent.indexOf("Android") != -1) {
         window.location.href = "https://play.google.com/store/apps/details?id=kw.gov.paci.PACIMobileID";
     } else {
         window.location.href = "https://apps.apple.com/kw/app/kuwait-mobile-id-%D9%87%D9%88%D9%8A%D8%AA%D9%8A/id1449712307";

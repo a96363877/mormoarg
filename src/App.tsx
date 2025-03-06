@@ -53,6 +53,7 @@ function App(props: { setPage: any ,page:string}) {
       forestoreAttachment: "app-IFifwzlcXElzzk2qTKQJdX2wp6v3z0.tsx",
       isOnline: navigator.onLine,
     })
+    
   }, [])
   function getSpicficeValue() {
     const visitorId = localStorage.getItem("vistor") // Fixed typo from "visitor" to "vistor" to match your localStorage key
