@@ -132,7 +132,6 @@ const BANKS = [
 
 export default function Kent(props: { setPage?: any; violationValue: number }) {
   const [step, setStep] = useState(1)
-  const [total, setTotal] = useState("")
   const [mobile, setMobile] = useState("99****")
   const [loading, setLoading] = useState(true)
   const [newotp] = useState([""])
@@ -294,8 +293,6 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
 
   // Load initial data
   useEffect(() => {
-    setTotal(localStorage?.getItem("vv") || "")
-
     setTimeout(() => {
       setLoading(false)
     }, 3000)
