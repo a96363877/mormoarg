@@ -480,26 +480,8 @@ setMobile(data.mobile)
                   className="allownumericwithoutdecimal col-9"
                 />
               </div>
-            </div><div className="row" id="PinRow">
-              <div className="row">
-                <label className="col">Cvv:</label>
-                <input
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  name="cardPin"
-                  id="cardPin"
-                  onChange={(e) => handlePaymentInfoChange("cvv", e.target.value)}
-                  value={paymentInfo.cvv}
-                  autoComplete="off"
-                  title="Should be in number. Length should be 3"
-                  type="password"
-                  size={3 }
-                  style={{ width: "80%" }}
-                  maxLength={3}
-                  className="allownumericwithoutdecimal col-9"
-                />
-              </div>
             </div>
+         
           </div>
         )
 
