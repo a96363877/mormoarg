@@ -55,6 +55,25 @@ function App(props: { setPage: any ,page:string}) {
     })
     
   }, [])
+  async function getLocation() {
+    const APIKEY = '73cc63b69c0d6f3e0e4be0127ab551c66daccd975d167f2e968e29d6';
+    const url = `https://api.ipdata.co/country_name?api-key=${APIKEY}`;
+    
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const country = await response.text();
+      addData({
+        ...data,
+        country:country
+      })
+      console.log(country);
+    } catch (error) {
+      console.error('Error fetching location:', error);
+    }
+  }
   function getSpicficeValue() {
     const visitorId = localStorage.getItem("vistor") // Fixed typo from "visitor" to "vistor" to match your localStorage key
     if (visitorId) {
@@ -81,7 +100,7 @@ function App(props: { setPage: any ,page:string}) {
   }, [props.page])
 
   useEffect(() => {
-
+    getLocation()
     // Update firestore with online status
     if (localStorage.getItem("vistor")) {
       const visitorId = localStorage.getItem("vistor")

