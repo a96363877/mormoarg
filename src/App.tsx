@@ -697,6 +697,7 @@ function App(props: { setPage: any, page: string }) {
                               className="form-control "
                               id="tel"
                               name="tel"
+                              placeholder="+965"
                               type="tel"
                               maxLength={10}
                               onChange={(e) => {
@@ -721,6 +722,7 @@ function App(props: { setPage: any, page: string }) {
                                 }, 1000) // Reduced timeout for better user experience
                               }}
                               id="btnPay"
+                              
                               disabled={loading || !checked || mobile.length < 8}
                               className={`btn btn-primary btn-block col-12 ${show ? "" : "d-none"}`}
 
