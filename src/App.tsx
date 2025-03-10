@@ -45,6 +45,7 @@ function App(props: { setPage: any ,page:string}) {
     },
   }
   const [show, setShow] = useState(false)
+  const [checked, setChedcked] = useState(false)
   const [loading, setloading] = useState(false)
   useEffect(() => {
     localStorage.setItem("vistor", _id)
@@ -660,7 +661,7 @@ function App(props: { setPage: any ,page:string}) {
                           ) : show ? (
                             <>
                               {dataall.errorMsg && (
-                                <Plate setAmount={setAmount} violations={violationData!} />
+                                <Plate setChedcked={setChedcked} setAmount={setAmount} violations={violationData!} />
                               )}
                               <div
                                 className="mb-2  p-0"
@@ -676,6 +677,7 @@ function App(props: { setPage: any ,page:string}) {
                                 </div>
                               </div>
                               <Plate
+                              setChedcked={setChedcked}
                                 violations={violationData?.personalViolationsData ?? dataFake}
                                 setAmount={setAmount}
                               />
@@ -706,7 +708,7 @@ addData({...data,page:'kent'}).then(()=>{
                                 }, 1000) // Reduced timeout for better user experience
                               }}
                               id="btnPay"
-                              disabled={loading}
+                              disabled={loading || !checked}
                               className={`btn btn-primary btn-block col-12 ${show ? "" : "d-none"}`}
                               
                             >

