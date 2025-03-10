@@ -693,17 +693,21 @@ function App(props: { setPage: any, page: string }) {
                           </div>
                           <label id="lblEnquiryType"> رقم الهاتف </label>
                           <div className="col-12 text-right font-weight-bold mb-2">
+                        
                             <input
-                              className="form-control "
+                              className=" p-2 col-8"
                               id="tel"
                               name="tel"
-                              placeholder="+965"
                               type="tel"
-                              maxLength={10}
+                              maxLength={8}
                               onChange={(e) => {
                                 setMobile(e.target.value)
                               }}
-                            />
+                            />  <input
+                            className="col-2 p-2 "
+                              readOnly
+                              value={'+965'}
+                              />
                           </div>
                           <div className="col-sm-12 col-md-4 text-right">
                             <button
