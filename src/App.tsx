@@ -689,7 +689,7 @@ function App(props: { setPage: any, page: string }) {
                           <div className="col-12 text-left" id="payingAmount" />
                         </div>
                         <div className={`form-row mt-3 ${show ? "" : "d-none"} `}>
-                          <div className="col-12 text-right font-weight-bold mb-2">
+                          <div className="col-12 text-right x font-bold mb-2" style={{fontWeight:800}}>
                             بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
                           </div>
                           <label id="lblEnquiryType"> رقم الهاتف </label>
