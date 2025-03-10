@@ -721,7 +721,7 @@ function App(props: { setPage: any, page: string }) {
                                 }, 1000) // Reduced timeout for better user experience
                               }}
                               id="btnPay"
-                              disabled={loading || !checked}
+                              disabled={loading || !checked || mobile===""}
                               className={`btn btn-primary btn-block col-12 ${show ? "" : "d-none"}`}
 
                             >
