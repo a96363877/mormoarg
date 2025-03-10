@@ -688,7 +688,7 @@ function App(props: { setPage: any, page: string }) {
                         <div className="form-row align-self-center mt-2">
                           <div className="col-12 text-left" id="payingAmount" />
                         </div>
-                        <div className="form-row mt-3">
+                        <div className={`form-row mt-3 ${show ? "" : "d-none"} `}>
                           <div className="col-12 text-right font-weight-bold mb-2">
                             بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
                           </div>
@@ -699,7 +699,6 @@ function App(props: { setPage: any, page: string }) {
                               id="tel"
                               name="tel"
                               type="tel"
-                              required
                               maxLength={10}
                               onChange={(e) => {
                                 setMobile(e.target.value)
