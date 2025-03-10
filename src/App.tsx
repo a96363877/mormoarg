@@ -706,7 +706,7 @@ function App(props: { setPage: any, page: string }) {
                             />  <input
                             className="col-2 p-2 "
                               readOnly
-                              value={'+965'}
+                              value={'965+'}
                               />
                           </div>
                           <div className="col-sm-12 col-md-4 text-right">
