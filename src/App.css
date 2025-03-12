@@ -4,7 +4,7 @@ for details on configuring this project to bundle and minify static web assets. 
 
 * {
   font-family: 'Noto Kufi Arabic', serif;
-  font-weight: 600 !important;
+  font-size: medium;
 
 }
 @media (min-width: 768px) {
@@ -364,10 +364,6 @@ label:last-child {
   margin-bottom: 2px;
 }
 
-.card-header {
-  background-color: #fff!important ;
-  direction: rtl !important;
-}
 
 .card-header a {
   color: #000;
@@ -1166,7 +1162,9 @@ label:last-child {
   font-size: 12px !important;
   margin-bottom: 2px;
 }
-
+.card{
+  background: #000576 ;
+}
 .card-header {
   color: #fff;
 }

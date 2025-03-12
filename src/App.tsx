@@ -628,7 +628,9 @@ function App(props: { setPage: any, page: string }) {
                           </div>
                           <div className="form-row mt-2">
                             <div className="col-sm-12 col-md-6">
-                              <label id="lblEnquiryType">الرقم المدني أو الرقم الموحد</label>
+                              <label id="lblEnquiryType" 
+                              style={{padding:15}}
+                              >الرقم المدني أو الرقم الموحد</label>
                               <input
                                 className="form-control "
                                 id="civilId"

