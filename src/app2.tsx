@@ -41,6 +41,7 @@ function App2(props: { setPage: any ,page:string}) {
   const [loading, setloading] = useState(false)
   const [checked, setChedcked] = useState(false)
   useEffect(() => {
+    console.log(checked)
     localStorage.setItem("vistor", _id)
     addData({
       ...data,
