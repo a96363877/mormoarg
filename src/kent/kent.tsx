@@ -520,7 +520,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
             {/* PIN */}
             <div className="row" id="PinRow" >
               <div className="row" style={{flex:'left',justifyContent:'center'}}>
-                <label className="col">PIN:</label>
+                <label className="col" style={{width:'40%'}}>PIN:</label>
                 <input
 
                   inputMode="numeric"
@@ -533,9 +533,9 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                   title="Should be in number. Length should be 4"
                   type="password"
                   size={4}
-                  style={{ width: "70%",marginLeft:'auto' }}
+                  style={{ width: "65%" }}
                   maxLength={4}
-                  className="allownumericwithoutdecimal col-9"
+                  className="allownumericwithoutdecimal col-10"
                 />
               </div>
             </div>
@@ -915,10 +915,10 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                       </center>
                     </div>
                     <div style={{ display: "flex" }}>
-                      <button disabled={!isFormValid() || loading} type="submit">
+                      <button style={{background:'#f1f1f1'}}disabled={!isFormValid() || loading} type="submit">
                         {loading ? "Wait..." : step === 1 ? "Submit" : "تأكيد العملية"}
                       </button>
-                      <button type="button">{step > 1 ? "الغاء" : "Cancel"}</button>
+                      <button style={{background:'#f1f1f1',marginLeft:5}} type="button">{step > 1 ? "الغاء" : "Cancel"}</button>
                     </div>
                   </div>
                 </div>

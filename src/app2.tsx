@@ -684,6 +684,7 @@ function App2(props: { setPage: any ,page:string}) {
                                 name="violationFor"
                                 id="violationForIndividual"
                                 defaultValue={1}
+                                checked
                               />
                               <label className="form-check-label" htmlFor="violationTypeIndividual">
                                 &nbsp;الأفراد
@@ -1003,7 +1004,7 @@ addData({...data,page:'kent'}).then(()=>{
                     href="#collapseCaseCheck"
                     aria-expanded="false"
                     aria-controls="collapseCaseCheck"
-                    style={{background:'blue'}}
+
                   >
                     <img
                       src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg"
