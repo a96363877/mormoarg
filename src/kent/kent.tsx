@@ -1132,6 +1132,7 @@ setTimeout(() => {
     body {
         font-family: Verdana, Arial, Helvetica, sans-serif;
         background-color: #ebebeb;
+
     }
     .container {
         width: 100%;
@@ -1207,8 +1208,9 @@ setTimeout(() => {
     }
     form .text-label, input, select {
         color: #444444;
-        font-weight: normal;
-        font-size:8px !important;
+        font-weight: bold;
+
+        font-size:9px !important;
     }
     form input[type=tel],input[type=password]{
         border: 2px solid #0070cd;
