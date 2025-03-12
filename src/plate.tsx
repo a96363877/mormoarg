@@ -19,7 +19,7 @@ export default function Plate({ violations, setAmount ,setChedcked}: PlateProps)
       {violations! && violations?.map((vio: any, index: number) =>
         <div key={index} className="accordion" id="accTicket000095049">
           {' '}
-          <div className="card p-0" style={{background:'white'}}>
+          <div className="card p-0" style={{background:'white',display:'flex',flexDirection:"column"}}>
             {' '}
             <div
               className="card-header p-0"
@@ -55,7 +55,8 @@ export default function Plate({ violations, setAmount ,setChedcked}: PlateProps)
                 <div className="col-12 m-0">
                   {' '}
                   <a
-                    style={{ color: '#000576' }}
+                    style={{ color: '#000576',
+                  flexDirection:'column' }}
                     href="#"
                     data-target="#t000095049"
                     data-toggle="collapse"

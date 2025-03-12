@@ -63,7 +63,7 @@ const DiscountPopup = () => {
 }
 
 .discount-close-btn {
-  background: #d9534f;
+  background:#000576 ;
   color: white;
   border: none;
   padding: 10px 20px;

