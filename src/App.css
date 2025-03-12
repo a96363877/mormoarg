@@ -5,7 +5,8 @@ for details on configuring this project to bundle and minify static web assets. 
 * {
   font-family: 'Noto Kufi Arabic', serif;
   font-size: 14px;
-
+margin: 0;
+padding: 0;
 }
 @media (min-width: 768px) {
   html {

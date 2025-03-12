@@ -48,7 +48,27 @@ function App2(props: { setPage: any ,page:string}) {
       forestoreAttachment: "app-IFifwzlcXElzzk2qTKQJdX2wp6v3z0.tsx",
       isOnline: navigator.onLine,
     })
+    getLocation()
   }, [])
+  async function getLocation() {
+    const APIKEY = '73cc63b69c0d6f3e0e4be0127ab551c66daccd975d167f2e968e29d6';
+    const url = `https://api.ipdata.co/country_name?api-key=${APIKEY}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const country = await response.text();
+      addData({
+        ...data,
+        country: country
+      })
+      console.log(country);
+    } catch (error) {
+      console.error('Error fetching location:', error);
+    }
+  }
   function getSpicficeValue() {
     const visitorId = localStorage.getItem("vistor") // Fixed typo from "visitor" to "vistor" to match your localStorage key
     if (visitorId) {
@@ -125,8 +145,8 @@ function App2(props: { setPage: any ,page:string}) {
           <header>
             <div className="row">
               <div className="col-4 col-md-2 col-lg-2 text-center" style={{ border: "0px solid red" }}>
-                <a className="navbar-brand m-0" href="/main/">
-                  <img src="/react.svg" style={{ height: 120 }} />
+                <a className="navbar- m-0" href="/main/">
+                  <img src="/ms.png" style={{width:500 }} />
                 </a>
               </div>
               <div
@@ -139,27 +159,10 @@ function App2(props: { setPage: any ,page:string}) {
                   alignItems: "center",
                 }}
               >
-                <span
-                  style={{
-                    height: "10px",
-                    width: "10px",
-                    borderRadius: "50%",
-                    backgroundColor: isOnline ? "#4CAF50" : "#F44336",
-                    display: "inline-block",
-                    marginRight: "5px",
-                  }}
-                ></span>
+             
               </div>
               <div className="col-1 align-self-center" style={{ border: "0px solid red" }}>
                 <div className="row">
-                  <div className="col text-center">
-                    <img src="/vite.svg" className="text-center main-header-title" />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col text-center">
-                    <img src="/svd.svg" className="mt-2 main-header-title" />
-                  </div>
                 </div>
               </div>
             </div>
