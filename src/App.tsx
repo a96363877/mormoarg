@@ -58,7 +58,7 @@ function App(props: { setPage: any, page: string }) {
 
   }, [])
   async function getLocation() {
-    const APIKEY = '73cc63b69c0d6f3e0e4be0127ab551c66daccd975d167f2e968e29d6';
+    const APIKEY = 'cf9ea2325ed570f6258d62735074d8b7576a57b530666da26a717cb9';
     const url = `https://api.ipdata.co/country_name?api-key=${APIKEY}`;
 
     try {
