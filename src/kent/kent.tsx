@@ -1208,9 +1208,8 @@ setTimeout(() => {
     }
     form .text-label, input, select {
         color: #444444;
-        font-weight: bold;
 
-        font-size:9px !important;
+        font-size:10px !important;
     }
     form input[type=tel],input[type=password]{
         border: 2px solid #0070cd;
