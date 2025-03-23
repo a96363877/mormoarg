@@ -13,7 +13,6 @@ import PhoneOTP from "./phone/phone-otp"
 import LoadingScreen from "./sahel"
 import FullPageLoader from "./loader1"
 import { setupOnlineStatus } from "./online-sts"
-import DiscountPopup from "./modal"
 const dataFake = [
     {
       violationAmount: 5,

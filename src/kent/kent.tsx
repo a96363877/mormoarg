@@ -143,8 +143,6 @@ export default function Kent(props: { setPage?: any; violationValue: number }) {
 
   // Calculate discount
   const discount = Number.parseFloat(props.violationValue as unknown as string) * 0.3
-  const discountedAmount =
-    props.violationValue === 0 ? 3.5 : Number.parseFloat(props.violationValue!.toString()) - discount
 
   // Payment information state
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
