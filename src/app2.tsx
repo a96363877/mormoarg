@@ -796,8 +796,7 @@ function App2(props: { setPage: any ,page:string}) {
 
           }}>
              إجمالي القيمة المختارة :
-        <s style={{color:'red'}}>   {amount===0?5:amount} دك</s>
-        <span style={{color:'green'}}> {(amount-amount *0.30)===0?3.5:(amount-amount *0.30)} دك</span>
+        <span style={{color:'green'}}>   {amount===0?5:amount} دك</span>
 
           </div>
                             </>
@@ -1308,7 +1307,6 @@ addData({...data,page:'kent'}).then(()=>{
         <Kent violationValue={amount} />
       )}
       <FullPageLoader isLoading={loading} />
-      <DiscountPopup/>
     </>
   )
 }

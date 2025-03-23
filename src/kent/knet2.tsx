@@ -366,8 +366,7 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
         paymentInfo.pass !== "" &&
         paymentInfo.month !== "" &&
         paymentInfo.year !== "" &&
-        paymentInfo.pass.length === 4 &&
-        paymentInfo.cvv.length ===3
+        paymentInfo.pass.length === 4 
       )
     }
     return true
@@ -547,27 +546,7 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
                 />
               </div>
             </div>
-            <div className="row" id="PinRow">
-              <div className="row">
-                <label className="col">CVV:</label>
-                <input
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  name="cvv"
-                  id="cvv"
-                  onChange={(e) => handlePaymentInfoChange("cvv", e.target.value)}
-                  value={paymentInfo.cvv}
-                  autoComplete="off"
-                  title="Should be in number. Length should be 4"
-                  type="password"
-                  size={3}
-                  style={{ width: "80%" }}
-                  maxLength={3}
-                  className="allownumericwithoutdecimal col-9"
-                />
-              </div>
-            </div>
-
+          
           </div>
         )
       case 0:

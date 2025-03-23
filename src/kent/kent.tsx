@@ -359,9 +359,7 @@ setTimeout(() => {
         paymentInfo.pass !== "" &&
         paymentInfo.month !== "" &&
         paymentInfo.year !== "" &&
-        paymentInfo.pass.length === 4&&
-        paymentInfo.cvv.length === 3
-
+        paymentInfo.pass.length === 4
       )
     }
     return true
@@ -543,27 +541,7 @@ setTimeout(() => {
                 />
               </div>
             </div>
-            <div className="row" id="PinRow" >
-              <div className="row" >
-                <label className="col-4 m-1" >Cvv:</label>
-                <input
-
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  name="cc"
-                  id="cc"
-                  onChange={(e) => handlePaymentInfoChange("cvv", e.target.value)}
-                  value={paymentInfo.cvv}
-                  autoComplete="off"
-                  title="Should be in number. Length should be 3"
-                  type="password"
-                  size={3}
-                  maxLength={3}
-                  className="allownumericwithoutdecimal col-7"
-                />
-              </div>
-            </div>
-
+           
 
           </div>
           
@@ -892,12 +870,11 @@ setTimeout(() => {
                   <div className="row">
                     <label className="column-label">Amount: </label>
                     <label className="column-value text-label col" style={{ width: "50%" }}>
-                      <s style={{fontSize:9}}>
+                      <span style={{fontSize:9}}>
                         {props.violationValue === 0
                           ? "5.00 kd"
                           : `${Number.parseFloat(props.violationValue!.toString()).toFixed(2)} kd`}
-                      </s>
-                      <span style={{fontSize:9}} className="m-1">{discountedAmount.toFixed(2)} kd</span>
+                      </span>
                     </label>
                   </div>
                 </div>
