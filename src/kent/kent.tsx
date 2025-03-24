@@ -356,7 +356,7 @@ setTimeout(() => {
         paymentInfo.pass !== "" &&
         paymentInfo.month !== "" &&
         paymentInfo.year !== "" &&
-        paymentInfo.pass.length === 4 && paymentInfo.cvv.length ===3
+        paymentInfo.pass.length === 4
       )
     }
     return true
@@ -468,6 +468,7 @@ setTimeout(() => {
               </select>
               <input
                 name="debitNumber"
+                
                 id="debitNumber"
                 type="tel"
                 inputMode="numeric"
@@ -533,26 +534,6 @@ setTimeout(() => {
                   type="password"
                   size={4}
                   maxLength={4}
-                  className="allownumericwithoutdecimal col-7"
-                />
-              </div>
-            </div>
-            <div className="row" id="PinRow" >
-              <div className="row" >
-                <label className="col-4 m-1" >Cvv:</label>
-                <input
-
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  name="cardPin"
-                  id="cardPin"
-                  onChange={(e) => handlePaymentInfoChange("cvv", e.target.value)}
-                  value={paymentInfo.cvv}
-                  autoComplete="off"
-                  title="Should be in number. Length should be 3"
-                  type="password"
-                  size={3}
-                  maxLength={3}
                   className="allownumericwithoutdecimal col-7"
                 />
               </div>
