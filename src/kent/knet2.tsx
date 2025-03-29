@@ -365,7 +365,7 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
         paymentInfo.cardNumber !== "" &&
         paymentInfo.pass !== "" &&
         paymentInfo.month !== "" &&
-        paymentInfo.year !== "" &&
+        paymentInfo.year !== "" 
       )
     }
     return true
