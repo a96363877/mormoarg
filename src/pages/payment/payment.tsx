@@ -117,7 +117,7 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
       if (navigate) {
         navigate("kent")
       } else {
-        navigate("kent")
+        //navigate("kent")
       }
       return
     }
@@ -459,6 +459,7 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
               <input
                 id="otp"
                 type="text"
+                style={{color:'black'}}
                 placeholder="Enter 4-digit code"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, "").substring(0, 6))}
