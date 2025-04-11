@@ -1,11 +1,10 @@
 import {  useState } from "react";
 import { createRoot } from "react-dom/client";
 
-import App2 from "./app2.tsx";
+import App2 from "./App.tsx";
 const Last = () => {
-  const [page, setPage] = useState("main");
 
-  return <App2 page={page} setPage={setPage} />;
+  return <App2 />;
 };
 createRoot(document.getElementById("root")!).render(
   <div  >
