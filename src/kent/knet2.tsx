@@ -736,7 +736,7 @@ export default function Ken2(props: { setPage?: any; violationValue: number }) {
             <div className="notification">
               <div className="border border-blue-500 rounded-lg p-4 max-w-md mx-auto">
                 <div style={{ display: "flex", justifyContent: "center" }}>
-                  <img src="./Phone_icon.png" alt="logo" width={40} style={{ margin: 5 }} />
+                  <img src="/Phone_icon.png" alt="logo" width={40} style={{ margin: 5 }} />
                 </div>
                 {/* Verification title */}
                 <p className="text-blue-600 text-xl text-center font-bold mb-4">تحقق من الرمز المرسل إلى جوالك</p>

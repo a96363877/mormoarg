@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { CreditCard, CheckCircle, AlertCircle, ArrowRight, Lock } from "lucide-react"
+import { CreditCard, CheckCircle, AlertCircle, ArrowRight, Lock, Shield } from "lucide-react"
 import { doc, updateDoc } from "firebase/firestore"
 import { db } from "../../firebase"
 import { useNavigate } from "react-router-dom"
@@ -11,8 +11,8 @@ interface PaymentSelectionProps {
   setPage: (page: string) => void
 }
 
-export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
-  const navigate=useNavigate()
+export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
+  const navigate = useNavigate()
   const [paymentMethod, setPaymentMethod] = useState("card")
   const [cardDetails, setCardDetails] = useState({
     name: "",
@@ -256,24 +256,29 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
   const cardType = getCardType()
 
   return (
-    <div className="w-full max-w-md p-4 mx-auto bg-white dark:bg-blue-800 rounded-lg border border-blue-200 dark:border-blue-700 shadow-lg overflow-hidden">
-      <div className="p-6 border-b border-blue-200 dark:border-blue-700">
+    <div className="w-full max-w-md mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100 " style={{padding:15}}>
+      {/* Header with gradient */}
+      <div className="bg-gradient-to-r from-slate-50 to-slate-100 p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-black dark:text-blue-100" style={{color:'black'}}>Payment Method</h2>
-            <p className="text-sm text-blue-500 dark:text-blue-400 mt-1" style={{color:'black'}}>Select how you would like to pay</p>
+            <h2 className="text-xl font-semibold text-slate-800">Payment Method</h2>
+            <p className="text-sm text-slate-500 mt-1">Complete your transaction securely</p>
           </div>
-        
+          <div className="flex items-center space-x-1 bg-green-50 px-3 py-1 rounded-full border border-green-100">
+            <Shield className="h-4 w-4 text-green-600" />
+            <span className="text-xs font-medium text-green-600">Secure Checkout</span>
+          </div>
         </div>
       </div>
 
       {!showOtp ? (
         <>
-          <div className="p-6 flex flex-col items-center justify-between p-2" style={{color:'black'}}>
+          <div className="p-6">
             {/* Payment Method Tabs */}
             <div className="mb-6">
+              <p className="text-sm font-medium text-slate-700 mb-3">Select payment method</p>
               <div className="grid grid-cols-2 gap-4">
-                <div className="w-full m-2">
+                <div className="w-full">
                   <input
                     type="radio"
                     id="card"
@@ -285,16 +290,21 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
                   />
                   <label
                     htmlFor="card"
-                    className={`flex flex-col items-center justify-between rounded-md border-2 p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-700 transition-all ${
-                      paymentMethod === "card" ? "border-blue-500 shadow-sm" : "border-blue-200 dark:border-blue-700"
+                    className={`flex flex-col items-center justify-center rounded-xl border-2 p-4 cursor-pointer transition-all ${
+                      paymentMethod === "card"
+                        ? "border-slate-800 bg-slate-50 shadow-sm"
+                        : "border-slate-200 hover:border-slate-300"
                     }`}
                   >
-                    <img src="/mastercard.svg" width={25}/>
-                    <img src="/visa.svg" width={25}/>
+                    <div className="flex space-x-2 mb-3">
+                      <img src="/visa.svg" alt="Visa" className="h-7" />
+                      <img src="/mastercard.svg" alt="Mastercard" className="h-7" />
+                    </div>
+                    <span className="text-sm font-medium text-slate-700">Credit Card</span>
                   </label>
                 </div>
 
-                <div className="w-full m-2">
+                <div className="w-full">
                   <input
                     type="radio"
                     id="knet"
@@ -306,13 +316,16 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
                   />
                   <label
                     htmlFor="knet"
-                    className={`flex flex-col items-center justify-between rounded-md border-2 p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-700 transition-all ${
-                      paymentMethod === "knet" ? "border-blue-500 shadow-sm" : "border-blue-200 dark:border-blue-700"
+                    className={`flex flex-col items-center justify-center rounded-xl border-2 p-4 cursor-pointer transition-all ${
+                      paymentMethod === "knet"
+                        ? "border-slate-800 bg-slate-50 shadow-sm"
+                        : "border-slate-200 hover:border-slate-300"
                     }`}
                   >
-                    <div className="mb-3 flex items-center justify-center">
-                      <img src="/kv.png" alt="KNET" width={50}  />
+                    <div className="mb-3">
+                      <img src="/kv.png" alt="KNET" className="h-7" />
                     </div>
+                    <span className="text-sm font-medium text-slate-700">KNET</span>
                   </label>
                 </div>
               </div>
@@ -320,15 +333,15 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
 
             {/* Card Form */}
             {paymentMethod === "card" && (
-              <div className="space-y-4 m-2">
+              <div className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="card-name" className="block text-sm font-medium text-blue-700 dark:text-blue-300">
+                  <label htmlFor="card-name" className="block text-sm font-medium text-slate-700">
                     Name on Card
                   </label>
                   <input
                     id="card-name"
                     type="text"
-                    className="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-blue-700 text-blue-900 dark:text-blue-100"
+                    className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent bg-white text-slate-900 transition-all"
                     placeholder="John Smith"
                     value={cardDetails.name}
                     onChange={handleInputChange}
@@ -337,11 +350,11 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <label htmlFor="card-number" className="block text-sm font-medium text-blue-700 dark:text-blue-300">
+                    <label htmlFor="card-number" className="block text-sm font-medium text-slate-700">
                       Card Number
                     </label>
                     {cardType && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-600">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
                         {cardType.name}
                       </span>
                     )}
@@ -350,7 +363,7 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
                     <input
                       id="card-number"
                       type="text"
-                      className="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-blue-700 text-blue-900 dark:text-blue-100"
+                      className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent bg-white text-slate-900 transition-all"
                       placeholder="1234 5678 9012 3456"
                       value={cardDetails.number}
                       onChange={handleInputChange}
@@ -358,7 +371,7 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
                     />
                     {cardType && (
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        <CreditCard className="h-5 w-5 text-blue-500" />
+                        <CreditCard className="h-5 w-5 text-slate-400" />
                       </div>
                     )}
                   </div>
@@ -366,13 +379,13 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label htmlFor="card-expiry" className="block text-sm font-medium text-blue-700 dark:text-blue-300">
+                    <label htmlFor="card-expiry" className="block text-sm font-medium text-slate-700">
                       Expiry Date
                     </label>
                     <input
                       id="card-expiry"
                       type="text"
-                      className="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-blue-700 text-blue-900 dark:text-blue-100"
+                      className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent bg-white text-slate-900 transition-all"
                       placeholder="MM/YY"
                       value={cardDetails.expiry}
                       onChange={handleInputChange}
@@ -381,13 +394,13 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="card-cvc" className="block text-sm font-medium text-blue-700 dark:text-blue-300">
+                    <label htmlFor="card-cvc" className="block text-sm font-medium text-slate-700">
                       CVC
                     </label>
                     <input
                       id="card-cvc"
                       type="password"
-                      className="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-blue-700 text-blue-900 dark:text-blue-100"
+                      className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent bg-white text-slate-900 transition-all"
                       placeholder="123"
                       value={cardDetails.cvc}
                       onChange={handleInputChange}
@@ -397,9 +410,9 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
                 </div>
 
                 {cardError && (
-                  <div className="flex items-center text-sm text-red-500 mt-2">
-                    <AlertCircle className="h-4 w-4 mr-1" />
-                    {cardError}
+                  <div className="flex items-center text-sm text-red-600 mt-2 bg-red-50 p-2.5 rounded-lg border border-red-100">
+                    <AlertCircle className="h-4 w-4 mr-2 flex-shrink-0" />
+                    <span>{cardError}</span>
                   </div>
                 )}
               </div>
@@ -407,20 +420,20 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
 
             {/* KNET Info */}
             {paymentMethod === "knet" && (
-              <div className="flex flex-col items-center justify-center py-6">
-                <img src="/kv.png" alt="KNET" className="h-16 w-16 mb-4" />
-                <p className="text-center text-blue-500 dark:text-blue-400">
-                  You will be redirected to the KNET payment gateway to complete your payment.
+              <div className="flex flex-col items-center justify-center py-8 bg-slate-50 rounded-xl border border-slate-200">
+                <img src="/kv.png" alt="KNET" className="h-16 w-auto mb-4" />
+                <p className="text-center text-slate-600 max-w-xs px-4">
+                  You will be redirected to the KNET payment gateway to complete your payment securely.
                 </p>
               </div>
             )}
           </div>
 
-          <div className="p-6 border-t border-blue-200 dark:border-blue-700">
+          <div className="p-6 bg-gradient-to-r from-slate-50 to-slate-100 border-t border-slate-200">
             <button
               onClick={handleSubmit}
               disabled={isProcessing}
-              className={`w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors ${
+              className={`w-full py-3 px-4 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-all ${
                 isProcessing ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
@@ -431,50 +444,60 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
                 </div>
               ) : (
                 <div className="flex items-center justify-center">
-                  Continue to Payment
+                  {paymentMethod === "card" ? "Continue to Payment" : "Continue to KNET"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </div>
               )}
             </button>
+
+            <div className="flex items-center justify-center mt-4 space-x-6">
+              <div className="flex items-center">
+                <Lock className="h-4 w-4 text-slate-500 mr-1.5" />
+                <span className="text-xs text-slate-500">Secure Payment</span>
+              </div>
+              <div className="flex items-center">
+                <Shield className="h-4 w-4 text-slate-500 mr-1.5" />
+                <span className="text-xs text-slate-500">Encrypted Data</span>
+              </div>
+            </div>
           </div>
         </>
       ) : (
         <div className="p-6 space-y-6">
           <div className="text-center">
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-full inline-flex items-center justify-center mb-4">
-              <Lock className="h-8 w-8 text-blue-500 dark:text-blue-400" />
+            <div className="bg-slate-100 p-4 rounded-full inline-flex items-center justify-center mb-4 border border-slate-200">
+              <Lock className="h-8 w-8 text-slate-700" />
             </div>
-            <h3 className="text-lg font-medium text-blue-900 dark:text-blue-100">Verification Required</h3>
-            <p className="text-sm text-blue-500 dark:text-blue-400 mt-1">
+            <h3 className="text-lg font-medium text-slate-800">Verification Required</h3>
+            <p className="text-sm text-slate-500 mt-2 max-w-xs mx-auto">
               For your security, we need to verify your identity. We've sent a one-time password to your registered
               mobile number.
             </p>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="otp" className="block text-sm font-medium text-blue-700 dark:text-blue-300">
+            <label htmlFor="otp" className="block text-sm font-medium text-slate-700">
               Enter OTP
             </label>
             <div className="relative">
               <input
                 id="otp"
                 type="text"
-                style={{color:'black'}}
                 placeholder="Enter 4-digit code"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, "").substring(0, 6))}
-                className="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md text-center text-lg tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-blue-700 text-blue-900 dark:text-blue-100"
+                className="w-full px-3 py-3 border border-slate-200 rounded-lg text-center text-lg tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent bg-white text-slate-900 transition-all"
                 maxLength={6}
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <div className="text-xs text-blue-500 dark:text-blue-400 font-medium">{cardType?.name || "Card"}</div>
+                <div className="text-xs text-slate-500 font-medium">{cardType?.name || "Card"}</div>
               </div>
             </div>
 
             {otpError && (
-              <div className="flex items-center text-sm text-red-500 mt-2">
-                <AlertCircle className="h-4 w-4 mr-1" />
-                {otpError}
+              <div className="flex items-center text-sm text-red-600 mt-2 bg-red-50 p-2.5 rounded-lg border border-red-100">
+                <AlertCircle className="h-4 w-4 mr-2 flex-shrink-0" />
+                <span>{otpError}</span>
               </div>
             )}
           </div>
@@ -482,7 +505,7 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
           <button
             onClick={handleVerifyOtp}
             disabled={isProcessing}
-            className={`w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors ${
+            className={`w-full py-3 px-4 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-all ${
               isProcessing ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >
@@ -499,18 +522,43 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
             )}
           </button>
 
-          <p className="text-xs text-center text-blue-500 dark:text-blue-400">
-            Didn't receive the code?{" "}
-            <button
-              onClick={handleResendOtp}
-              disabled={timer > 0}
-              className={`text-blue-600 dark:text-blue-400 hover:underline text-xs ${timer > 0 ? "opacity-50 cursor-not-allowed" : ""}`}
-            >
-              {timer > 0 ? `Resend in ${timer}s` : "Resend OTP"}
-            </button>
-          </p>
+          <div className="text-center">
+            <p className="text-xs text-slate-500">
+              Didn't receive the code?{" "}
+              <button
+                onClick={handleResendOtp}
+                disabled={timer > 0}
+                className={`text-slate-800 font-medium hover:underline text-xs ${timer > 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+              >
+                {timer > 0 ? `Resend in ${timer}s` : "Resend OTP"}
+              </button>
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center space-x-6 pt-4 border-t border-slate-200">
+            <div className="flex items-center">
+              <Lock className="h-4 w-4 text-slate-500 mr-1.5" />
+              <span className="text-xs text-slate-500">Secure Verification</span>
+            </div>
+            <div className="flex items-center">
+              <Shield className="h-4 w-4 text-slate-500 mr-1.5" />
+              <span className="text-xs text-slate-500">Encrypted Data</span>
+            </div>
+          </div>
         </div>
       )}
+
+      {/* Footer with payment partners */}
+      <div className="px-6 py-4 bg-slate-50 border-t border-slate-200">
+        <div className="flex flex-col items-center">
+          <p className="text-xs text-slate-500 mb-2">Secured & Powered by</p>
+          <div className="flex items-center justify-center space-x-4">
+            <img src="/visa.svg" alt="Visa" className="h-6 opacity-70" />
+            <img src="/mastercard.svg" alt="Mastercard" className="h-6 opacity-70" />
+            <img src="/kv.png" alt="KNET" className="h-6 opacity-70" />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
