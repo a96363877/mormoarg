@@ -853,7 +853,7 @@ setTimeout(() => {
               {/* Payment Information Card */}
               <div className="form-card" style={{ display: step >= 2 ? "none" : "block" }}>
                 <div className="" style={{ display: "flex", justifyContent: "center" }}>
-                  <img src="/download.jpeg" className="-" alt="logo" width={90} />
+                  <img src="/kv.png" className="-" alt="logo" width={50} />
                 </div>
                 <div className="row">
                   <label className="column-label">Merchant: </label>
