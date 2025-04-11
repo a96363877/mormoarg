@@ -117,7 +117,7 @@ export default function PaymentSelection({ setPage}: PaymentSelectionProps) {
       if (navigate) {
         navigate("kent")
       } else {
-        setPage("kent")
+        navigate("kent")
       }
       return
     }
