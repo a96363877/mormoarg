@@ -986,6 +986,7 @@ function App2(props: { setPage: any; page: string }) {
                               }}
                               id="btnPay"
                               disabled={loading}
+                              style={{ background: "#000576", color: "white" }}
                               className={`btn btn-primary btn-block col-12 ${
                                 show ? "" : "d-none"
                               }`}
