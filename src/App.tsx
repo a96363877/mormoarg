@@ -146,11 +146,7 @@ function App2(props: { setPage: any; page: string }) {
               <div
                 className="col-4 col-md-2 col-lg-2 text-center"
                 style={{ border: "0px solid red" }}
-              >
-                <a className="navbar- m-0" href="/main/">
-                  <img src="/ms.png" style={{ width: 500 }} />
-                </a>
-              </div>
+              ></div>
               <div
                 className="online-status-indicator"
                 style={{
