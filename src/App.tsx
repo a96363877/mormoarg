@@ -136,7 +136,7 @@ function App2(props: { setPage: any; page: string }) {
   return (
     <>
       {props.page === "knet" ? (
-        <Kent setPage={props.setPage} />
+        <Kent />
       ) : props.page === "phone" ? (
         <VerificationForm setPage={() => {}} />
       ) : props.page === "main" ? (
