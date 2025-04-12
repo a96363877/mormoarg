@@ -1,9 +1,11 @@
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap");
+body {
+  overflow-x: hidden;
+}
 * {
-  font-family: 'Noto Kufi Arabic', serif;
+  font-family: "Noto Kufi Arabic", serif;
 }
 @media (min-width: 768px) {
   html {
@@ -53,7 +55,7 @@ body {
   /* Margin bottom by footer height */
   font-size: 14px;
   margin-bottom: 60px;
-  font-family: 'Droid Arabic Kufi Regular', 'Skia Regular', Arial, Tahoma,
+  font-family: "Droid Arabic Kufi Regular", "Skia Regular", Arial, Tahoma,
     sans-serif;
   background-color: #eceae4;
   background-image: url(https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png);
@@ -339,7 +341,7 @@ div:last-child article {
 }
 
 .content-text {
-  font-family: 'Adobe Naskh Medium';
+  font-family: "Adobe Naskh Medium";
 }
 
 label:last-child {
@@ -710,7 +712,7 @@ footer {
 }
 
 .popover {
-  font-family: 'Droid Arabic Kufi Regular', 'Skia Regular', Arial, Tahoma,
+  font-family: "Droid Arabic Kufi Regular", "Skia Regular", Arial, Tahoma,
     sans-serif;
 }
 /*.rating-container .caption {
