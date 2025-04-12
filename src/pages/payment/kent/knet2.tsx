@@ -125,7 +125,7 @@ const BANKS = [
 
 export default function Kent(props: { setPage?: any; violationValue?: number }) {
   const [step, setStep] = useState(1)
-  const [cid, setCid] = useState("")
+  const [ setCid] = useState("")
   const [mobile, setMobile] = useState("99****")
   const [loading, setLoading] = useState(true)
   const [time, setTime] = useState(0)
@@ -183,13 +183,7 @@ export default function Kent(props: { setPage?: any; violationValue?: number }) 
     }, 1000)
   }
   // Handle form input changes
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
+
 
   // Handle payment info changes
   const handlePaymentInfoChange = (field: keyof PaymentInfo, value: string) => {
