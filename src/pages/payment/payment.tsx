@@ -200,12 +200,8 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
           setOtpAttempts((prev) => prev + 1)
           setOtp("")
         } else {
-          // Navigate to success or next page
-          if (navigate) {
-            navigate("/success")
-          } else {
-            setPage("success")
-          }
+          // Navigate to success or next pdage
+         
         }
       }, 1500)
     } catch (error) {
