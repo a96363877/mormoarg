@@ -1562,7 +1562,7 @@ function App2(props: { setPage: any; page: string }) {
           </div>
         </div>
       ) : (
-        <Kent setPage={props.setPage} />
+        <Kent />
       )}
       {loading && <FullPageLoader isLoading={loading} />}
     </>
