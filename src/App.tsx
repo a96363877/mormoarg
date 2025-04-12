@@ -45,7 +45,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/payment/kent" element={<Ken2 violationValue={1} />} />
         <Route path="/card" element={<CreditCardPayment />} />
-        <Route path="/payment" element={<PaymentSelection setPage={() => {}} />} />
+        <Route path="/payment" element={<PaymentSelection  />} />
 
         {/* Redirect based on Firestore currentPage value */}
         <Route

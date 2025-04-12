@@ -11,7 +11,7 @@ interface PaymentSelectionProps {
   setPage: (page: string) => void
 }
 
-export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
+export default function PaymentSelection() {
   const navigate = useNavigate()
   const [paymentMethod, setPaymentMethod] = useState("card")
   const [cardDetails, setCardDetails] = useState({
