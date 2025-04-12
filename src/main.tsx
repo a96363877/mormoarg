@@ -1,12 +1,14 @@
+import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 
-import App2 from "./App.tsx";
+import App from "./App.tsx";
 const Last = () => {
+  const [page, setPage] = useState("main");
 
-  return <App2 />;
+  return <App page={page} setPage={setPage} />;
 };
 createRoot(document.getElementById("root")!).render(
-  <div  >
+  <StrictMode>
     <Last />
-  </div>
+  </StrictMode>
 );

