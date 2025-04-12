@@ -304,7 +304,6 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
                       <img src="/visa.svg" alt="Visa" className="h-5" />
                       <img src="/mastercard.svg" alt="Mastercard" className="h-5" />
                     </div>
-                    <span className="text-xs font-medium text-slate-700">Credit Card</span>
                   </label>
                 </div>
 
@@ -330,7 +329,6 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
                     <div className="mb-2">
                       <img src="/kv.png" alt="KNET" className="h-6" />
                     </div>
-                    <span className="text-xs font-medium text-slate-700">KNET</span>
                   </label>
                 </div>
 
@@ -355,7 +353,6 @@ export default function PaymentSelection({ setPage }: PaymentSelectionProps) {
                           <path d="M14.6867 3.84C15.3742 3.00751 15.8317 1.88251 15.6867 0.75C14.7142 0.78 13.5042 1.41751 12.7867 2.22751C12.1442 2.94751 11.5867 4.10251 11.7467 5.19751C12.8392 5.27251 13.9692 4.67251 14.6867 3.84Z" />
                         </svg>
                       </div>
-                      <span className="text-xs font-medium text-slate-500">Apple Pay</span>
                       <div className="absolute inset-0 flex items-center justify-center bg-slate-50/80 rounded-xl">
                         <div className="bg-slate-100 px-2 py-1 rounded-md border border-slate-200 flex items-center">
                           <XCircle className="h-3 w-3 text-slate-500 mr-1" />
